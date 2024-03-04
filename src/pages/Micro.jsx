@@ -1,5 +1,11 @@
+import MicroCard from "../components/Microenterprises/MicroCard"
+
 export const Micro = () => {
     return (
-        <div>Micro</div>
+        <main>
+            <section>
+                <MicroCard />
+            </section>
+        </main>
     )
 }
