@@ -1,7 +1,7 @@
 // Publicaciones.js
 
 import React, { useState } from 'react';
-import PublicacionList from '../components/Publications/PublicacionList';
+import PublicacionList from '../components/Publications/PublicationList';
 import SearchBar from '../components/Publications/SearchBar';
 
 
