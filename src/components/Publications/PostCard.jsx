@@ -24,11 +24,9 @@ function PostCard({ title, description, date }) {
         >
           {description}
         </Typography>
-        {!expanded && (
-          <Button variant="outlined" onClick={toggleExpand}>
-            Ver más
-          </Button>
-        )}
+        <Button variant="outlined" onClick={toggleExpand}>
+          {expanded ? 'Ver menos' : 'Ver más'}
+        </Button>
       </CardContent>
     </Card>
   );
