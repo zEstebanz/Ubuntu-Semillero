@@ -1,6 +1,9 @@
+import LandingPosts from "../components/LandingPosts";
 
 export const Landing = () => {
-    return (
-        <div>Landing</div>
-    )
-}
+  return (
+    <div>
+      <LandingPosts />
+    </div>
+  );
+};
