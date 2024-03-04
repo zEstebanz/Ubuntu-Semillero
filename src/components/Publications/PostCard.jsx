@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Card, CardContent, Typography, Button } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  CardMedia,
+} from "@mui/material";
 
 function PostCard({ title, description, date }) {
   const [expanded, setExpanded] = useState(false);
@@ -40,7 +46,7 @@ function PostCard({ title, description, date }) {
             onClick={toggleExpand}
           >
             <Typography variant="body2" fontWeight={600} color="principal">
-              Ver más
+              {expanded ? "Ver menos" : "Ver más"}
             </Typography>
           </Button>
         )}
