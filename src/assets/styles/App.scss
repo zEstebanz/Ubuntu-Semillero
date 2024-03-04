@@ -76,11 +76,48 @@
     padding: 16px 0px 8px 0px;
     border-radius: 16px;
     gap: 16px;
+
     .collapsed {
         max-height: 100px;
         overflow: hidden;
     }
+
     .expanded {
         max-height: none;
+    }
+}
+
+.section-categories {
+    h1 {
+        width: 328px;
+        height: 24px;
+        top: 584px;
+        left: 16px;
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 25px;
+        letter-spacing: 0px;
+        text-align: center;
+    }
+
+    .object {
+        width: Fixed (328px);
+        height: Fixed (72px);
+        top: 632px;
+        left: 16px;
+        border-radius: 16px;
+        gap: 6px;
+        background-color: #FDFDFE;
+
+        a {
+            color: black;
+            text-decoration: none;
+            font-family: Lato;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 25px;
+            letter-spacing: 0px;
+            text-align: left;
+        }
     }
 }

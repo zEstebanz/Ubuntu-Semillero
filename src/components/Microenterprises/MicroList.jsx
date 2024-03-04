@@ -1,57 +1,49 @@
 import React from 'react';
-import PostCard from './PostCard';
+import MicroCard from './MicroCard';
 
-const MicroList = ({ busqueda }) => {
+const MicroList = ({ search, caracteristica }) => {
 
-    // Datos de ejemplo para las publicaciones (reemplazar con tus datos reales)
-
-    const publicaciones = [
+    const microenterprises = [
         {
             id: 1,
-            title: '1 Inversiones Éticas: Más que ganancias',
+            title: '1 Ethical Investments: More than Profits',
             imageUrl: 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
             date: '03-03-2024',
-            description: 'Las decisiones financieras han trascendido la mera maximización del rendimiento. Actualmente, muchos inversores desean que sus decisiones reflejen sus valores éticos y morales, dando lugar a las inversiones éticas o sostenibles.Las decisiones financieras han trascendido la mera maximización del rendimiento.',
-            link: '/post/1'
+            description: 'Financial decisions have transcended mere profit maximization. Nowadays, many investors want their decisions to reflect their ethical and moral values, giving rise to ethical or sustainable investments. Financial decisions have transcended mere profit maximization.',
+            link: '/post/1',
+            caracteristicas: ['Ética', 'Sostenibilidad']
         },
         {
             id: 2,
-            title: '2 Inversiones Éticas: Más que ganancias',
+            title: '2 Ethical Investments: More than Profits',
             imageUrl: 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
             date: '03-03-2024',
-            description: 'Las decisiones financieras han trascendido la mera maximización del rendimiento. Actualmente, muchos inversores desean que sus decisiones reflejen sus valores éticos y morales, dando lugar a las inversiones éticas o sostenibles.',
-            link: '/post/2'
+            description: 'Financial decisions have transcended mere profit maximization. Nowadays, many investors want their decisions to reflect their ethical and moral values, giving rise to ethical or sustainable investments. Financial decisions have transcended mere profit maximization.',
+            link: '/post/2',
+            caracteristicas: ['Innovación', 'Tecnología']
         },
-        {
-            id: 3,
-            title: '3 Inversiones Éticas: Más que ganancias',
-            imageUrl: 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            date: '03-03-2024',
-            description: 'Las decisiones financieras han trascendido la mera maximización del rendimiento. Actualmente, muchos inversores desean que sus decisiones reflejen sus valores éticos y morales, dando lugar a las inversiones éticas o sostenibles.',
-            link: '/post/3'
-        },
+        // Agrega más publicaciones con diferentes características si es necesario
     ];
 
-    // Filtrar publicaciones según el término de búsqueda
-    const publicacionesFiltradas = publicaciones.filter(publicacion =>
-        publicacion.title.toLowerCase().includes(busqueda.toLowerCase())
+    // Filter posts according to search term and characteristic
+    const filteredMicroenterprises = microenterprises.filter(microenterprise =>
+        (typeof search === 'string' && microenterprise.title.toLowerCase().includes(search.toLowerCase())) &&
+        (!caracteristica || (typeof caracteristica === 'string' && microenterprise.caracteristicas.includes(caracteristica)))
     );
 
     return (
         <main>
             <section>
-                {
-                    publicacionesFiltradas.map(publicacion => (
-                        <PostCard
-                            key={publicacion.id}
-                            title={publicacion.title}
-                            description={publicacion.description}
-                            date={publicacion.date}
-                            imageUrl={publicacion.imageUrl}
-                            link={publicacion.link}
-                        />
-                    ))
-                }
+                {filteredMicroenterprises.map(microenterprise => (
+                    <MicroCard
+                        key={microenterprise.id}
+                        title={microenterprise.title}
+                        description={microenterprise.description}
+                        date={microenterprise.date}
+                        imageUrl={microenterprise.imageUrl}
+                        link={microenterprise.link}
+                    />
+                ))}
             </section>
         </main>
     );

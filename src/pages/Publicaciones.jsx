@@ -1,16 +1,15 @@
 // Publicaciones.js
-
 import React, { useState } from 'react';
 import PublicacionList from '../components/Publications/PublicationList';
 import SearchBar from '../components/Publications/SearchBar';
 
-
 export const Publicaciones = () => {
-  
+
   const [busqueda, setBusqueda] = useState('');
 
   return (
     <main>
+      
       <section className="section-port">
         <SearchBar busqueda={busqueda} setBusqueda={setBusqueda} />
         <h2>Publicaciones</h2>
