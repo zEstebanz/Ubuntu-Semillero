@@ -1,10 +1,15 @@
-import { GoogleButton } from "../components/login/GoogleButton"
+import { Box } from "@mui/material"
+import { GoogleButton } from "../components/Conflict/GoogleButton"
 
 export const Login = () => {
 
     return (
-        <div>
+        <Box
+            sx={{
+                
+            }}
+        >
             <GoogleButton />
-        </div>
+        </Box>
     )
 }
