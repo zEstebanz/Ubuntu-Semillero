@@ -8,18 +8,6 @@ function PostCard({ title, description, date, imageUrl }) {
   const images = [imageUrl, imageUrl, imageUrl];
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % images.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
-  };
-
-  const goToSlide = (index) => {
-    setCurrentSlide(index);
-  };
-
   const toggleExpand = () => {
     setExpanded(!expanded);
   };
@@ -28,7 +16,9 @@ function PostCard({ title, description, date, imageUrl }) {
     <Card
       className="post-card"
       sx={{
-        marginBottom: "2rem",
+        width: "84%",
+        height: "40%",
+        marginBottom: "1.5rem",
         borderRadius: "1rem",
       }}
     >
@@ -49,7 +39,7 @@ function PostCard({ title, description, date, imageUrl }) {
         >
           {title}
         </Typography>
-        <div className="post-image">
+        {/*         <div className="post-image">
           <div className="carousel">
             <button className="left-arrow">
               <img src={leftArrow} alt="left-arrow" />
@@ -79,11 +69,11 @@ function PostCard({ title, description, date, imageUrl }) {
               ></button>
             ))}
           </div>
-        </div>
-
-        {/*         <div className="post-card-image">
-          <img src={imageUrl} />
         </div> */}
+
+        <div className="post-card-image">
+          <img src={imageUrl} />
+        </div>
         <Typography
           variant="body2"
           fontWeight={600}

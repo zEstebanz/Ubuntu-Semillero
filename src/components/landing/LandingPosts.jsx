@@ -1,6 +1,7 @@
 import { Box, Typography, Button } from "@mui/material";
-import img from "../assets/Blog.jpg";
-import PostCard from "./Publications/PostCard";
+import img from "../../assets/Blog.jpg";
+import PostCard from "../Publications/PostCard";
+import { Link } from "react-router-dom";
 
 function LandingPosts() {
   const posts = [
@@ -40,6 +41,8 @@ function LandingPosts() {
       display="flex"
       flexDirection="column"
       alignItems="center"
+      marginTop="1.5rem"
+      width="100%"
     >
       <Typography variant="paragraphs" fontWeight={600} marginBottom={0.3}>
         Publicaciones
@@ -52,8 +55,7 @@ function LandingPosts() {
         display="flex"
         flexDirection="column"
         alignItems="center"
-        width="20rem"
-        /*         height="90rem" */
+        width="100%"
       >
         {posts?.map((post) => (
           <PostCard
@@ -65,23 +67,23 @@ function LandingPosts() {
           />
         ))}
       </Box>
-
-      {/*       <Box width="33%"> */}
-      <Button
-        variant="contained"
-        size="small"
-        sx={{
-          borderRadius: "2rem",
-          padding: "0.5rem 1.4rem",
-          marginBottom: "1rem",
-          textTransform: "none",
-        }}
-      >
-        <Typography variant="body2" fontWeight={500}>
-          Ir a Publicaciones
-        </Typography>
-      </Button>
-      {/*       </Box> */}
+      <Link to="/publicaciones">
+        <Button
+          variant="contained"
+          /*           size="small" */
+          sx={{
+            width: "10rem",
+            borderRadius: "2rem",
+            padding: "0.5rem 1.4rem",
+            marginBottom: "1rem",
+            textTransform: "none",
+          }}
+        >
+          <Typography variant="body2" fontWeight={500}>
+            Ir a Publicaciones
+          </Typography>
+        </Button>
+      </Link>
     </Box>
   );
 }

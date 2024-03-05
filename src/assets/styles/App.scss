@@ -83,13 +83,13 @@
     .expanded {
         max-height: none;
     }
-/*     .post-card-image {
+    .post-card-image {
         display: flex;
         align-self: center;
         overflow: hidden;
         position: relative;
         height: 9rem;
-        width: 22rem;
+        width: 100%;
         border-radius: 1rem;
         img {
             height: auto;
@@ -97,9 +97,9 @@
             object-fit: cover;
             position: absolute;
         }
-    } */
+    }
 
-    .post-image {
+   /*  .post-image {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -111,7 +111,7 @@
                 flex-direction: row;
                 width: fit-content;
                 overflow: hidden;
-/*                 transform: translateX(-33.35%); */
+                transform: translateX(-33.35%);
                 .slide {
                     display: flex;
                     align-self: center;
@@ -146,12 +146,12 @@
         .controls {
 
             .button-group {
-                width: 0.45rem; /* Ajusta el ancho según sea necesario */
-                height: 0.45rem; /* Ajusta la altura según sea necesario */
+                width: 0.45rem; 
+                height: 0.45rem; 
                 margin-right: 0.3rem;
                 border-radius: 50%;
-                background-color: white; /* Color de fondo del botón */
-                color: #fff; /* Color del texto del botón */
+                background-color: white; 
+                color: #fff; 
                 border: none;
                 cursor: pointer;
             }
@@ -163,5 +163,5 @@
             border: none;
             background: none;
         }
-    }
+    } */
 }
