@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { Children, useState } from 'react';
 import SearchMicro from '../components/Microenterprises/SearchMicro';
 import MicroList from '../components/Microenterprises/MicroList';
-import Categories from '../components/Microenterprises/Categories';
+import MicroCategori from '../components/Microenterprises/MicroCategori';
+import { Outlet, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-export const Micro = () => {
+export const Micro = ({ children }) => {
     const [search, setSearch] = useState('');
+    const { pathname } = useLocation();
+
+    console.log(pathname)
 
     return (
         <main>
@@ -16,13 +21,12 @@ export const Micro = () => {
             </section>
 
             <section>
-                <Categories />
+                {pathname === '/microemprendimientos' ? <MicroCategori /> : null}
             </section>
-            
-            {/* <section>
-                <MicroList search={search} />
-            </section> */}
-            
+
+            <section>
+                <Outlet />
+            </section>
         </main>
     )
 }

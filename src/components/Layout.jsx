@@ -7,6 +7,7 @@ export const Layout = () => {
                 <ul>
                     <li><a href="/microemprendimientos">Micro</a></li>
                     <li><a href="/publicaciones">Public</a></li>
+                    <li><a href="/">Home</a></li>
                 </ul>
             </div>
             <Outlet />
