@@ -13,11 +13,14 @@ export const Micro = ({ children }) => {
 
     return (
         <main>
-            <section className="section-port">
-                <SearchMicro search={search} setSearch={setSearch} />
-                <h2>MICROEMPRENDIMIENTOS</h2>
-                <h1>Invertí sostenible</h1>
-                <h3>Explorá las categorías y encontrá la inversión sostenible que mejor se ajuste a tus metas financieras</h3>
+            <section className="section-micro">
+                <SearchMicro search={search} setSearch={setSearch}/>
+                <div className='text'>
+                    <h2>MICROEMPRENDIMIENTOS</h2>
+                    <h1>Invertí sostenible</h1>
+                    <h3>Explorá las categorías y encontrá la inversión sostenible que mejor se ajuste a tus metas financieras</h3>
+                </div>
+
             </section>
 
             <section>

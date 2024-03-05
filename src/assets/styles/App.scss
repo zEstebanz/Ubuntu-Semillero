@@ -10,13 +10,8 @@
         height: 24px;
         top: 176px;
         left: 16px;
-        position: absolute;
-        font-family: Lato;
         font-size: 18px;
         font-weight: 600;
-        line-height: 24px;
-        letter-spacing: 0em;
-        text-align: left;
     }
 
     h1 {
@@ -24,13 +19,8 @@
         height: 64px;
         top: 208px;
         left: 16px;
-        position: absolute;
-        font-family: Lato;
         font-size: 28px;
         font-weight: 500;
-        line-height: 32px;
-        letter-spacing: 0em;
-        text-align: left;
     }
 
     h3 {
@@ -38,13 +28,8 @@
         height: 192px;
         top: 288px;
         left: 16px;
-        position: absolute;
-        font-family: Lato;
         font-size: 24px;
         font-weight: 400;
-        line-height: 32px;
-        letter-spacing: 0em;
-        text-align: left;
     }
 
 }
@@ -53,9 +38,9 @@
     top: 80px;
     left: 16px;
     right: 16px;
-    width: 328px;
+    width: auto;
     height: 56px;
-    padding: 0px 16px;
+    padding: 0px 16px 0px 16px;
     border-radius: 100px;
     gap: 16px;
     background: #FDFDFE;
@@ -112,7 +97,7 @@
         a {
             color: black;
             text-decoration: none;
-            font-family: Lato;
+
             font-size: 16px;
             font-weight: 400;
             line-height: 25px;
@@ -122,7 +107,92 @@
     }
 }
 
-.section-micro{
-    height: auto;
-    min-height: 100vh;
+.section-micro {
+    padding: 16px;
+    min-height: 408px;
+    color: #FDFDFE;
+
+    @media screen and (max-width: 767px) {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../../public/img/micro-background.jpeg');
+        background-size: cover;
+        background-position: center;
+
+        h2 {
+            width: 152px;
+            height: 24px;
+            top: 176px;
+            left: 16px;
+            position: absolute;
+
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 24px;
+            letter-spacing: 0em;
+            text-align: left;
+        }
+
+        h1 {
+            width: 256px;
+            height: 64px;
+            top: 208px;
+            left: 16px;
+            position: absolute;
+
+            font-size: 28px;
+            font-weight: 500;
+            line-height: 32px;
+            letter-spacing: 0em;
+            text-align: left;
+        }
+
+        h3 {
+            width: 240px;
+            height: 192px;
+            top: 288px;
+            left: 16px;
+            position: absolute;
+
+            font-size: 24px;
+            font-weight: 400;
+            line-height: 32px;
+            letter-spacing: 0em;
+            text-align: left;
+        }
+    }
+
+    @media screen and (min-width: 767px) {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../../public/img/micro-background.jpeg');
+        background-size: cover;
+        background-position: top;
+
+        h1 {
+
+            font-size: 36px;
+            font-weight: 500;
+            line-height: 40px;
+            letter-spacing: 0em;
+            text-align: left;
+        }
+
+        h2 {
+
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 32px;
+            letter-spacing: 0em;
+            text-align: left;
+        }
+
+        h3 {
+
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 28px;
+            letter-spacing: 0em;
+            text-align: left;
+        }
+
+    }
+
+
 }

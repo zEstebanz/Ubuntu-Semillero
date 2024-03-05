@@ -35,7 +35,7 @@ const PublicacionList = ({ busqueda }) => {
     // Filtrar publicaciones según el término de búsqueda
     const publicacionesFiltradas = publicaciones.filter(publicacion =>
         publicacion.title.toLowerCase().includes(busqueda.toLowerCase())
-    );
+    ); 
 
     return (
         <main>

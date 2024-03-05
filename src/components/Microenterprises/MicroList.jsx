@@ -1,10 +1,11 @@
-import React from 'react';
-import MicroCard from './MicroCard';
+import React, { useState } from 'react';
+import { Box, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { Height } from '@mui/icons-material';
+import MicroCard from './MicroCard';
 
-const MicroList = ({ search, caracteristica }) => {
+const MicroList = () => {
 
+    const [expanded, setExpanded] = useState(false);
     const { id } = useParams();
 
     const microenterprises = [
@@ -16,38 +17,104 @@ const MicroList = ({ search, caracteristica }) => {
             entity: 'Finca agroecológica',
             categori: 'Agroecología/Orgánicos/Alimentación saludable',
             location: 'Tunuyán, Mendoza, Argentina',
-            descriptionOne: '',
-            descriptionTwo: '',
             link: '/post/1',
+            contact: ''
+        },
+        {
+            id: 2,
+            title: 'EcoSenda',
+            imageUrl: 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            date: '03-03-2024',
+            entity: 'Finca agroecológica',
+            categori: 'Agroecología/Orgánicos/Alimentación saludable',
+            location: 'Tunuyán, Mendoza, Argentina',
+            link: '/post/2',
+            contact: ''
+        }, {
+            id: 2,
+            title: 'EcoSenda',
+            imageUrl: 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            date: '03-03-2024',
+            entity: 'Finca agroecológica',
+            categori: 'Agroecología/Orgánicos/Alimentación saludable',
+            location: 'Tunuyán, Mendoza, Argentina',
+            link: '/post/2',
             contact: ''
         },
     ];
 
-    // Filter posts according to search term and characteristic
-    const filteredMicroenterprises = microenterprises.filter(microenterprise =>
-        (typeof search === 'string' && microenterprise.title.toLowerCase().includes(search.toLowerCase())) &&
-        (!caracteristica || (typeof caracteristica === 'string' && microenterprise.caracteristicas.includes(caracteristica)))
-    );
+    const toggleExpand = () => {
+        setExpanded(!expanded);
+    };
 
     return (
         <main>
             <section>
-                <MicroCard />
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    maxWidth: 800,
+                    margin: "auto",
+                    paddingBottom: 3,
+                    paddingLeft: 2,
+                    paddingRight: 2
+                }}>
+                    <Typography
+                        variant="h5"
+                        color="common.black"
+                        fontWeight="bold"
+                        sx={{
+                            paddingTop: 6
+                        }}
+                        marginBottom={3}>
+                        Categorias
+                    </Typography>
+
+                    <Typography
+                        sx={{
+                            fontSize: {
+                                xs: '16px', // Para dispositivos extra pequeños (teléfonos)
+                                sm: '18px', // Para dispositivos pequeños (tablets)
+                                md: '20px', // Para dispositivos medianos (laptops)
+                                lg: '22px', // Para dispositivos grandes (monitores)
+                            },
+                            fontWeight: 500,
+                            color: "#093C59",
+                        }}
+                    >
+                        Agroecología/Orgánicos/Alimentación Saludable
+                    </Typography>
+
+                    <Typography
+                        sx={{
+                            fontFamily: "Lato",
+                            fontSize: "16px",
+                            fontWeight: 400,
+                            lineHeight: "25px",
+                            letterSpacing: "0px",
+                            textAlign: "center",
+                            marginBottom: "20px" // Ajusta el margen inferior según tus necesidades
+                        }}
+                    >
+                        Conectate con Microemprendimientos que respetan la tierra y priorizan la salud, a través de prácticas agrícolas limpias y alimentos nutritivos.
+                    </Typography>
+                </Box>
             </section>
 
-            <section className='section-micro'>
-                {filteredMicroenterprises.map(microenterprise => (
-                    <MicroCard
-                        key={microenterprise.id}
-                        title={microenterprise.title}
-                        entity={microenterprise.entity}
-                        categori={microenterprise.categori}
-                        imageUrl={microenterprise.imageUrl}
-                        link={microenterprise.link}
-                        location={microenterprise.location}
-                        contact={microenterprise.contact}
-                    />
-                ))}
+            <section>
+                {
+                    microenterprises.map(microenterprises => (
+                        <MicroCard
+                            key={microenterprises.id}
+                            title={microenterprises.title}
+                            entity={microenterprises.entity}
+                            categori={microenterprises.categori}
+                            imageUrl={microenterprises.imageUrl}
+                            location={microenterprises.location}
+                        />
+                    ))
+                }
             </section>
         </main>
     );

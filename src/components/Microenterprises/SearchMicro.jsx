@@ -1,5 +1,6 @@
 import React from 'react';
 import { TextField, Grid } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 const SearchMicro = ({ search, setSearch }) => {
   return (
@@ -9,7 +10,7 @@ const SearchMicro = ({ search, setSearch }) => {
       className="search-bar"
     >
       <TextField
-        label="Search Microenterprises"
+        label="Buscar Microemprendimientos"
         className="search-input"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
