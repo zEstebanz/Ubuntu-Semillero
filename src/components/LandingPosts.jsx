@@ -52,8 +52,8 @@ function LandingPosts() {
         display="flex"
         flexDirection="column"
         alignItems="center"
-        width={380}
-        marginBottom={2.5}
+        width="20rem"
+        /*         height="90rem" */
       >
         {posts?.map((post) => (
           <PostCard
@@ -72,12 +72,12 @@ function LandingPosts() {
         size="small"
         sx={{
           borderRadius: "2rem",
-          paddingLeft: "1.3rem",
-          paddingRight: "1.3rem",
+          padding: "0.5rem 1.4rem",
+          marginBottom: "1rem",
           textTransform: "none",
         }}
       >
-        <Typography variant="paragraphs" fontWeight={500}>
+        <Typography variant="body2" fontWeight={500}>
           Ir a Publicaciones
         </Typography>
       </Button>

@@ -87,7 +87,7 @@ function PostCard({ title, description, date, imageUrl }) {
         <Typography
           variant="body2"
           fontWeight={600}
-          marginTop={4}
+          marginTop="1.8rem"
           marginBottom={0.6}
           color="common.black"
         >
