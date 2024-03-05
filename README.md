@@ -3,8 +3,14 @@
 ## Instalación
 
 1. Clona el repositorio
-2. Instala las dependencias: npm install
-3.1. Ejecutar con npm run dev. 
+2. Crear un archivo .env en la raíz del proyecto.
+   
+   ```env
+        VITE_GOOGLE_CLIENT_ID=<oauth2-client-ID>
+   ```
+
+3. Instala las dependencias: npm install
+3.1. Ejecutar con npm run dev.
 3.2. URL utilizada: http://localhost:5173
 
 ## Contribuciones
