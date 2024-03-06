@@ -12,33 +12,23 @@ const MicroList = () => {
         {
             id: 1,
             title: 'EcoSenda',
-            imageUrl: 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            imageUrl: '../../../public/img/post.jpeg',
             date: '03-03-2024',
             entity: 'Finca agroecológica',
             categori: 'Agroecología/Orgánicos/Alimentación saludable',
             location: 'Tunuyán, Mendoza, Argentina',
-            link: '/post/1',
+            link: '',
             contact: ''
         },
         {
             id: 2,
             title: 'EcoSenda',
-            imageUrl: 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            imageUrl: '../../../public/img/post.jpeg',
             date: '03-03-2024',
             entity: 'Finca agroecológica',
             categori: 'Agroecología/Orgánicos/Alimentación saludable',
             location: 'Tunuyán, Mendoza, Argentina',
-            link: '/post/2',
-            contact: ''
-        }, {
-            id: 2,
-            title: 'EcoSenda',
-            imageUrl: 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            date: '03-03-2024',
-            entity: 'Finca agroecológica',
-            categori: 'Agroecología/Orgánicos/Alimentación saludable',
-            location: 'Tunuyán, Mendoza, Argentina',
-            link: '/post/2',
+            link: '',
             contact: ''
         },
     ];
@@ -59,7 +49,7 @@ const MicroList = () => {
                     paddingBottom: 3,
                     paddingLeft: 2,
                     paddingRight: 2
-                }}>
+                }}> 
                     <Typography
                         variant="h5"
                         color="common.black"
@@ -73,15 +63,11 @@ const MicroList = () => {
 
                     <Typography
                         sx={{
-                            fontSize: {
-                                xs: '16px', // Para dispositivos extra pequeños (teléfonos)
-                                sm: '18px', // Para dispositivos pequeños (tablets)
-                                md: '20px', // Para dispositivos medianos (laptops)
-                                lg: '22px', // Para dispositivos grandes (monitores)
-                            },
-                            fontWeight: 500,
-                            color: "#093C59",
+                            fontSize: "20px",
+                            fontWeight: 600,
+                            textAlign: "center"
                         }}
+                        color="primary"
                     >
                         Agroecología/Orgánicos/Alimentación Saludable
                     </Typography>

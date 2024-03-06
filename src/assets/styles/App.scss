@@ -53,50 +53,16 @@
 
 }
 
-.section-categories {
-    h1 {
-        width: 328px;
-        height: 24px;
-        top: 584px;
-        left: 16px;
-        font-size: 24px;
-        font-weight: 600;
-        line-height: 25px;
-        letter-spacing: 0px;
-        text-align: center;
-    }
-
-    .object {
-        width: Fixed (328px);
-        height: Fixed (72px);
-        top: 632px;
-        left: 16px;
-        border-radius: 16px;
-        gap: 6px;
-        background-color: #FDFDFE;
-
-        a {
-            color: black;
-            text-decoration: none;
-
-            font-size: 16px;
-            font-weight: 400;
-            line-height: 25px;
-            letter-spacing: 0px;
-            text-align: left;
-        }
-    }
-}
-
 .section-micro {
     padding: 16px;
-    min-height: 408px;
+    min-height: 488px;
     color: #FDFDFE;
 
     @media screen and (max-width: 767px) {
         background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../../public/img/micro-background.jpeg');
         background-size: cover;
         background-position: center;
+        height: 488px;
 
         h2 {
             width: 152px;
@@ -129,10 +95,9 @@
         h3 {
             width: 240px;
             height: 192px;
-            top: 288px;
+            top: 256px;
             left: 16px;
             position: absolute;
-
             font-size: 24px;
             font-weight: 400;
             line-height: 32px;
