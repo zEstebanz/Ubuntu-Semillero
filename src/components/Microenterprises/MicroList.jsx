@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import MicroCard from './MicroCard';
 
@@ -94,7 +94,8 @@ const MicroList = () => {
                             lineHeight: "25px",
                             letterSpacing: "0px",
                             textAlign: "center",
-                            marginBottom: "20px" // Ajusta el margen inferior según tus necesidades
+                            marginBottom: "16px",
+                            marginTop: "16px"
                         }}
                     >
                         Conectate con Microemprendimientos que respetan la tierra y priorizan la salud, a través de prácticas agrícolas limpias y alimentos nutritivos.

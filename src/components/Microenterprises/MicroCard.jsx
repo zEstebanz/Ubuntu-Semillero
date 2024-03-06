@@ -12,14 +12,14 @@ function MicroCard({ title, entity, categori, location, imageUrl, link }) {
   };
 
   return (
-    <Grid item xs={12} sm={6} md={4} lg={4}>
+    <Grid container justifyContent="center">
 
       <Card className="post-card" sx={{
         width: "328px",
         height: 'fit-content',
         top: "1200px",
         left: "16px",
-        padding: '16px 0px 8px 0px',
+        padding: '16px 0px 0px 0px',
         marginBottom: "16px",
         borderRadius: "16px",
         gap: "16px"
@@ -66,7 +66,8 @@ function MicroCard({ title, entity, categori, location, imageUrl, link }) {
                 textAlign: 'left',
                 width: '304px',
                 height: '16px',
-                top: '28px'
+                top: '28px',
+                marginBottom: '10px'
               }}
             >
               {entity}
@@ -83,6 +84,7 @@ function MicroCard({ title, entity, categori, location, imageUrl, link }) {
                 lineHeight: '18px',
                 letterSpacing: '0px',
                 textAlign: 'left',
+                marginBottom: '16px'
               }}
             >
               {categori}
