@@ -53,25 +53,6 @@
 
 }
 
-.post-card {
-    width: 328px;
-    height: 424px;
-    top: 584px;
-    left: 16px;
-    padding: 16px 0px 8px 0px;
-    border-radius: 16px;
-    gap: 16px;
-
-    .collapsed {
-        max-height: 100px;
-        overflow: hidden;
-    }
-
-    .expanded {
-        max-height: none;
-    }
-}
-
 .section-categories {
     h1 {
         width: 328px;
