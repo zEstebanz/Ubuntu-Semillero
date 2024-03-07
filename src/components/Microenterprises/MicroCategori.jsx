@@ -27,7 +27,7 @@ const Categories = () => {
                         width: '100%', // Ancho completo
                         height: '100%', // Altura completa
                         background: '#226516', // Color de fondo
-                        clipPath: "polygon(13% 0, 33% 24%, 64% 43%, 100% 43%, 100% 100%, 19% 100%, 0 100%, 0 0)",
+                        clipPath: 'polygon(26% 26%, 64% 44%, 100% 44%, 100% 100%, 0 100%, 0 0)',
                         zIndex: -1, // Fondo detrás de los elementos
                     }}
                 />
