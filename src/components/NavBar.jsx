@@ -3,41 +3,43 @@ import {
   AppBar,
   Box,
   Drawer,
+  Grid,
   IconButton,
   Toolbar,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
 import logo from "../assets/logoUbuntu.png";
+import { Link } from "react-router-dom";
+import DrawerList from "./DrawerList";
 
 function NavBar() {
   const [open, setOpen] = useState(false);
   return (
-    /*     <Box component="nav" display="flex" width="100%">
-      <IconButton onClick={() => setOpen(open)}>
-        <Menu height="6rem" />
-      </IconButton>
-      <Box right="-24%" position="relative">
-        <img src={logo} alt="logo-ubuntu" />
-      </Box>
-      <Drawer open={open} onClose={() => setOpen(false)}></Drawer>
-    </Box> */
-
-    <AppBar position="static">
+    <AppBar position="static" color="transparent">
       <Toolbar>
-        <IconButton edge="start" color="inherit" aria-label="menu">
+        <IconButton
+          edge="start"
+          color="common.black"
+          aria-label="menu"
+          onClick={() => setOpen(open)}
+        >
           <Menu />
         </IconButton>
         <Box
-          sx={{
-            flexGrow: 1,
-          }}
+          display="flex"
+          width="100%"
+          marginRight="1.5rem"
+          justifyContent="center"
         >
-          <Typography variant="h6">
-            <img src={logo} alt="Logo" height="40" />
-          </Typography>
+          <Link to="/">
+            <img src={logo} alt="Logo" height="50" />
+          </Link>
         </Box>
       </Toolbar>
+      <Drawer open={open} onClose={() => setOpen(false)}>
+        <DrawerList />
+      </Drawer>
     </AppBar>
   );
 }
