@@ -4,6 +4,7 @@ import { Landing } from "../pages/Landing";
 import { Micro } from "../pages/Micro";
 import { Publicaciones } from "../pages/Publicaciones";
 import { Login } from "../pages/Login"
+import MicroList from "../components/Microenterprises/MicroList";
 
 const router = createBrowserRouter([
     {
@@ -16,7 +17,13 @@ const router = createBrowserRouter([
             },
             {
                 path: '/microemprendimientos',
-                element: <Micro />
+                element: <Micro />,
+                children: [
+                    {
+                        path: ':id',
+                        element: <MicroList />
+                    }
+                ]
             },
             {
                 path: '/publicaciones',
@@ -28,6 +35,7 @@ const router = createBrowserRouter([
             },
         ]
     },
+
 ]);
 
 export default router;
