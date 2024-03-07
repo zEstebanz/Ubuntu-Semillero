@@ -16,7 +16,7 @@ const SearchMicro = ({ search, setSearch }) => {
           gap: '8px'
         }}
       >
-        <SearchIcon color='primary' />
+        <SearchIcon color='black'/>
         <TextField
           name="message"
           label=""

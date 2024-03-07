@@ -1,5 +1,6 @@
 import React from 'react';
-import { TextField, Grid } from '@mui/material';
+import { TextField, Grid, Box } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 const SearchBar = ({ busqueda, setBusqueda }) => {
   return (
@@ -8,13 +9,33 @@ const SearchBar = ({ busqueda, setBusqueda }) => {
       justifyContent="center"
       className="search-bar"
     >
-      <TextField
-        label="Buscar Microemprendimientos"
-        className="search-input"
-        value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
-      />
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          width: '100%',
+          gap: '8px'
+        }}
+      >
+        <SearchIcon color='black'/>
+        <TextField
+          name="message"
+          label=""
+          placeholder="Buscar Microemprendimientos"
+          variant="outlined"
+          fullWidth
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              borderRadius: 0
+            },
+            "& fieldset": {
+              border: 'none'
+            },
+          }}
+        />
+      </Box>
     </Grid>
+
   );
 };
 

@@ -24,7 +24,8 @@
     color: #FDFDFE;
 
     @media screen and (max-width: 767px) {
-        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../../public/img/micro-background.jpeg');
+        background-image: linear-gradient(rgba(9, 9, 9, 0.8), rgba(9, 9, 9, 0.8)), url('../../../public/img/micro-background.jpeg');
+
         background-size: cover;
         background-position: center;
         height: 488px;

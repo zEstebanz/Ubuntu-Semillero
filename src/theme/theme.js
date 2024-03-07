@@ -43,6 +43,9 @@ const theme = createTheme({
       white: "#fdfdfd",
       black: '#090909',
     },
+    black: {
+      main: "#090909"
+    }
   },
 
   typography: {
