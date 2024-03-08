@@ -1,61 +1,10 @@
-.section-port {
-    background-color: #226516;
-    width: 360px;
-    height: 488px;
-    top: 56px;
-    padding: 16px;
-
-    h2 {
-        width: 152px;
-        height: 24px;
-        top: 176px;
-        left: 16px;
-        position: absolute;
-        font-family: Lato;
-        font-size: 18px;
-        font-weight: 600;
-        line-height: 24px;
-        letter-spacing: 0em;
-        text-align: left;
-    }
-
-    h1 {
-        width: 256px;
-        height: 64px;
-        top: 208px;
-        left: 16px;
-        position: absolute;
-        font-family: Lato;
-        font-size: 28px;
-        font-weight: 500;
-        line-height: 32px;
-        letter-spacing: 0em;
-        text-align: left;
-    }
-
-    h3 {
-        width: 240px;
-        height: 192px;
-        top: 288px;
-        left: 16px;
-        position: absolute;
-        font-family: Lato;
-        font-size: 24px;
-        font-weight: 400;
-        line-height: 32px;
-        letter-spacing: 0em;
-        text-align: left;
-    }
-
-}
-
 .search-bar {
     top: 80px;
     left: 16px;
     right: 16px;
-    width: 328px;
+    width: auto;
     height: 56px;
-    padding: 0px 16px;
+    padding: 0px 16px 0px 16px;
     border-radius: 100px;
     gap: 16px;
     background: #FDFDFE;
@@ -68,19 +17,204 @@
 
 }
 
-.post-card {
-    width: 328px;
-    height: 424px;
-    top: 584px;
-    left: 16px;
-    padding: 16px 0px 8px 0px;
-    border-radius: 16px;
-    gap: 16px;
-    .collapsed {
-        max-height: 100px;
+.section-micro {
+    padding: 16px;
+    min-height: 488px;
+    color: #FDFDFE;
+
+    @media screen and (max-width: 767px) {
+        background-image: linear-gradient(rgba(9, 9, 9, 0.8), rgba(9, 9, 9, 0.8)), url('../../../public/img/micro-background.jpeg');
+
+        background-size: cover;
+        background-position: center;
+        height: 488px;
+
+        h2 {
+            width: 152px;
+            height: 24px;
+            top: 176px;
+            left: 16px;
+            position: absolute;
+
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 24px;
+            letter-spacing: 0em;
+            text-align: left;
+        }
+
+        h1 {
+            width: 256px;
+            height: 64px;
+            top: 208px;
+            left: 16px;
+            position: absolute;
+
+            font-size: 28px;
+            font-weight: 500;
+            line-height: 32px;
+            letter-spacing: 0em;
+            text-align: left;
+        }
+
+        h3 {
+            width: 240px;
+            height: 192px;
+            top: 256px;
+            left: 16px;
+            position: absolute;
+            font-size: 24px;
+            font-weight: 400;
+            line-height: 32px;
+            letter-spacing: 0em;
+            text-align: left;
+        }
+    }
+
+    @media screen and (min-width: 767px) {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../../public/img/micro-background.jpeg');
+        background-size: cover;
+        background-position: top center;
+        background-position-y: -5vw;
+
+        .text-container {
+            padding: 100px;
+
+            h1 {
+                font-size: 46px;
+                font-weight: 500;
+                line-height: 40px;
+                letter-spacing: 0em;
+                text-align: left;
+            }
+
+            h2 {
+                padding-bottom: 16px;
+                font-size: 25px;
+                font-weight: 600;
+                line-height: 32px;
+                letter-spacing: 0em;
+                text-align: left;
+            }
+
+            h3 {
+                padding-top: 16px;
+                font-size: 30px;
+                font-weight: 400;
+                line-height: 28px;
+                letter-spacing: 0em;
+                text-align: left;
+            }
+        }
+
+    }
+    
+    .post-card-image {
+        display: flex;
+        align-self: center;
         overflow: hidden;
+        position: relative;
+        height: 9rem;
+        width: 100%;
+        border-radius: 1rem;
+        img {
+            height: auto;
+            width: 100%;
+            object-fit: cover;
+            position: absolute;
+        }
     }
-    .expanded {
-        max-height: none;
+}
+
+.section-publications {
+    padding: 16px;
+    min-height: 488px;
+    color: #FDFDFE;
+    margin-bottom: 16px;
+    @media screen and (max-width: 767px) {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../../public/img/public.jpeg');
+        background-size: cover;
+        background-position: center;
+        height: 488px;
+
+        h2 {
+            width: 152px;
+            height: 24px;
+            top: 176px;
+            left: 16px;
+            position: absolute;
+
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 24px;
+            letter-spacing: 0em;
+            text-align: left;
+        }
+
+        h1 {
+            width: 256px;
+            height: 64px;
+            top: 208px;
+            left: 16px;
+            position: absolute;
+
+            font-size: 28px;
+            font-weight: 500;
+            line-height: 32px;
+            letter-spacing: 0em;
+            text-align: left;
+        }
+
+        h3 {
+            width: 240px;
+            height: 192px;
+            top: 288px;
+            left: 16px;
+            position: absolute;
+            font-size: 24px;
+            font-weight: 400;
+            line-height: 32px;
+            letter-spacing: 0em;
+            text-align: left;
+        }
     }
+
+    @media screen and (min-width: 767px) {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../../public/img/public.jpeg');
+        background-size: cover;
+        background-position: top center;
+        background-position-y: -5vw;
+
+        .text-container {
+            padding: 100px;
+
+            h1 {
+                font-size: 46px;
+                font-weight: 500;
+                line-height: 40px;
+                letter-spacing: 0em;
+                text-align: left;
+            }
+
+            h2 {
+                padding-bottom: 16px;
+                font-size: 25px;
+                font-weight: 600;
+                line-height: 32px;
+                letter-spacing: 0em;
+                text-align: left;
+            }
+
+            h3 {
+                padding-top: 16px;
+                font-size: 30px;
+                font-weight: 400;
+                line-height: 28px;
+                letter-spacing: 0em;
+                text-align: left;
+            }
+        }
+
+    }
+
 }

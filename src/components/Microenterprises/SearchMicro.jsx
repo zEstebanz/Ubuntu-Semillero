@@ -1,8 +1,7 @@
 import React from 'react';
 import { TextField, Grid, Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-
-const SearchBar = ({ busqueda, setBusqueda }) => {
+const SearchMicro = ({ search, setSearch }) => {
   return (
     <Grid
       container
@@ -36,7 +35,10 @@ const SearchBar = ({ busqueda, setBusqueda }) => {
       </Box>
     </Grid>
 
+
   );
 };
 
-export default SearchBar;
+export default SearchMicro;
+
+
