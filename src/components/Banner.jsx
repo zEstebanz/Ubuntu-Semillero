@@ -25,7 +25,6 @@ export const Banner = ({
     title = defaultTitle,
     imageURL = defaultImageURL
 }) => {
-    console.log(imageURL);
     return (
         <Box
             sx={{
