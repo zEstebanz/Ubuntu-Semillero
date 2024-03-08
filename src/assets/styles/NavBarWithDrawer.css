@@ -1,0 +1,12 @@
+body.drawer-open {
+    overflow: hidden;
+  }
+  
+  .navbar.drawer-open {
+    width: 100%;
+    z-index: 1100; /* Ajusta según sea necesario */
+  }
+  
+  .drawer-open .overlay {
+    pointer-events: auto;
+  }
