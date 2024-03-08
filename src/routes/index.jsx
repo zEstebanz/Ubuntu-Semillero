@@ -4,6 +4,7 @@ import { Landing } from "../pages/Landing";
 import { Micro } from "../pages/Micro";
 import { Publicaciones } from "../pages/Publicaciones";
 import { Login } from "../pages/Login"
+import { Contact } from "../pages/Contact";
 
 const router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
             {
                 path: '/login',
                 element: <Login />
+            },
+            {
+                path: '/contacto',
+                element: <Contact />
             },
         ]
     },
