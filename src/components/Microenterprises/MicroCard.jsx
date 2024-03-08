@@ -12,7 +12,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-function MicroCard({ title, entity, categori, location, imageUrl, imageUrl2,imageUrl3, link }) {
+function MicroCard({ title, entity, categori, location, imageUrl, imageUrl2, imageUrl3, link }) {
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpand = () => {
@@ -29,7 +29,7 @@ function MicroCard({ title, entity, categori, location, imageUrl, imageUrl2,imag
         gap: "16px"
       }}>
         <CardContent>
-          
+
           <div style={{ position: "relative" }}>
             <Swiper
               cssMode={true}
@@ -39,7 +39,8 @@ function MicroCard({ title, entity, categori, location, imageUrl, imageUrl2,imag
               keyboard={true}
               modules={[Navigation, Pagination, Mousewheel, Keyboard]}
               className="swiper"
-            >  <SwiperSlide className="swiper-slide">
+            >
+              <SwiperSlide className="swiper-slide">
                 <CardMedia component="img" height="128" width="304" image={imageUrl} alt={title} sx={{ borderRadius: "16px" }} />
               </SwiperSlide>
               <SwiperSlide className="swiper-slide">

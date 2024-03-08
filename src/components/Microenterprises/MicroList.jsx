@@ -26,6 +26,8 @@ const MicroList = () => {
             id: 2,
             title: 'EcoSenda',
             imageUrl: '../../../public/img/post.jpeg',
+            imageUrl2: '../../../public/img/post1.jpeg',
+            imageUrl3: '../../../public/img/post2.jpeg',
             date: '03-03-2024',
             entity: 'Finca agroecológica',
             categori: 'Agroecología/Orgánicos/Alimentación saludable',
@@ -33,6 +35,7 @@ const MicroList = () => {
             link: '',
             contact: ''
         },
+        
     ];
 
     const toggleExpand = () => {
