@@ -13,6 +13,8 @@ const MicroList = () => {
             id: 1,
             title: 'EcoSenda',
             imageUrl: '../../../public/img/post.jpeg',
+            imageUrl2: '../../../public/img/post1.jpeg',
+            imageUrl3: '../../../public/img/post2.jpeg',
             date: '03-03-2024',
             entity: 'Finca agroecológica',
             categori: 'Agroecología/Orgánicos/Alimentación saludable',
@@ -99,6 +101,8 @@ const MicroList = () => {
                             entity={microenterprises.entity}
                             categori={microenterprises.categori}
                             imageUrl={microenterprises.imageUrl}
+                            imageUrl2={microenterprises.imageUrl2}
+                            imageUrl3={microenterprises.imageUrl3}
                             location={microenterprises.location}
                         />
                     ))

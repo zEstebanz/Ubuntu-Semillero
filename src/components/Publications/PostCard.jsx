@@ -1,13 +1,20 @@
 import { useState } from "react";
-import { Card, CardContent, Typography, Button, Grid, CardMedia } from "@mui/material";
-import leftArrow from "../../assets/leftArrow.png";
-import rightArrow from "../../assets/rightArrow.png";
+import { Card, CardContent, Typography, Button, Grid, CardMedia, Container } from "@mui/material";
 
-function PostCard({ title, description, date, imageUrl }) {
+import { Navigation, Pagination, Mousewheel, Keyboard } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
+function PostCard({ title, description, date, imageUrl, imageUrl2 }) {
   const [expanded, setExpanded] = useState(false);
   const images = [imageUrl, imageUrl, imageUrl];
   const [currentSlide, setCurrentSlide] = useState(0);
   const descriptionLimit = 100; // Limite de caracteres para la descripción inicial
+
 
   const toggleExpand = () => {
     setExpanded(!expanded);
@@ -42,16 +49,26 @@ function PostCard({ title, description, date, imageUrl }) {
             {title}
           </Typography>
 
-          <CardMedia
-            component="img"
-            height="128"
-            width="304"
-            image={imageUrl}
-            alt={title}
-            sx={{
-              borderRadius: "16px",
-            }}
-          />
+          <div style={{ position: "relative" }}>
+            <Swiper
+              cssMode={true}
+              navigation={true}
+              pagination={true}
+              mousewheel={true}
+              keyboard={true}
+              modules={[Navigation, Pagination, Mousewheel, Keyboard]}
+              className="swiper"
+            >
+              <SwiperSlide className="swiper-slide">
+                <CardMedia component="img" height="128" width="304" image={imageUrl} alt={title} sx={{ borderRadius: "16px" }} />
+              </SwiperSlide>
+              <SwiperSlide className="swiper-slide">
+                <CardMedia component="img" height="128" width="304" image={imageUrl2} alt={title} sx={{ borderRadius: "16px" }} />
+              </SwiperSlide>
+            </Swiper>
+
+          </div>
+
           <Typography
             variant="body2"
             fontWeight={600}
@@ -65,7 +82,7 @@ function PostCard({ title, description, date, imageUrl }) {
             variant="body2"
             fontWeight={600}
             color="common.black"
-            className={expanded ? "expanded" : "collapsed"} // Aplica una clase condicional para expandir o colapsar el texto
+            className={expanded ? "expanded" : "collapsed"}
           >
             {expanded ? description : description.slice(0, descriptionLimit) + (description.length > descriptionLimit ? '...' : '')}
           </Typography>

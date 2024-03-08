@@ -4,7 +4,15 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
-function MicroCard({ title, entity, categori, location, imageUrl, link }) {
+import { Navigation, Pagination, Mousewheel, Keyboard } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
+function MicroCard({ title, entity, categori, location, imageUrl, imageUrl2,imageUrl3, link }) {
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpand = () => {
@@ -21,16 +29,29 @@ function MicroCard({ title, entity, categori, location, imageUrl, link }) {
         gap: "16px"
       }}>
         <CardContent>
-          <CardMedia
-            component="img"
-            height="144"
-            width="304"
-            image={imageUrl}
-            alt={title}
-            sx={{
-              borderRadius: "16px",
-            }}
-          />
+          
+          <div style={{ position: "relative" }}>
+            <Swiper
+              cssMode={true}
+              navigation={true}
+              pagination={true}
+              mousewheel={true}
+              keyboard={true}
+              modules={[Navigation, Pagination, Mousewheel, Keyboard]}
+              className="swiper"
+            >  <SwiperSlide className="swiper-slide">
+                <CardMedia component="img" height="128" width="304" image={imageUrl} alt={title} sx={{ borderRadius: "16px" }} />
+              </SwiperSlide>
+              <SwiperSlide className="swiper-slide">
+                <CardMedia component="img" height="128" width="304" image={imageUrl2} alt={title} sx={{ borderRadius: "16px" }} />
+              </SwiperSlide>
+              <SwiperSlide className="swiper-slide">
+                <CardMedia component="img" height="128" width="304" image={imageUrl3} alt={title} sx={{ borderRadius: "16px" }} />
+              </SwiperSlide>
+            </Swiper>
+
+          </div>
+
           <Typography
             variant="h6"
             gutterBottom
