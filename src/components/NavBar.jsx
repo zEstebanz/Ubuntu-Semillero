@@ -2,36 +2,53 @@ import { Menu } from "@mui/icons-material";
 import {
   AppBar,
   Box,
-  Drawer,
-  Grid,
   IconButton,
   SwipeableDrawer,
   Toolbar,
-  Typography,
 } from "@mui/material";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import logo from "../assets/logoUbuntu.png";
 import { Link } from "react-router-dom";
 import DrawerList from "./DrawerList";
 import CloseIcon from "@mui/icons-material/Close";
+import OutsideClickHandler from "react-outside-click-handler";
 
-import "../assets/styles/NavBarWithDrawer.css";
-
-function NavBar() {
+function NavBar({ setDrawerOpened }) {
   const [open, setOpen] = useState(false);
   const navbarRef = useRef();
   const getNavbarHeight = () => {
     if (navbarRef.current) {
       return navbarRef.current.offsetHeight;
     }
-    return 0; // Valor predeterminado si no se puede obtener la altura del Navbar
+    return 0;
   };
   const toggleDrawer = () => {
+    setDrawerOpened(!open);
     setOpen(!open);
   };
+  const closeDrawer = () => {
+    if (open) {
+      toggleDrawer();
+    }
+  };
+
+  useEffect(() => {
+    /*     window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    }; */
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   return (
-    <div ref={navbarRef} className={`navbar ${open ? "drawer-open" : ""}`}>
+    <div ref={navbarRef}>
       <AppBar position="static" color="transparent">
         <Toolbar>
           <IconButton
@@ -54,22 +71,26 @@ function NavBar() {
           </Box>
         </Toolbar>
       </AppBar>
-      <SwipeableDrawer
-        variant="persistent"
-        open={open}
-        onOpen={() => setOpen(true)}
-        onClose={() => setOpen(false)}
-        anchor="left"
-        PaperProps={{
-          style: {
-            width: "70%",
-            top: `${getNavbarHeight()}px`,
-            backgroundColor: "#093C59",
-          },
-        }}
-      >
-        <DrawerList toggleDrawer={toggleDrawer} />
-      </SwipeableDrawer>
+      <OutsideClickHandler onOutsideClick={closeDrawer}>
+        <SwipeableDrawer
+          variant="persistent"
+          open={open}
+          onOpen={toggleDrawer}
+          onClose={toggleDrawer}
+          anchor="left"
+          PaperProps={{
+            style: {
+              width: "70%",
+              /* marginTop: "3.5rem", */
+              position: "absolute",
+              top: `${getNavbarHeight()}px`,
+              backgroundColor: "#093C59",
+            },
+          }}
+        >
+          <DrawerList toggleDrawer={toggleDrawer} />
+        </SwipeableDrawer>
+      </OutsideClickHandler>
     </div>
   );
 }
