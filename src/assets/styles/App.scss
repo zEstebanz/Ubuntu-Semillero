@@ -236,6 +236,8 @@
 
     .swiper-pagination-bullet {
         background-color: white;
+        color: #FDFDFE;
+        opacity: 1;
     }
 
     .swiper-pagination-bullet-active {
@@ -260,7 +262,7 @@
         /* Estilos para el icono de flecha */
         .swiper-button-prev::after,
         .swiper-button-next::after {
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 800;
             /* Tamaño del icono */
         }
