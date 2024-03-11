@@ -268,3 +268,9 @@
         }
     }
 }
+
+.outlet-inactive {
+    pointer-events: none;
+    filter: blur(1.5px);
+}
+

@@ -1,17 +1,16 @@
 import { Outlet, ScrollRestoration } from "react-router-dom";
+import NavBar from "./NavBar";
+import { useState } from "react";
 
 export const Layout = () => {
+  const [drawerOpened, setDrawerOpened] = useState(false);
   return (
     <>
-      <div>
-        <ul>
-          <li><a href="/microemprendimientos">Micro</a></li>
-          <li><a href="/publicaciones">Public</a></li>
-          <li><a href="/">Home</a></li>
-        </ul>
-      </div>
+      <NavBar setDrawerOpened={setDrawerOpened} />
       <ScrollRestoration />
-      <Outlet />
+      <div className={drawerOpened === true ? `outlet-inactive` : ""}>
+        <Outlet />
+      </div>
     </>
   );
 };
