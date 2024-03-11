@@ -75,6 +75,7 @@ function LandingPosts() {
             width: "10rem",
             borderRadius: "2rem",
             padding: "0.5rem 1.4rem",
+            marginTop: "1rem",
             marginBottom: "1rem",
             textTransform: "none",
           }}
