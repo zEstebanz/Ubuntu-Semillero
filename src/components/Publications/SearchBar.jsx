@@ -3,12 +3,12 @@ import { TextField, Grid, Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
 const SearchBar = ({ busqueda, setBusqueda }) => {
+  const handleBusquedaChange = (event) => {
+    setBusqueda(event.target.value);
+  };
+
   return (
-    <Grid
-      container
-      justifyContent="center"
-      className="search-bar"
-    >
+    <Grid container justifyContent="center" className="search-bar">
       <Box
         sx={{
           display: 'flex',
@@ -24,6 +24,8 @@ const SearchBar = ({ busqueda, setBusqueda }) => {
           placeholder="Buscar Microemprendimientos"
           variant="outlined"
           fullWidth
+          value={busqueda}
+          onChange={handleBusquedaChange}
           sx={{
             '& .MuiOutlinedInput-root': {
               borderRadius: 0
@@ -35,7 +37,6 @@ const SearchBar = ({ busqueda, setBusqueda }) => {
         />
       </Box>
     </Grid>
-
   );
 };
 

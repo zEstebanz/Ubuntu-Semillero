@@ -40,5 +40,3 @@ const SearchMicro = ({ search, setSearch }) => {
 };
 
 export default SearchMicro;
-
-
