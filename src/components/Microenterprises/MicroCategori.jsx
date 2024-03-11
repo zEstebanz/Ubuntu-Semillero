@@ -64,6 +64,9 @@ const Categories = () => {
                         <Link
                             component="button"
                             to="/microemprendimientos/1"
+                            style={{
+                                textDecoration: "none"
+                            }}
                         >
                             <CategoriesCard
                                 imageUrl="./public/img/eco-social.png"
@@ -74,7 +77,13 @@ const Categories = () => {
                         </Link>
 
 
-                        <Link component="button" to="/microemprendimientos/2">
+                        <Link
+                            component="button"
+                            to="/microemprendimientos/2"
+                            style={{
+                                textDecoration: "none"
+                            }}
+                        >
 
                             <CategoriesCard
                                 imageUrl="./public/img/agroecologia.png"
@@ -86,7 +95,13 @@ const Categories = () => {
                             />
                         </Link>
 
-                        <Link component="button" to="/microemprendimientos/3">
+                        <Link
+                            component="button"
+                            to="/microemprendimientos/3"
+                            style={{
+                                textDecoration: "none"
+                            }}
+                        >
                             <CategoriesCard
                                 imageUrl="./public/img/conservacion.png"
                                 altText="Logo de Conservación."
@@ -99,7 +114,13 @@ const Categories = () => {
                         </Link>
 
 
-                        <Link component="button" to="/microemprendimientos/4">
+                        <Link
+                            component="button"
+                            to="/microemprendimientos/4"
+                            style={{
+                                textDecoration: "none"
+                            }}
+                        >
                             <CategoriesCard
                                 imageUrl="./public/img/empresas.png"
                                 altText="Logo de Empresas."
