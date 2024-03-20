@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Box, Typography, styled, TextField, Button } from '@mui/material';
-import CustomButton from "../../components/buttonCustom";
+import CustomButton from "../buttonCustom";
 import { MessageText } from "./Message/MessageText";
 import upload from "../../../public/img/upload.svg";
 
@@ -90,8 +90,38 @@ function PublicationsForm() {
                 <Input
                     type="text"
                     required
-                    id="full-name"
-                    label="Titulo"
+                    id="subcategoria"
+                    label="Subcategoría"
+                    fullWidth
+                    sx={{
+                        mt: 3,
+                    }}
+                />
+                <Input
+                    type="text"
+                    required
+                    id="pais"
+                    label="País"
+                    fullWidth
+                    sx={{
+                        mt: 3,
+                    }}
+                />
+                <Input
+                    type="text"
+                    required
+                    id="provincia-estado"
+                    label="Provincia/Estado"
+                    fullWidth
+                    sx={{
+                        mt: 3,
+                    }}
+                />
+                <Input
+                    type="text"
+                    required
+                    id="ciudad"
+                    label="Ciudad"
                     fullWidth
                     sx={{
                         mt: 3,
@@ -100,9 +130,22 @@ function PublicationsForm() {
                 <Input
                     required
                     type="text"
+                    //defaultValue={messageDefaultValue}
+                    placeholder='Descripción del Microemprendimiento'
+                    fullWidth
+                    multiline
+                    rows={7}
+                    sx={{
+                        mt: 2,
+                    }}
+                    onChange={(event) => setCounter(event.target.value.length)}
+                />
+                <Input
+                    required
+                    type="text"
                     helperText={<MessageText counter={counter} />}
                     //defaultValue={messageDefaultValue}
-                    placeholder='Ingresa el contenido de la publicación*'
+                    placeholder='Más información del Microemprendimiento'
                     fullWidth
                     multiline
                     rows={7}
