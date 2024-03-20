@@ -10,6 +10,7 @@ import DashboardMicro from "../pages/Dashboard/DashboardMicro";
 import DashboardPublications from "../pages/Dashboard/DashboardPublications";
 import DashboardAdmin from "../pages/Dashboard/DashboardAdmin";
 import PublicationsForm from "../components/Dashboard/PublicationsForm";
+import MicroForm from "../components/Dashboard/MicroForm";
 
 const router = createBrowserRouter([
     {
@@ -45,7 +46,13 @@ const router = createBrowserRouter([
             //dashboard
             {
                 path: '/dashboard-micro',
-                element: <DashboardMicro />
+                element: <DashboardMicro />,
+                children: [
+                    {
+                        path: '/dashboard-micro/form',
+                        element: <MicroForm />
+                    }
+                ]
             },
             {
                 path: '/dashboard-admin',
