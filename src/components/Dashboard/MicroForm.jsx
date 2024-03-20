@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Box, Typography, styled, TextField, Button } from '@mui/material';
-import CustomButton from "../buttonCustom";
+import { Box, Typography, styled, TextField, Select, MenuItem } from '@mui/material';
+import CustomButton from "../../components/buttonCustom";
 import { MessageText } from "./Message/MessageText";
 import upload from "../../../public/img/upload.svg";
 
@@ -28,20 +28,58 @@ const handleImageUpload = () => {
     // Lógica para manejar la carga de la imagen aquí
 };
 
-function PublicationsForm() {
+const provinciasArgentinas = [
+    'Buenos Aires',
+    'Catamarca',
+    'Chaco',
+    'Chubut',
+    'Córdoba',
+    'Corrientes',
+    'Entre Ríos',
+    'Formosa',
+    'Jujuy',
+    'La Pampa',
+    'La Rioja',
+    'Mendoza',
+    'Misiones',
+    'Neuquén',
+    'Río Negro',
+    'Salta',
+    'San Juan',
+    'San Luis',
+    'Santa Cruz',
+    'Santa Fe',
+    'Santiago del Estero',
+    'Tierra del Fuego',
+    'Tucumán'
+];
+
+const paises = [
+    'Argentina',
+    'Chile',
+    'Perú',
+    'Brasil',
+    'Uruguay',
+    'Paraguay',
+];
+function MicroForm() {
     const [counter, setCounter] = useState(0);
+    const [provincia, setProvincia] = useState('');
+    const [categoria, setCategoria] = useState('');
+    const [pais, setPais] = useState('');
+
     const [isFormComplete, setIsFormComplete] = useState(false);
-    const messageDefaultValue = `Ingresa el contenido de la publicación*`;
+
     const fileInputRef = useRef(null);
 
     useEffect(() => {
-        // Verifica si todos los campos están completos
-        if (counter > 0 && true) {
-            setIsFormComplete(true);
-        } else {
-            setIsFormComplete(false);
-        }
-    }, [counter /*, otros estados necesarios */]);
+        const allFieldsCompleted = provincia && categoria && pais && ciudad && title && informacion && descripcion; // Verifica si todos los campos están completos
+        setIsFormComplete(allFieldsCompleted);
+    }, [provincia, categoria, pais]); // Dependencias del efecto
+
+    const handleImageUpload = () => {
+        // Lógica para manejar la carga de la imagen aquí
+    };
 
     const handleClick = () => {
         fileInputRef.current.click(); // Simula hacer clic en el campo de entrada de archivo
@@ -52,6 +90,18 @@ function PublicationsForm() {
         if (file) {
             handleImageUpload(file); // Maneja la carga de la imagen
         }
+    };
+
+    const handleProvinciaChange = (event) => {
+        setProvincia(event.target.value);
+    };
+
+    const handleCategoriaChange = (event) => {
+        setCategoria(event.target.value);
+    };
+
+    const handlePaisChange = (event) => {
+        setPais(event.target.value);
     };
 
     return (
@@ -73,63 +123,142 @@ function PublicationsForm() {
                         fontWeight: 500,
                     }}
                 >
-                    Microemprendimientos
+                    Carga de microemprendimientos
                 </Typography>
                 <Typography
                     variant="h3"
-                    color="primary"
                     sx={{
-                        fontSize: '1.5rem',
-                        textAlign: 'center',
-                        fontWeight: 700,
-                        paddingTop: '32px'
-                    }}
-                >
-                    EcoSenda
-                </Typography>
-
-                <Typography
-                    variant="h3"
-                    sx={{
-                        fontSize: '1rem',
+                        fontSize: '1.25rem',
                         textAlign: 'center',
                         fontWeight: 400,
                         lineHeight: '35px',
                         paddingTop: '32px'
                     }}
                 >
-                    Agroecología/Orgánicos/Alimentación saludable
+                    Completá los datos para crear una nueva publicación
                 </Typography>
                 <Input
                     type="text"
                     required
-                    id="subcategoria"
+                    id="title"
+                    label="Nombre del Microemprendimiento*"
+                    fullWidth
+                    sx={{
+                        mt: 3,
+                    }}
+                />
+                <Typography
+                    sx={{
+                        fontSize: '13px',
+                        fontWeight: 400,
+                        lineHeight: '35px',
+                    }}
+                >
+                    Se visualizará en el título de la publicación
+                </Typography>
+
+                {/* Categoría */}
+                <Select
+                    value={categoria}
+                    onChange={handleCategoriaChange}
+                    fullWidth
+                    required
+                    sx={{ mt: 3 }}
+                    displayEmpty
+                    renderValue={(value) => {
+                        if (value === '') {
+                            return <p>Categoría*</p>;
+                        }
+                        return value;
+                    }}
+                >
+                    <MenuItem value="Economía social/Desarrollo local/
+                        Inclusión financiera">
+                        Economía social/Desarrollo local/
+                        Inclusión financiera
+                    </MenuItem>
+
+                    <MenuItem value="Agroecología/Orgánicos/Alimentación
+                        saludable">
+                        Agroecología/Orgánicos/Alimentación
+                        saludable
+                    </MenuItem>
+
+                    <MenuItem value="Conservación/Regeneración/Servicios
+                        ecosistémicos">
+                        Conservación/Regeneración/Servicios
+                        ecosistémicos
+                    </MenuItem>
+
+                    <MenuItem value="Empresas/Organismos de impacto/
+                        Economía circular">
+                        Empresas/Organismos de impacto/
+                        Economía circular
+                    </MenuItem>
+                </Select>
+
+                {/* Sub-Categoría */}
+
+                <Input
+                    type="text"
+                    required
+                    id="title"
                     label="Subcategoría"
                     fullWidth
                     sx={{
                         mt: 3,
                     }}
                 />
-                <Input
-                    type="text"
-                    required
-                    id="pais"
-                    label="País"
-                    fullWidth
+                <Typography
                     sx={{
-                        mt: 3,
+                        fontSize: '13px',
+                        fontWeight: 400,
+                        lineHeight: '35px',
                     }}
-                />
-                <Input
-                    type="text"
+                >
+                    Escribi la subcategoría del Microemprendimiento
+                </Typography>
+
+                {/* País */}
+
+                <Select
+                    value={pais}
                     required
-                    id="provincia-estado"
-                    label="Provincia/Estado"
+                    onChange={handlePaisChange}
                     fullWidth
-                    sx={{
-                        mt: 3,
-                    }}
-                />
+                    sx={{ mt: 3 }}
+                    displayEmpty
+                >
+                    <MenuItem value="" disabled>
+                        País*
+                    </MenuItem>
+                    {paises.map((pais) => (
+                        <MenuItem key={pais} value={pais}>
+                            {pais}
+                        </MenuItem>
+                    ))}
+                </Select>
+
+                {/* Provincia/Estado */}
+
+                <Select
+                    value={provincia}
+                    required
+                    onChange={handleProvinciaChange}
+                    fullWidth
+                    sx={{ mt: 3 }}
+                    displayEmpty
+                >
+                    <MenuItem value="" disabled>
+                        Provincia/Estado*
+                    </MenuItem>
+                    {provinciasArgentinas.map((provincia) => (
+                        <MenuItem key={provincia} value={provincia}>
+                            {provincia}
+                        </MenuItem>
+                    ))}
+                </Select>
+
                 <Input
                     type="text"
                     required
@@ -143,7 +272,7 @@ function PublicationsForm() {
                 <Input
                     type="text"
                     required
-                    id="ciudad"
+                    id="descripcion"
                     label="Descripción del Microemprendimiento"
                     fullWidth
                     sx={{
@@ -153,7 +282,7 @@ function PublicationsForm() {
                 <Input
                     type="text"
                     required
-                    id="ciudad"
+                    id="informacion"
                     label="Más información del Microemprendimiento"
                     fullWidth
                     sx={{
@@ -252,4 +381,4 @@ function PublicationsForm() {
     )
 }
 
-export default PublicationsForm;
+export default MicroForm;

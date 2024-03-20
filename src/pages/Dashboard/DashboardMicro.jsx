@@ -39,6 +39,7 @@ function DashboardMicro() {
                 Microemprendimientos
               </Typography>
 
+              {/* Carga */}
               <Link to={"/dashboard-micro/form"}>
                 <CustomButton
                   fullWidth
@@ -47,6 +48,18 @@ function DashboardMicro() {
                   }}
                 >
                   Cargar Microemprendimiento
+                </CustomButton>
+              </Link>
+
+              {/* Edit */}
+              <Link to={"/dashboard-micro/form-edit"}>
+                <CustomButton
+                  fullWidth
+                  sx={{
+                    my: 5,
+                  }}
+                >
+                  Editar Microemprendimiento
                 </CustomButton>
               </Link>
 
