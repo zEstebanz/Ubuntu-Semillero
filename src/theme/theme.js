@@ -46,8 +46,11 @@ const theme = createTheme({
     black: {
       main: "#090909"
     },
-    white:{
+    white: {
       main: "#fdfdfd",
+    },
+    grayDark: {
+      main: "#6E6F70"
     }
   },
 
