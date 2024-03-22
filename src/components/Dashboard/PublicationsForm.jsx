@@ -31,6 +31,7 @@ const handleImageUpload = () => {
 function PublicationsForm() {
     const [counter, setCounter] = useState(0);
     const [isFormComplete, setIsFormComplete] = useState(false);
+    const [images, setImages] = useState([]);
     const messageDefaultValue = `Ingresa el contenido de la publicación*`;
     const fileInputRef = useRef(null);
 
@@ -47,10 +48,20 @@ function PublicationsForm() {
         fileInputRef.current.click(); // Simula hacer clic en el campo de entrada de archivo
     };
 
-    const handleChange = (event) => {
-        const file = event.target.files[0]; // Obtiene el archivo seleccionado
-        if (file) {
-            handleImageUpload(file); // Maneja la carga de la imagen
+
+    const handleChange = (e) => {
+        const files = e.target.files;
+        const imagesArray = [];
+
+        for (let i = 0; i < files.length; i++) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                imagesArray.push(event.target.result);
+                if (imagesArray.length === files.length) {
+                    setImages([...images, ...imagesArray]);
+                }
+            };
+            reader.readAsDataURL(files[i]);
         }
     };
 
@@ -120,43 +131,69 @@ function PublicationsForm() {
                     <Box
                         sx={{
                             display: 'flex',
-                            justifyContent: 'flex-end',
-                            mt: 2,
+                            flexDirection: 'column', // Cambia la dirección del contenido a una columna
+                            alignItems: 'center', // Alinea los elementos en el centro horizontal
                         }}
                     >
                         <input
                             type="file"
                             accept="image/*"
+                            multiple
                             ref={fileInputRef}
                             style={{ display: 'none' }} // Oculta visualmente el campo de entrada de archivo
                             onChange={handleChange}
+                            disabled={images.length === 3} // Deshabilita el input cuando hay 3 imágenes cargadas
                         />
-                        <button
-                            style={{
-                                width: '152px',
-                                height: '40px',
-                                padding: '10px 16px',
-                                border: 'none',
-                                gap: '8px',
-                                borderRadius: '100px',
-                                fontSize: '0.75rem',
-                                fontWeight: 700,
-                                textAlign: 'center',
-                                textTransform: 'none',
-                                backgroundColor: '#093C59',
-                                color: '#FDFDFE'
-                            }}
-                            onClick={handleClick}
-                            disabled={!isFormComplete}
-                        >
-                            <img
-                                src={upload}
-                                alt="Upload Icon"
-                                style={{ marginRight: '8px', verticalAlign: 'middle' }}
-                            />
-                            Subir imágen
-                        </button>
+
+                        <div>
+                            {images.map((image, index) => (
+                                <img
+                                    key={index}
+                                    src={image}
+                                    alt={`preview ${index}`}
+                                    style={{
+                                        width: '328px',
+                                        height: '112px',
+                                        borderRadius: "4px",
+                                    }}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Renderiza el botón solo si hay menos de 3 imágenes cargadas */}
+                        {images.length < 3 && (
+                            <button
+                                style={{
+                                    width: '152px',
+                                    height: '40px',
+                                    padding: '10px 16px',
+                                    border: 'none',
+                                    gap: '8px',
+                                    borderRadius: '100px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 700,
+                                    textAlign: 'center',
+                                    textTransform: 'none',
+                                    backgroundColor: '#093C59',
+                                    color: '#FDFDFE',
+                                    marginTop: '16px' // Añade un margen superior
+                                }}
+                                onClick={handleClick}
+                                disabled={images.length === 3} // Deshabilita el botón cuando hay 3 imágenes cargadas
+                            >
+                                <img
+                                    src={upload}
+                                    alt="Upload Icon"
+                                    style={{
+                                        marginRight: '8px',
+                                        verticalAlign: 'middle',
+                                    }}
+                                />
+                                Subir imagen
+                            </button>
+                        )}
                     </Box>
+
                     <Box
                         sx={{
                             mt: 2,
