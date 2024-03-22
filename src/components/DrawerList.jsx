@@ -41,20 +41,20 @@ function DrawerList({ toggleDrawer }) {
       <ListItem>
         <Link
           onClick={handleClickLink}
-          to="/dashboard-micro"
+          to="/dashboard-admin"
           style={{ textDecoration: "none", color: "white" }}
         >
-          <Typography variant="subtitles">DashboardMicro</Typography>
+          <Typography variant="subtitles">Dashboard Administrador</Typography>
         </Link>
       </ListItem>
 
       <ListItem>
         <Link
           onClick={handleClickLink}
-          to="/dashboard-admin"
+          to="/dashboard-micro"
           style={{ textDecoration: "none", color: "white" }}
         >
-          <Typography variant="subtitles">DashboardAdmin</Typography>
+          <Typography variant="subtitles">DashboardMicro</Typography>
         </Link>
       </ListItem>
 

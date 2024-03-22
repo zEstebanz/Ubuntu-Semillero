@@ -66,6 +66,7 @@ function MicroForm() {
     const [counter, setCounter] = useState(0);
     const [provincia, setProvincia] = useState('');
     const [categoria, setCategoria] = useState('');
+    const [images, setImages] = useState([]);
     const [pais, setPais] = useState('');
 
     const [isFormComplete, setIsFormComplete] = useState(false);
@@ -102,6 +103,22 @@ function MicroForm() {
 
     const handlePaisChange = (event) => {
         setPais(event.target.value);
+    };
+
+    const handleChangeImage = (e) => {
+        const files = e.target.files;
+        const imagesArray = [];
+
+        for (let i = 0; i < files.length; i++) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                imagesArray.push(event.target.result);
+                if (imagesArray.length === files.length) {
+                    setImages([...images, ...imagesArray]);
+                }
+            };
+            reader.readAsDataURL(files[i]);
+        }
     };
 
     return (
@@ -299,42 +316,67 @@ function MicroForm() {
                     <Box
                         sx={{
                             display: 'flex',
-                            justifyContent: 'flex-end',
-                            mt: 2,
+                            flexDirection: 'column', // Cambia la dirección del contenido a una columna
+                            alignItems: 'center', // Alinea los elementos en el centro horizontal
                         }}
                     >
                         <input
                             type="file"
                             accept="image/*"
+                            multiple
                             ref={fileInputRef}
                             style={{ display: 'none' }} // Oculta visualmente el campo de entrada de archivo
-                            onChange={handleChange}
+                            onChange={handleChangeImage}
+                            disabled={images.length === 3} // Deshabilita el input cuando hay 3 imágenes cargadas
                         />
-                        <button
-                            style={{
-                                width: '152px',
-                                height: '40px',
-                                padding: '10px 16px',
-                                border: 'none',
-                                gap: '8px',
-                                borderRadius: '100px',
-                                fontSize: '0.75rem',
-                                fontWeight: 700,
-                                textAlign: 'center',
-                                textTransform: 'none',
-                                backgroundColor: '#093C59',
-                                color: '#FDFDFE'
-                            }}
-                            onClick={handleClick}
-                            disabled={!isFormComplete}
-                        >
-                            <img
-                                src={upload}
-                                alt="Upload Icon"
-                                style={{ marginRight: '8px', verticalAlign: 'middle' }}
-                            />
-                            Subir imágen
-                        </button>
+
+                        <div>
+                            {images.map((image, index) => (
+                                <img
+                                    key={index}
+                                    src={image}
+                                    alt={`preview ${index}`}
+                                    style={{
+                                        width: '328px',
+                                        height: '112px',
+                                        borderRadius: "4px",
+                                    }}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Renderiza el botón solo si hay menos de 3 imágenes cargadas */}
+                        {images.length < 3 && (
+                            <button
+                                style={{
+                                    width: '152px',
+                                    height: '40px',
+                                    padding: '10px 16px',
+                                    border: 'none',
+                                    gap: '8px',
+                                    borderRadius: '100px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 700,
+                                    textAlign: 'center',
+                                    textTransform: 'none',
+                                    backgroundColor: '#093C59',
+                                    color: '#FDFDFE',
+                                    marginTop: '16px' // Añade un margen superior
+                                }}
+                                onClick={handleClick}
+                                disabled={images.length === 3} // Deshabilita el botón cuando hay 3 imágenes cargadas
+                            >
+                                <img
+                                    src={upload}
+                                    alt="Upload Icon"
+                                    style={{
+                                        marginRight: '8px',
+                                        verticalAlign: 'middle',
+                                    }}
+                                />
+                                Subir imagen
+                            </button>
+                        )}
                     </Box>
                     <Box
                         sx={{

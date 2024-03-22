@@ -49,7 +49,7 @@ function PublicationsForm() {
     };
 
 
-    const handleChange = (e) => {
+    const handleChangeImage = (e) => {
         const files = e.target.files;
         const imagesArray = [];
 
@@ -141,7 +141,7 @@ function PublicationsForm() {
                             multiple
                             ref={fileInputRef}
                             style={{ display: 'none' }} // Oculta visualmente el campo de entrada de archivo
-                            onChange={handleChange}
+                            onChange={handleChangeImage}
                             disabled={images.length === 3} // Deshabilita el input cuando hay 3 imágenes cargadas
                         />
 
