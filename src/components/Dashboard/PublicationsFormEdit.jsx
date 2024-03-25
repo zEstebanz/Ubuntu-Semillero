@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Box, Typography, styled, TextField, Select, MenuItem } from '@mui/material';
+import { Box, Typography, styled, TextField, Button } from '@mui/material';
 import CustomButton from "../../components/buttonCustom";
 import { MessageText } from "./Message/MessageText";
 import upload from "../../../public/img/upload.svg";
@@ -28,82 +28,26 @@ const handleImageUpload = () => {
     // Lógica para manejar la carga de la imagen aquí
 };
 
-const provinciasArgentinas = [
-    'Buenos Aires',
-    'Catamarca',
-    'Chaco',
-    'Chubut',
-    'Córdoba',
-    'Corrientes',
-    'Entre Ríos',
-    'Formosa',
-    'Jujuy',
-    'La Pampa',
-    'La Rioja',
-    'Mendoza',
-    'Misiones',
-    'Neuquén',
-    'Río Negro',
-    'Salta',
-    'San Juan',
-    'San Luis',
-    'Santa Cruz',
-    'Santa Fe',
-    'Santiago del Estero',
-    'Tierra del Fuego',
-    'Tucumán'
-];
-
-const paises = [
-    'Argentina',
-    'Chile',
-    'Perú',
-    'Brasil',
-    'Uruguay',
-    'Paraguay',
-];
-function MicroForm() {
+function PublicationsForm() {
     const [counter, setCounter] = useState(0);
-    const [provincia, setProvincia] = useState('');
-    const [categoria, setCategoria] = useState('');
-    const [images, setImages] = useState([]);
-    const [pais, setPais] = useState('');
-
     const [isFormComplete, setIsFormComplete] = useState(false);
-
+    const [images, setImages] = useState([]);
+    const messageDefaultValue = `Ingresa el contenido de la publicación*`;
     const fileInputRef = useRef(null);
 
     useEffect(() => {
-        const allFieldsCompleted = provincia && categoria && pais && ciudad && title && informacion && descripcion; // Verifica si todos los campos están completos
-        setIsFormComplete(allFieldsCompleted);
-    }, [provincia, categoria, pais]); // Dependencias del efecto
-
-    const handleImageUpload = () => {
-        // Lógica para manejar la carga de la imagen aquí
-    };
+        // Verifica si todos los campos están completos
+        if (counter > 0 && true) {
+            setIsFormComplete(true);
+        } else {
+            setIsFormComplete(false);
+        }
+    }, [counter]);
 
     const handleClick = () => {
-        fileInputRef.current.click(); // Simula hacer clic en el campo de entrada de archivo
+        fileInputRef.current.click();
     };
 
-    const handleChange = (event) => {
-        const file = event.target.files[0]; // Obtiene el archivo seleccionado
-        if (file) {
-            handleImageUpload(file); // Maneja la carga de la imagen
-        }
-    };
-
-    const handleProvinciaChange = (event) => {
-        setProvincia(event.target.value);
-    };
-
-    const handleCategoriaChange = (event) => {
-        setCategoria(event.target.value);
-    };
-
-    const handlePaisChange = (event) => {
-        setPais(event.target.value);
-    };
 
     const handleChangeImage = (e) => {
         const files = e.target.files;
@@ -134,12 +78,10 @@ function MicroForm() {
                 }}
                 maxWidth='sm'
             >
-
                 <Box
                     component='form'
                     sx={{
                         width: '328px',
-                        display: 'flex',
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -151,24 +93,9 @@ function MicroForm() {
                             fontSize: '1.75rem',
                             textAlign: 'center',
                             fontWeight: 500,
-                            lineHeight: '35px'
                         }}
                     >
-                        Microemprendimientos
-                    </Typography>
-
-                    <Typography
-                        variant="h3"
-                        color="primary"
-                        sx={{
-                            fontSize: '1.375rem',
-                            textAlign: 'center',
-                            fontWeight: 700,
-                            lineHeight: '24px',
-                            paddingTop: '32px'
-                        }}
-                    >
-                        EcoSenda
+                        Edición de publicación
                     </Typography>
                     <Typography
                         variant="h3"
@@ -177,106 +104,46 @@ function MicroForm() {
                             textAlign: 'center',
                             fontWeight: 400,
                             lineHeight: '35px',
-                            paddingTop: '8px'
+                            paddingTop: '32px'
                         }}
                     >
-                        Agroecología/Orgánicos/Alimentación saludable
+                        Modificá los datos de la publicación
                     </Typography>
-
-                    {/* Sub-Categoría */}
-
                     <Input
                         type="text"
                         required
-                        id="title"
-                        label="Subcategoría"
-                        fullWidth
-                        sx={{
-                            mt: 3,
-                        }}
-                    />
-
-                    {/* País */}
-
-                    <Select
-                        value={pais}
-                        required
-                        onChange={handlePaisChange}
-                        fullWidth
-                        sx={{ mt: 3 }}
-                        displayEmpty
-                    >
-                        <MenuItem value="" disabled>
-                            País*
-                        </MenuItem>
-                        {paises.map((pais) => (
-                            <MenuItem key={pais} value={pais}>
-                                {pais}
-                            </MenuItem>
-                        ))}
-                    </Select>
-
-                    {/* Provincia/Estado */}
-
-                    <Select
-                        value={provincia}
-                        required
-                        onChange={handleProvinciaChange}
-                        fullWidth
-                        sx={{ mt: 3 }}
-                        displayEmpty
-                    >
-                        <MenuItem value="" disabled>
-                            Provincia/Estado*
-                        </MenuItem>
-                        {provinciasArgentinas.map((provincia) => (
-                            <MenuItem key={provincia} value={provincia}>
-                                {provincia}
-                            </MenuItem>
-                        ))}
-                    </Select>
-
-                    <Input
-                        type="text"
-                        required
-                        id="ciudad"
-                        label="Ciudad"
+                        id="full-name"
+                        label="Titulo"
                         fullWidth
                         sx={{
                             mt: 3,
                         }}
                     />
                     <Input
-                        type="text"
                         required
-                        id="descripcion"
-                        label="Descripción del Microemprendimiento"
-                        fullWidth
-                        sx={{
-                            mt: 3,
-                        }}
-                    />
-                    <Input
                         type="text"
-                        required
-                        id="informacion"
-                        label="Más información del Microemprendimiento"
+                        helperText={<MessageText counter={counter} />}
+                        //defaultValue={messageDefaultValue}
+                        placeholder='Ingresa el contenido de la publicación*'
                         fullWidth
+                        multiline
+                        rows={7}
                         sx={{
-                            mt: 3,
+                            mt: 2,
                         }}
-
+                        onChange={(event) => setCounter(event.target.value.length)}
                     />
                     <Box
                         sx={{
-                            mt: 2
+                            mt: 2,
                         }}
                     >
+
                         <Box
                             sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
-                                alignItems: 'center'
+                                alignItems: 'center',
                             }}
                         >
                             <input
@@ -284,7 +151,7 @@ function MicroForm() {
                                 accept="image/*"
                                 multiple
                                 ref={fileInputRef}
-                                style={{ display: 'none' }} // Oculta visualmente el campo de entrada de archivo
+                                style={{ display: 'none' }}
                                 onChange={handleChangeImage}
                                 disabled={images.length === 3} // Deshabilita el input cuando hay 3 imágenes cargadas
                             />
@@ -320,7 +187,7 @@ function MicroForm() {
                                         textTransform: 'none',
                                         backgroundColor: '#093C59',
                                         color: '#FDFDFE',
-                                        marginTop: '16px' // Añade un margen superior
+                                        marginTop: '16px'
                                     }}
                                     onClick={handleClick}
                                     disabled={images.length === 3} // Deshabilita el botón cuando hay 3 imágenes cargadas
@@ -376,13 +243,12 @@ function MicroForm() {
                         }}
                         disabled={!isFormComplete}
                     >
-                        Guardar cambios
+                        Crear publicación
                     </CustomButton>
                 </Box>
             </Box>
-
         </section>
     )
 }
 
-export default MicroForm;
+export default PublicationsForm;

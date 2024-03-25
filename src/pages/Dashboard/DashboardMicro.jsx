@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Typography } from '@mui/material'
 import CustomButton from "../../components/buttonCustom";
-import MicroList from '../../components/Microenterprises/MicroList';
+import Micro from '../../components/Microenterprises/MicroDashboard';
 import { Outlet, useLocation, Link } from 'react-router-dom'; // Importar useLocation
 
 
@@ -44,38 +44,16 @@ function DashboardMicro() {
                 <CustomButton
                   fullWidth
                   sx={{
-                    my: 5,
+                    my: '32px',
                   }}
                 >
                   Cargar Microemprendimiento
                 </CustomButton>
               </Link>
-
-              {/* Edit */}
-              <Link to={"/dashboard-micro/form-edit"}>
-                <CustomButton
-                  fullWidth
-                  sx={{
-                    my: 5,
-                  }}
-                >
-                  Editar Microemprendimiento
-                </CustomButton>
-              </Link>
-
-              <Typography
-                variant="h3"
-                sx={{
-                  fontSize: '1.375rem',
-                  textAlign: 'center',
-                  fontWeight: 600
-                }}
-              >
-                Publicaciones cargadas
-              </Typography>
-
               {/* Aca deberia llamar a las publicaciones */}
-              <MicroList busqueda={""} />
+              <div style={{marginTop: '16px'}}>
+                <Micro busqueda={""} />
+              </div>
             </Box>
           )}
         </div>

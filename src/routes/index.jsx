@@ -9,9 +9,10 @@ import MicroList from "../components/Microenterprises/MicroList";
 import DashboardMicro from "../pages/Dashboard/DashboardMicro";
 import DashboardPublications from "../pages/Dashboard/DashboardPublications";
 import DashboardAdmin from "../pages/Dashboard/DashboardAdmin";
-import PublicationsForm from "../components/Dashboard/PublicationsForm";
 import MicroFormEdit from "../components/Dashboard/MicroFormEdit";
 import MicroForm from "../components/Dashboard/MicroForm";
+import PublicationsForm from "../components/Dashboard/PublicationsForm";
+import PublicationsFormEdit from "../components/Dashboard/PublicationsFormEdit";
 
 
 const router = createBrowserRouter([
@@ -53,12 +54,12 @@ const router = createBrowserRouter([
                     {
                         path: '/dashboard-micro/form',
                         element: <MicroForm />
-                    },
-                    {
-                        path: '/dashboard-micro/form-edit',
-                        element: <MicroFormEdit />
                     }
                 ]
+            },
+            {
+                path: '/dashboard-micro/form-edit',
+                element: <MicroFormEdit />
             },
             {
                 path: '/dashboard-admin',
@@ -71,6 +72,10 @@ const router = createBrowserRouter([
                     {
                         path: '/dashboard-publications/form',
                         element: <PublicationsForm />
+                    },
+                    {
+                        path: '/dashboard-publications/form-edit',
+                        element: <PublicationsFormEdit />
                     }
                 ]
             },

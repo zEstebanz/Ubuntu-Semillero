@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { Box, Divider, Typography } from '@mui/material'
 import getRubros from '../../api/rubros/getRubros'
 
@@ -67,6 +67,7 @@ function DashboardAdmin() {
           backgroundColor: '#093C59',
           margin: 'auto',
           borderRadius: '8px',
+          padding: '8px 16px',
         }}>
 
           <div>
@@ -119,7 +120,7 @@ function DashboardAdmin() {
       </section>
 
       <section style={{ marginTop: '16px' }}>
-        <div style={{ width: '328px', margin: 'auto', borderRadius: '8px' }}>
+        <div style={{ width: '328px', margin: 'auto', borderRadius: '8px', }}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
             {/* Primer div */}
@@ -163,7 +164,7 @@ function DashboardAdmin() {
           backgroundColor: '#EAEAEA',
           margin: 'auto',
           borderRadius: '8px',
-          padding: '8px, 16px, 8px, 16px'
+          padding: '8px 16px 8px 16px'
         }}>
           <div>
             <Typography
@@ -286,8 +287,6 @@ function DashboardAdmin() {
           Visualizaciones por Publicación
         </Typography>
 
-
-
         <div style={{
           width: '328px',
           minHeight: '80px',
@@ -295,6 +294,7 @@ function DashboardAdmin() {
           margin: 'auto',
           borderRadius: '8px',
           border: '1px solid #093C59',
+          padding: '8px 16px'
         }}>
           <div
             style={{

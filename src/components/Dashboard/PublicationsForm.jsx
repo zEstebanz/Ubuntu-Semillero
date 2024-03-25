@@ -42,10 +42,10 @@ function PublicationsForm() {
         } else {
             setIsFormComplete(false);
         }
-    }, [counter /*, otros estados necesarios */]);
+    }, [counter]);
 
     const handleClick = () => {
-        fileInputRef.current.click(); // Simula hacer clic en el campo de entrada de archivo
+        fileInputRef.current.click();
     };
 
 
@@ -70,7 +70,7 @@ function PublicationsForm() {
             <Box
                 component='form'
                 sx={{
-                    width: 1,
+                    width: '328px',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -125,14 +125,14 @@ function PublicationsForm() {
                 <Box
                     sx={{
                         mt: 2,
-                        ml: '60%'
                     }}
                 >
+                    
                     <Box
                         sx={{
                             display: 'flex',
-                            flexDirection: 'column', // Cambia la dirección del contenido a una columna
-                            alignItems: 'center', // Alinea los elementos en el centro horizontal
+                            flexDirection: 'column',
+                            alignItems: 'center',
                         }}
                     >
                         <input
@@ -140,7 +140,7 @@ function PublicationsForm() {
                             accept="image/*"
                             multiple
                             ref={fileInputRef}
-                            style={{ display: 'none' }} // Oculta visualmente el campo de entrada de archivo
+                            style={{ display: 'none' }}
                             onChange={handleChangeImage}
                             disabled={images.length === 3} // Deshabilita el input cuando hay 3 imágenes cargadas
                         />
@@ -176,7 +176,7 @@ function PublicationsForm() {
                                     textTransform: 'none',
                                     backgroundColor: '#093C59',
                                     color: '#FDFDFE',
-                                    marginTop: '16px' // Añade un margen superior
+                                    marginTop: '16px'
                                 }}
                                 onClick={handleClick}
                                 disabled={images.length === 3} // Deshabilita el botón cuando hay 3 imágenes cargadas

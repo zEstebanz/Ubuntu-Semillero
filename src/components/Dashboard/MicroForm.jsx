@@ -126,7 +126,8 @@ function MicroForm() {
             <Box
                 component='form'
                 sx={{
-                    width: 1,
+                    width: '328px',
+                    display: 'flex',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -309,15 +310,14 @@ function MicroForm() {
                 />
                 <Box
                     sx={{
-                        mt: 2,
-                        ml: '60%'
+                        mt: 2
                     }}
                 >
                     <Box
                         sx={{
                             display: 'flex',
-                            flexDirection: 'column', // Cambia la dirección del contenido a una columna
-                            alignItems: 'center', // Alinea los elementos en el centro horizontal
+                            flexDirection: 'column',
+                            alignItems: 'center'
                         }}
                     >
                         <input
@@ -378,6 +378,7 @@ function MicroForm() {
                             </button>
                         )}
                     </Box>
+                    
                     <Box
                         sx={{
                             mt: 2,

@@ -1,14 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import CustomButton from "../../components/buttonCustom";
 import PublicacionList from '../../components/Publications/PublicationList';
-import { Outlet, useLocation, Link } from 'react-router-dom'; // Importar useLocation
+import { Outlet, useLocation, Link } from 'react-router-dom';
 
 
 function DashboardPublications() {
 
   const { pathname } = useLocation();
 
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <section>
       <Box
@@ -61,8 +70,9 @@ function DashboardPublications() {
                 Publicaciones cargadas
               </Typography>
 
-              {/* Aca deberia llamar a las publicaciones */}
+              {/* Aquí se llama al componente PublicacionList */}
               <PublicacionList busqueda={""} />
+              
             </Box>
           )}
         </div>
@@ -70,6 +80,7 @@ function DashboardPublications() {
         <section>
           <Outlet />
         </section>
+
       </Box>
     </section>
   )

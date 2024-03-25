@@ -1,6 +1,6 @@
-import ubuntuApi from '../../utils/services/axiosConfig';
+import { ubuntuApi } from '../../utils/services/axiosConfig';
 
-export const getRubros = async () => {
+const getRubros = async () => {
   try {
     const response = await ubuntuApi.get('/rubros/get-all');
     console.log(response)
@@ -11,3 +11,5 @@ export const getRubros = async () => {
     throw error;
   }
 };
+
+export default getRubros;
