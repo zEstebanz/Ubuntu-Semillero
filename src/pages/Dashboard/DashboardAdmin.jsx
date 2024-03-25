@@ -1,8 +1,24 @@
 import React from 'react'
-import AdminDashboard from '../../components/Dashboard/AdminDashboard'
 import { Box, Divider, Typography } from '@mui/material'
+import getRubros from '../../api/rubros/getRubros'
 
 function DashboardAdmin() {
+
+  const [rubros, setRubros] = useState([]);
+
+  useEffect(() => {
+    const obtenerRubros = async () => {
+      try {
+        const rubrosData = await getRubros();
+        setRubros(rubrosData);
+      } catch (error) {
+        console.error('Error al obtener los rubros:', error);
+      }
+    };
+
+    obtenerRubros();
+  }, []);
+
   return (
     <main>
 
@@ -43,16 +59,14 @@ function DashboardAdmin() {
           </Typography>
         </Box>
       </section>
-      
+
       <section>
         <div style={{
           width: '328px',
-          minHeight: '64px',
-          height: 'auto',
+          maxHeight: '64px',
           backgroundColor: '#093C59',
           margin: 'auto',
           borderRadius: '8px',
-          padding: '8px, 16px, 8px, 16px'
         }}>
 
           <div>
@@ -71,6 +85,7 @@ function DashboardAdmin() {
                   fontSize: '20px',
                   fontWeight: 400,
                   color: '#FDFDFE',
+                  lineHeight: '25px'
                 }}
               >
                 Nuevos Microemprendimientos
@@ -90,7 +105,7 @@ function DashboardAdmin() {
                     paddingTop: '16px',
                   }}
                 >
-                  40
+                  100
                 </Typography>
 
               </div>
@@ -104,11 +119,11 @@ function DashboardAdmin() {
       </section>
 
       <section style={{ marginTop: '16px' }}>
-        <div style={{ width: '328px', margin: 'auto', borderRadius: '8px', padding: '8px 16px' }}>
+        <div style={{ width: '328px', margin: 'auto', borderRadius: '8px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
             {/* Primer div */}
-            <div style={{ width: '152px', minHeight: '72px', border: '1px solid #1D9129', borderRadius: '8px' }}>
+            <div style={{ width: '152px', minHeight: '72px', border: '2px solid #1D9129', borderRadius: '8px' }}>
               <div style={{ padding: '8px' }}>
                 <Typography sx={{ fontSize: '18px', fontWeight: 400, color: '#090909' }}>
                   Gestionados
@@ -121,7 +136,7 @@ function DashboardAdmin() {
             </div>
 
             {/* Segundo div */}
-            <div style={{ width: '152px', minHeight: '72px', border: '1px solid #B86B11', borderRadius: '8px', marginLeft: '16px' }}>
+            <div style={{ width: '152px', minHeight: '72px', border: '2px solid #B86B11', borderRadius: '8px', marginLeft: '16px' }}>
               <div style={{ padding: '8px' }}>
                 <Typography sx={{ fontSize: '18px', fontWeight: 400, color: '#090909' }}>
                   No gestionados
@@ -159,7 +174,8 @@ function DashboardAdmin() {
                 textAlign: 'center',
                 fontWeight: 600,
                 lineHeight: '35px',
-                paddingTop: '8px'
+                paddingY: '8px',
+                lineHeight: '25px'
               }}
             >
               Microemprendimientos por categoría
@@ -196,14 +212,18 @@ function DashboardAdmin() {
                 }}
               >
 
-                <Typography
-                  sx={{
-                    fontSize: '1rem',
-                    fontWeight: 400
-                  }}
-                >
-                  Economía social/Desarrollo local/ Inclusión financiera
-                </Typography>
+                <div>
+                  {rubros.map(rubro => (
+                    <Typography
+                      sx={{
+                        fontSize: '1rem',
+                        fontWeight: 400
+                      }}
+                    >
+                      {rubro.nombre}
+                    </Typography>
+                  ))}
+                </div>
 
                 <div
                   style={{
