@@ -2,9 +2,9 @@ import { ubuntuApi } from "../../utils/services/axiosConfig";
 import { getAccessToken } from "../../utils/helpers/localStorage";
 import { decodeUserData } from "../../utils/helpers/decodeJWT";
 
-const getRubrosStatistics = async () => {
+const getMicroStatistics = async () => {
     try {
-        const { headers } = await ubuntuApi.get('/auth/user/details', {
+        const { headers } = await ubuntuApi.get('/microemprendimientos/admin/estadisticasGenerales', {
             headers: {
                 Authorization: `Bearer ${getAccessToken()}`,
             }
@@ -29,4 +29,4 @@ const getRubrosStatistics = async () => {
     }
 };
 
-export default getRubrosStatistics;
+export default getMicroStatistics;

@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Divider, Typography } from '@mui/material'
 import getRubros from '../../api/rubros/getRubrosStatistics'
+import getMicroStatistics from '../../api/rubros/getMicroStatistics';
 
 function DashboardAdmin() {
 
   const [rubros, setRubros] = useState([]);
+  const [micro, setMicro] = useState([]);
 
   useEffect(() => {
     const obtenerRubros = async () => {
       try {
         const rubrosData = await getRubros();
+        const microData = await getMicroStatistics();
+
         setRubros(rubrosData);
+        setMicro(microData);
+
       } catch (error) {
         console.error('Error al obtener los rubros:', error);
       }
@@ -106,7 +112,8 @@ function DashboardAdmin() {
                     paddingTop: '16px',
                   }}
                 >
-                  100
+                  {micro.total ? micro.total.visualizaciones : ''}
+
                 </Typography>
 
               </div>

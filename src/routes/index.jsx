@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+
 import { Layout } from "../components/Layout";
 import { Landing } from "../pages/Landing";
 import { Micro } from "../pages/Micro";
@@ -84,4 +85,4 @@ const router = createBrowserRouter([
 
 ]);
 
-export default router;
+export default router;  
