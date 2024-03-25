@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Divider, Typography } from '@mui/material'
-import getRubros from '../../api/rubros/getRubros'
+import getRubros from '../../api/rubros/getRubrosStatistics'
 
 function DashboardAdmin() {
 
@@ -252,7 +252,7 @@ function DashboardAdmin() {
                             fontWeight: 700,
                           }}
                         >
-                          {rubro.id}
+                          {rubro.cantidadMicroemprendimientos}
                         </Typography>
                       </div>
                     </div>
