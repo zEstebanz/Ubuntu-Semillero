@@ -15,7 +15,9 @@ function DashboardAdmin() {
         const microData = await getMicroStatistics();
 
         setRubros(rubrosData);
-        setMicro(microData);
+        setMicro(microData.body);
+
+        console.log(microData.body)
 
       } catch (error) {
         console.error('Error al obtener los rubros:', error);
@@ -29,7 +31,7 @@ function DashboardAdmin() {
     <main>
 
       {/* Estadisticas */}
-      <section >
+      <section>
         <Box
           sx={{
             display: 'flex',
@@ -98,24 +100,28 @@ function DashboardAdmin() {
                 Nuevos Microemprendimientos
               </Typography>
 
+
               <div
                 style={{
                   with: '21px',
                   height: '25px',
                 }}
               >
-                <Typography
-                  sx={{
-                    color: '#FDFDFE',
-                    fontSize: '22px',
-                    fontWeight: 700,
-                    paddingTop: '16px',
-                  }}
-                >
-                  {micro.total ? micro.total.visualizaciones : ''}
-
-                </Typography>
-
+                {micro.map((item, index) => (
+                  <div key={index}>
+                    <Typography
+                      key={index}
+                      sx={{
+                        color: '#fff',
+                        fontSize: '22px',
+                        fontWeight: 700,
+                        paddingTop: '16px',
+                      }}
+                    >
+                      {item.total}
+                    </Typography>
+                  </div>
+                ))}
               </div>
 
             </div>
@@ -137,9 +143,11 @@ function DashboardAdmin() {
                   Gestionados
                 </Typography>
                 <Divider sx={{ width: '48px', border: '1px solid #1D9129' }} />
-                <Typography sx={{ color: '#090909', fontSize: '20px', fontWeight: 700 }}>
-                  80
-                </Typography>
+                {micro.map((item, index) => (
+                  <Typography key={index} sx={{ color: '#090909', fontSize: '20px', fontWeight: 700 }}>
+                    {item.gestionadas}
+                  </Typography>
+                ))}
               </div>
             </div>
 
@@ -150,9 +158,11 @@ function DashboardAdmin() {
                   No gestionados
                 </Typography>
                 <Divider sx={{ width: '48px', border: '1px solid #B86B11' }} />
-                <Typography sx={{ color: '#090909', fontSize: '20px', fontWeight: 700 }}>
-                  20
-                </Typography>
+                {micro.map((item, index) => (
+                  <Typography key={index} sx={{ color: '#090909', fontSize: '20px', fontWeight: 700 }}>
+                    {item.noGestionadas}
+                  </Typography>
+                ))}
               </div>
             </div>
           </div>
