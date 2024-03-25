@@ -1,19 +1,34 @@
 import { useEffect, useState } from "react";
+import { ubuntuApi } from '../utils/services/axiosConfig'
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../store/auth/authSlice";
+import { useNavigate } from "react-router-dom";
+import { saveAccessToken } from "../utils/helpers/localStorage";
 
 export const useGoogleAuth = (wrapperRef) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [googleButtonWrapper, setGoogleButtonWrapper] = useState();
 
     const handleCredentialResponse = async (response) => {
-        console.info('JWT GOOGLE: ', response.credential);
-        // const data = {
-        //     token_id: response.credential
-        // }
+        try {
+            const { headers } = await ubuntuApi.post(`/auth/token`, null, {
+                headers: {
+                    Authorization: `Bearer ${response.credential}`
+                }
+            });
+            console.log(headers);
+            const accessToken = headers.getAuthorization();
 
-        // const userResponse = await ubuntuApi.get(`/auth/google`, data);
+            dispatch(setCredentials(accessToken));
+            saveAccessToken(accessToken);
 
-
-        // console.log(userResponse)
+            // TODO: Redireccionar a dashboard de administrador
+            navigate('/');
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     useEffect(() => {
