@@ -67,7 +67,7 @@ function DashboardAdmin() {
           backgroundColor: '#093C59',
           margin: 'auto',
           borderRadius: '8px',
-          padding: '8px 16px',
+          padding: '8px 16px'
         }}>
 
           <div>
@@ -154,18 +154,16 @@ function DashboardAdmin() {
       {/* End Estadisticas */}
 
       {/* Micro por Categoria */}
-      <section
-        style={{ marginTop: '32px' }}
-      >
+      <section style={{ marginTop: '32px' }}>
         <div style={{
           width: '328px',
-          minHeight: '352px',
           height: 'auto',
           backgroundColor: '#EAEAEA',
           margin: 'auto',
           borderRadius: '8px',
-          padding: '8px 16px 8px 16px'
+          padding: '8px 16px'
         }}>
+
           <div>
             <Typography
               variant="h3"
@@ -191,7 +189,6 @@ function DashboardAdmin() {
                 margin: '0',
               }}
             />
-
           </div>
 
           <div
@@ -200,68 +197,81 @@ function DashboardAdmin() {
               padding: '8px 16px',
             }}
           >
-
-            {/* Micro. por categoría */}
-            <div>
-
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  width: '288px',
-                  height: '56px',
+            {/* Verificar si rubros está vacío */}
+            {rubros.length === 0 ? (
+              <Typography
+                sx={{
+                  fontSize: '1rem',
+                  fontWeight: 400,
+                  textAlign: 'center'
                 }}
               >
-
-                <div>
-                  {rubros.map(rubro => (
-                    <Typography
-                      sx={{
-                        fontSize: '1rem',
-                        fontWeight: 400
+                Cargando categorías...
+              </Typography>
+            ) : (
+              // Renderizar los rubros si no está vacío
+              rubros
+                .sort((a, b) => a.id - b.id)
+                .map(rubro => (
+                  <div key={rubro.id}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        width: '288px',
+                        height: '56px',
                       }}
                     >
-                      {rubro.nombre}
-                    </Typography>
-                  ))}
-                </div>
-
-                <div
-                  style={{
-                    with: '21px',
-                    height: '25px',
-                    display: 'flex',
-                    justifyContent: 'flex-end'
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: '1.125rem',
-                      fontWeight: 700,
-                      paddingTop: '8px'
-                    }}
-                  >
-                    40
-                  </Typography>
-
-                </div>
-
-              </div>
-
-              <Divider
-                sx={{
-                  backgroundColor: '#226516',
-                  borderColor: '#226516',
-                  height: '1px',
-                  width: '100%',
-                  margin: '0'
-                }}
-              />
-
-            </div>
+                      <div style={{
+                        width: '235px'
+                      }}>
+                        <Typography
+                          sx={{
+                            fontSize: '1rem',
+                            height: '50px',
+                            fontWeight: 400
+                          }}
+                        >
+                          {rubro.nombre}
+                        </Typography>
+                      </div>
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'flex-end',
+                          alignItems: 'center',
+                          width: '50px',
+                          height: '100%',
+                          paddingRight: '16px',
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            fontSize: '1.125rem',
+                            fontWeight: 700,
+                          }}
+                        >
+                          {rubro.id}
+                        </Typography>
+                      </div>
+                    </div>
+                    <Divider
+                      sx={{
+                        backgroundColor: '#226516',
+                        borderColor: '#226516',
+                        height: '1px',
+                        width: '100%',
+                        margin: '0'
+                      }}
+                    />
+                  </div>
+                ))
+            )}
             {/* End Micro. por categoría */}
 
           </div>
+
         </div>
       </section>
       {/* End Micro por Categoria */}
@@ -299,7 +309,7 @@ function DashboardAdmin() {
           <div
             style={{
               display: 'flex',
-              justifyContent: 'space-between',
+              justifyContent: 'space-between'
             }}
           >
 

@@ -1,15 +1,14 @@
-import { ubuntuApi } from '../../utils/services/axiosConfig';
+import { ubuntuApi } from "../../utils/services/axiosConfig";
 
 const getRubros = async () => {
-  try {
-    const response = await ubuntuApi.get('/rubros/get-all');
-    console.log(response)
-
-    return response.data;
-  } catch (error) {
-    console.error('Error al obtener los rubros:', error);
-    throw error;
-  }
+    try {
+        // const res = await ubuntuApi.get('/admin/estadisticasPorUsuario');
+        const res = await ubuntuApi.get('/rubros/get-all');
+        return res.data;
+    } catch (error) {
+        console.error('Error al obtener los rubros:', error);
+        return [];
+    }
 };
 
 export default getRubros;

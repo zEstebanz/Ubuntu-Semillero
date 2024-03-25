@@ -50,7 +50,7 @@ const PublicacionList = ({ busqueda }) => {
             date={publicacion.date}
             imageUrl={publicacion.imageUrl}
             imageUrl2={publicacion.imageUrl2}
-            link={publicacion.link}
+            link={publicacion.link} 
           />
         ))}
       </section>
