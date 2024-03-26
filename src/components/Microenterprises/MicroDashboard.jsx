@@ -1,10 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid, Card, CardContent, Typography, Divider, Button, Menu, MenuItem } from '@mui/material';
 import { Link } from 'react-router-dom';
+import getMicroEdit from '../../api/micros/getMicroEdit';
+
 
 function Micro() {
 
+    const [expanded, setExpanded] = useState(false);
+    const [micros, setMicros] = useState([]);
     const [anchorEl, setAnchorEl] = useState(null);
+
+    useEffect(() => {
+        const obtenerMicro = async () => {
+            try {
+                const microData = await getMicroEdit();
+
+                setMicros(microData.body);
+
+                console.log(microData)
+            } catch (error) {
+                console.error('Error al obtener los rubros:', error);
+            }
+        };
+
+        obtenerMicro();
+    }, []);
+    
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -14,16 +35,11 @@ function Micro() {
         setAnchorEl(null);
     };
 
-    const data = [
-        { title: 'EcoSenda', imageUrl: '../../../public/img/menu-edit.svg', linkTo: '/dashboard-micro/form-edit', subtitle: 'Agroecología/Orgánicos/Alimentación saludable' },
-        { title: 'Lorem ipsu', imageUrl: '../../../public/img/menu-edit.svg', linkTo: '/dashboard-micro/form-edit', subtitle: 'Economía social/Desarrollo local/Inclusión financiera' },
-    ];
-
     return (
 
         <section>
             <Grid container justifyContent="center">
-                {data.map((item, index) => (
+                {micros.map((item, index) => (
                     <Card sx={{
                         width: "328px",
                         borderRadius: "16px",
@@ -47,7 +63,7 @@ function Micro() {
                                     alignItems: 'center',
                                 }}
                             >
-                                {item.title}
+                                {item.nombre}
                                 <button onClick={handleClick}>
                                     <img src="../../../public/img/menu-edit.svg" alt="menu" />
                                 </button>
@@ -94,7 +110,8 @@ function Micro() {
                                         width: 'calc(244px - 16px)',
                                     }}
                                 >
-                                    {item.subtitle}
+                                    {item.rubro.nombre}
+
                                 </Typography>
                                 <div style={{
                                     width: '7.41px',
