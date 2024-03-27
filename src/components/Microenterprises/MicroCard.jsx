@@ -12,11 +12,41 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-function MicroCard({ title, entity, categori, location, imageUrl, imageUrl2, imageUrl3, link }) {
+function MicroCard({ title, entity, category, location, images, link }) {
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpand = () => {
     setExpanded(!expanded);
+  };
+
+  const renderSwiper = () => {
+    if (images.length > 1) {
+      return (
+        <div style={{ position: "relative" }}>
+          <Swiper
+            cssMode={true}
+            navigation={true}
+            pagination={true}
+            mousewheel={true}
+            keyboard={true}
+            modules={[Navigation, Pagination, Mousewheel, Keyboard]}
+            className="swiper"
+          >
+            {images.map((imageUrl, index) => (
+              <SwiperSlide key={index} className="swiper-slide">
+                <CardMedia component="img" height="128" width="304" image={imageUrl} alt={title} sx={{ borderRadius: "16px" }} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      );
+    } else if (images.length === 1) {
+      return (
+        <CardMedia component="img" height="128" width="304" image={images[0]} alt={title} sx={{ borderRadius: "16px" }} />
+      );
+    } else {
+      return null; // No hay imágenes disponibles
+    }
   };
 
   return (
@@ -29,30 +59,7 @@ function MicroCard({ title, entity, categori, location, imageUrl, imageUrl2, ima
         gap: "16px"
       }}>
         <CardContent>
-
-          <div style={{ position: "relative" }}>
-            <Swiper
-              cssMode={true}
-              navigation={true}
-              pagination={true}
-              mousewheel={true}
-              keyboard={true}
-              modules={[Navigation, Pagination, Mousewheel, Keyboard]}
-              className="swiper"
-            >
-              <SwiperSlide className="swiper-slide">
-                <CardMedia component="img" height="128" width="304" image={imageUrl} alt={title} sx={{ borderRadius: "16px" }} />
-              </SwiperSlide>
-              <SwiperSlide className="swiper-slide">
-                <CardMedia component="img" height="128" width="304" image={imageUrl2} alt={title} sx={{ borderRadius: "16px" }} />
-              </SwiperSlide>
-              <SwiperSlide className="swiper-slide">
-                <CardMedia component="img" height="128" width="304" image={imageUrl3} alt={title} sx={{ borderRadius: "16px" }} />
-              </SwiperSlide>
-            </Swiper>
-
-          </div>
-
+          {renderSwiper()}
           <Typography
             variant="h6"
             gutterBottom
@@ -92,7 +99,7 @@ function MicroCard({ title, entity, categori, location, imageUrl, imageUrl2, ima
               marginBottom: '16px'
             }}
           >
-            {categori}
+            {category}
           </Typography>
           <Typography
             sx={{

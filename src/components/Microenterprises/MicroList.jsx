@@ -100,9 +100,10 @@ const MicroList = () => {
                             title={micro.nombre}
                             entity={micro.rubro.nombre}
                             category={micro.subrubro}
-                            imageUrl={obtenerUrlsDeImagenes(micro.images)[0]} // Primera URL de imagen
-                            imageUrl2={obtenerUrlsDeImagenes(micro.images)[1]} // Segunda URL de imagen
-                            imageUrl3={obtenerUrlsDeImagenes(micro.images)[2]} // Tercera URL de imagen
+                            images={obtenerUrlsDeImagenes(micro.images)}
+                            //imageUrl={obtenerUrlsDeImagenes(micro.images)[0]} // Primera URL de imagen
+                            //imageUrl2={obtenerUrlsDeImagenes(micro.images)[1]} // Segunda URL de imagen
+                            //imageUrl3={obtenerUrlsDeImagenes(micro.images)[2]} // Tercera URL de imagen
                             location={`${micro.ciudad}, ${micro.provincia.nombre}, ${micro.pais.nombre}`}
                         />
                     </div>

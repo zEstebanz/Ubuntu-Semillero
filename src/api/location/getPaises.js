@@ -1,9 +1,9 @@
 import { ubuntuApi } from "../../utils/services/axiosConfig";
 
 // Función para obtener los micros desde el backend
-const getRubros = async () => {
+const getPaises = async () => {
     try {
-        const res = await ubuntuApi.get('/rubros/get-all'); // Reemplaza '/ruta-del-endpoint' con la ruta correcta de tu backend
+        const res = await ubuntuApi.get('/paises/get-all'); // Reemplaza '/ruta-del-endpoint' con la ruta correcta de tu backend
         return res.data;
     } catch (error) {
         console.error('Error al obtener los micros:', error);
@@ -11,4 +11,4 @@ const getRubros = async () => {
     }
 }
 
-export default getRubros;
+export default getPaises;
