@@ -2,6 +2,7 @@ import React from "react";
 import PostCard from "./PostCard";
 
 const PublicacionList = ({ busqueda }) => {
+  
   const publicaciones = [
     {
       id: 1,

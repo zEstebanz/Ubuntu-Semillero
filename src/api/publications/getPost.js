@@ -2,7 +2,7 @@ import { ubuntuApi } from "../../utils/services/axiosConfig";
 import { getAccessToken } from "../../utils/helpers/localStorage";
 import { decodeUserData } from "../../utils/helpers/decodeJWT";
 
-const getMicro = async () => {
+const getPost = async () => {
     try {
         const { headers } = await ubuntuApi.get('/auth/user/details', {
             headers: {
@@ -11,12 +11,12 @@ const getMicro = async () => {
         });
         const user = decodeUserData(headers.getAuthorization())
 
-        const res = await ubuntuApi.get('microemprendimientos/findByRubro/1',
+        const res = await ubuntuApi.get('publicaciones/',
             {
                 headers: {
                     Authorization: `Bearer ${getAccessToken()}`,
                 }
-            });     
+            });
         return res.data;
 
     } catch (error) {
@@ -25,4 +25,4 @@ const getMicro = async () => {
     }
 };
 
-export default getMicro;
+export default getPost;

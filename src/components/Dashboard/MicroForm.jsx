@@ -159,15 +159,19 @@ function MicroForm() {
         // email de alta
         formData.append('email', 'ubuntusemillero@gmail.com')
 
+
         images.forEach((image, index) => {
-            formData.append(`imagen${index + 1}`, image)
+            formData.append(`images`, image)
         })
 
         console.log(formData)
 
         try {
             // Envía los datos a través de Axios
+            const user = decodeUserData(headers.getAuthorization())
+
             const response = await ubuntuApi.post('/microemprendimientos/admin/create', formData, {
+                
                 headers: {
                     Authorization: `Bearer ${getAccessToken()}`,
                 }

@@ -178,7 +178,6 @@ function DashboardAdmin() {
           backgroundColor: '#EAEAEA',
           margin: 'auto',
           borderRadius: '8px',
-          padding: '8px 16px'
         }}>
 
           <div>
@@ -243,15 +242,21 @@ function DashboardAdmin() {
                       <div style={{
                         width: '235px'
                       }}>
-                        <Typography
-                          sx={{
-                            fontSize: '1rem',
-                            height: '50px',
-                            fontWeight: 400
-                          }}
-                        >
-                          {rubro.nombre}
-                        </Typography>
+                        <Box sx={{
+                          width: '90%',
+                          alignItems: 'flex-start'
+                        }}>
+                          <Typography
+                            sx={{
+                              fontSize: '1rem',
+                              height: '50px',
+                              fontWeight: 400
+                            }}
+                          >
+                            {rubro.nombre}
+                          </Typography>
+                        </Box>
+
                       </div>
                       <div
                         style={{
