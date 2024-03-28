@@ -6,19 +6,13 @@ import getMicro from '../../api/micros/getMicro';
 
 const MicroList = () => {
 
-    const [expanded, setExpanded] = useState(false);
     const [micros, setMicros] = useState([]);
-
-    const { id } = useParams();
 
     useEffect(() => {
         const obtenerMicro = async () => {
             try {
                 const microData = await getMicro();
-
                 setMicros(microData.body);
-
-                console.log(microData)
             } catch (error) {
                 console.error('Error al obtener los rubros:', error);
             }
@@ -26,10 +20,6 @@ const MicroList = () => {
 
         obtenerMicro();
     }, []);
-
-    const toggleExpand = () => {
-        setExpanded(!expanded);
-    };
 
     const obtenerUrlsDeImagenes = (images) => {
         return images.map(image => {
@@ -100,11 +90,10 @@ const MicroList = () => {
                             title={micro.nombre}
                             entity={micro.rubro.nombre}
                             category={micro.subrubro}
+                            location={`${micro.ciudad ? micro.ciudad + ', ' : ''}${micro.provincia.nombre}, ${micro.pais.nombre}`}
                             images={obtenerUrlsDeImagenes(micro.images)}
-                            //imageUrl={obtenerUrlsDeImagenes(micro.images)[0]} // Primera URL de imagen
-                            //imageUrl2={obtenerUrlsDeImagenes(micro.images)[1]} // Segunda URL de imagen
-                            //imageUrl3={obtenerUrlsDeImagenes(micro.images)[2]} // Tercera URL de imagen
-                            location={`${micro.ciudad}, ${micro.provincia.nombre}, ${micro.pais.nombre}`}
+                            masInfo={micro.masInfo}
+                            descripcion={micro.descripcion}
                         />
                     </div>
                 ))}

@@ -12,7 +12,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-function MicroCard({ title, entity, category, location, images, link }) {
+function MicroCard({ title, entity, category, location, images, masInfo, descripcion }) {
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpand = () => {
@@ -123,7 +123,7 @@ function MicroCard({ title, entity, category, location, images, link }) {
                 Descripción del Microemprendimiento
               </Typography>
               <Typography variant="body2" sx={{ marginBottom: '16px' }}>
-                Promueven un modelo de agricultura sostenible, protegiendo el medio ambiente, el agua y las semillas autóctonas. Cultivan frutas, verduras, plantas medicinales y crean derivados. Editan también contenidos educativos, gestionan un banco de semillas y comercializan o intercambian excedentes.
+                {descripcion}
               </Typography>
 
               <Divider sx={{ width: '296px', margin: 'auto', marginBottom: '16px', height: '4px', borderBottom: '1px solid #090909' }} />
@@ -132,7 +132,7 @@ function MicroCard({ title, entity, category, location, images, link }) {
                 Más información de interés
               </Typography>
               <Typography variant="body2" sx={{ marginBottom: '16px' }}>
-                Nació del sueño de restaurar la salud y adoptar un estilo de vida ideal. Este proyecto familiar creció fundamentado en la permacultura, biodinámica y agroecología, comprometiéndose con la soberanía alimentaria, el bienestar, el regreso al campo, la venta directa y la dignidad de la vida campesina.
+                {masInfo}
               </Typography>
 
               <div style={{ textAlign: 'center' }}>

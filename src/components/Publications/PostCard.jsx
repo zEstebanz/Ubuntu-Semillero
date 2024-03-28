@@ -9,15 +9,42 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-function PostCard({ title, description, date, imageUrl, imageUrl2 }) {
+function PostCard({ title, description, date, images }) {
   const [expanded, setExpanded] = useState(false);
-  const images = [imageUrl, imageUrl, imageUrl];
-  const [currentSlide, setCurrentSlide] = useState(0);
   const descriptionLimit = 100;
-
 
   const toggleExpand = () => {
     setExpanded(!expanded);
+  };
+
+  const renderSwiper = () => {
+    if (images.length > 1) {
+      return (
+        <div style={{ position: "relative" }}>
+          <Swiper
+            cssMode={true}
+            navigation={true}
+            pagination={true}
+            mousewheel={true}
+            keyboard={true}
+            modules={[Navigation, Pagination, Mousewheel, Keyboard]}
+            className="swiper"
+          >
+            {images.map((imageUrl, index) => (
+              <SwiperSlide key={index} className="swiper-slide">
+                <CardMedia component="img" height="128" width="304" image={imageUrl} alt={title} sx={{ borderRadius: "16px" }} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      );
+    } else if (images.length === 1) {
+      return (
+        <CardMedia component="img" height="128" width="304" image={images[0]} alt={title} sx={{ borderRadius: "16px" }} />
+      );
+    } else {
+      return null; // No hay imágenes disponibles
+    }
   };
 
   return (
@@ -38,6 +65,7 @@ function PostCard({ title, description, date, imageUrl, imageUrl2 }) {
             paddingBottom: "0.8rem !important",
           }}
         >
+          {renderSwiper()}
           <Typography
             variant="subtitles"
             fontWeight={600}
@@ -49,27 +77,6 @@ function PostCard({ title, description, date, imageUrl, imageUrl2 }) {
           >
             {title}
           </Typography>
-
-          <div style={{ position: "relative" }}>
-            <Swiper
-              cssMode={true}
-              navigation={true}
-              pagination={{ clickable: true }} // Puntos de paginación debajo de la imagen
-              mousewheel={true}
-              keyboard={true}
-              modules={[Navigation, Pagination, Mousewheel, Keyboard]}
-              className="swiper"
-            >
-              <SwiperSlide className="swiper-slide" >
-                <CardMedia component="img" height="128" width="304" image={imageUrl} alt={title} sx={{ borderRadius: "16px" }} />
-              </SwiperSlide>
-              <SwiperSlide className="swiper-slide" >
-                <CardMedia component="img" height="128" width="304" image={imageUrl2} alt={title} sx={{ borderRadius: "16px" }}/>
-              </SwiperSlide>
-              
-            </Swiper>
-
-          </div>
 
           <Typography
             variant="body2"

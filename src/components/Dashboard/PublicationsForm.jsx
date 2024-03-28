@@ -3,6 +3,9 @@ import { Box, Typography, styled, TextField, Button } from '@mui/material';
 import CustomButton from "../../components/buttonCustom";
 import { MessageText } from "./Message/MessageText";
 import upload from "../../../public/img/upload.svg";
+import { ubuntuApi } from '../../utils/services/axiosConfig';
+import { useSession } from '../../hooks/useSession';
+import { getAccessToken } from '../../utils/helpers/localStorage';
 
 const Input = styled(TextField)(({ theme }) => ({
     "& label": {
@@ -24,15 +27,21 @@ const Input = styled(TextField)(({ theme }) => ({
     },
 }));
 
-const handleImageUpload = () => {
-    // Lógica para manejar la carga de la imagen aquí
-};
-
 function PublicationsForm() {
+    const user = useSession();
+
     const [counter, setCounter] = useState(0);
     const [isFormComplete, setIsFormComplete] = useState(false);
+
     const [images, setImages] = useState([]);
+    const [files, setFiles] = useState([]);
+
+    const [nombre, setNombre] = useState([]);
+    const [date, setDate] = useState([]);
+    const [descripcion, setDescripcion] = useState([]);
+
     const messageDefaultValue = `Ingresa el contenido de la publicación*`;
+
     const fileInputRef = useRef(null);
 
     useEffect(() => {
@@ -48,10 +57,17 @@ function PublicationsForm() {
         fileInputRef.current.click();
     };
 
-
     const handleChangeImage = (e) => {
         const files = e.target.files;
+        setFiles((fileState) => [...fileState, files[0]])
         const imagesArray = [];
+
+        console.log(files.length)
+
+        if (files[0].size > 3000000) {
+            alert('Imagenes mayor a 3mb')
+            return
+        }
 
         for (let i = 0; i < files.length; i++) {
             const reader = new FileReader();
@@ -62,6 +78,44 @@ function PublicationsForm() {
                 }
             };
             reader.readAsDataURL(files[i]);
+        }
+    };
+
+    const handleNombre = (event) => {
+        setNombre(event.target.value)
+    }
+    const handleDate = (event) => {
+        setDate(event.target.value)
+    }
+    const handleDescripcion = (event) => {
+        setDescripcion(event.target.value)
+    }
+
+    const handleSubmit = async () => {
+        const formData = new FormData();
+
+        formData.append('titulo', nombre);
+        formData.append('descripcion', descripcion)
+        // formData.append('fecha-creacion', date)
+
+        formData.append('email', user.sub);
+
+        files.forEach((image, index) => {
+            formData.append(`images`, image, image.name)
+        })
+
+        try {
+
+            const response = await ubuntuApi.postForm('/#', formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${getAccessToken()}`,
+                        'content-type': 'multipart/form-data'
+                    },
+                });
+
+        } catch (error) {
+            console.error('Error al enviar los datos:', error);
         }
     };
 
@@ -102,7 +156,8 @@ function PublicationsForm() {
                     type="text"
                     required
                     id="full-name"
-                    label="Titulo"
+                    label="Titulo*"
+                    value={nombre}
                     fullWidth
                     sx={{
                         mt: 3,
@@ -114,6 +169,7 @@ function PublicationsForm() {
                     helperText={<MessageText counter={counter} />}
                     //defaultValue={messageDefaultValue}
                     placeholder='Ingresa el contenido de la publicación*'
+                    value={descripcion}
                     fullWidth
                     multiline
                     rows={7}
@@ -127,7 +183,7 @@ function PublicationsForm() {
                         mt: 2,
                     }}
                 >
-                    
+
                     <Box
                         sx={{
                             display: 'flex',
@@ -140,7 +196,7 @@ function PublicationsForm() {
                             accept="image/*"
                             multiple
                             ref={fileInputRef}
-                            style={{ display: 'none' }}
+                            style={{ display: 'none' }} // Oculta visualmente el campo de entrada de archivo
                             onChange={handleChangeImage}
                             disabled={images.length === 3} // Deshabilita el input cuando hay 3 imágenes cargadas
                         />
@@ -155,11 +211,12 @@ function PublicationsForm() {
                                         width: '328px',
                                         height: '112px',
                                         borderRadius: "4px",
+                                        objectFit: "cover"
                                     }}
                                 />
                             ))}
                         </div>
-
+                        
                         {/* Renderiza el botón solo si hay menos de 3 imágenes cargadas */}
                         {images.length < 3 && (
                             <button

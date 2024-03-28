@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PostCard from "./PostCard";
+import getPost from "../../api/publications/getPost";
 
 const PublicacionList = ({ busqueda }) => {
-  
+
+  const [post, setPost] = useState([]);
+
   const publicaciones = [
     {
       id: 1,
@@ -12,7 +15,6 @@ const PublicacionList = ({ busqueda }) => {
       imageUrl2: "https://www.coliseugeek.com.br/wp-content/uploads/2023/01/d9f70-clickwallpapers-lion-4k-img2-scaled-1.jpg",
       date: "03-03-2024",
       description: `Las decisiones financieras han trascendido la mera maximización del rendimiento. Actualmente, muchos inversores desean que sus decisiones reflejen sus valores éticos y morales, dando lugar a las inversiones éticas o sostenibles.`,
-      link: "/post/1",
     },
     {
       id: 2,
@@ -21,8 +23,7 @@ const PublicacionList = ({ busqueda }) => {
         "https://www.coliseugeek.com.br/wp-content/uploads/2023/01/d9f70-clickwallpapers-lion-4k-img2-scaled-1.jpg",
       date: "03-03-2024",
       description:
-        "Las decisiones financieras han trascendido la mera maximización del rendimiento. Actualmente, muchos inversores desean que sus decisiones reflejen sus valores éticos y morales, dando lugar a las inversiones éticas o sostenibles.",
-      link: "/post/2",
+        "Las decisiones financieras han trascendido la mera maximización del rendimiento. Actualmente, muchos inversores desean que sus decisiones reflejen sus valores éticos y morales, dando lugar a las inversiones éticas o sostenibles."
     },
     {
       id: 3,
@@ -31,27 +32,45 @@ const PublicacionList = ({ busqueda }) => {
         "https://www.coliseugeek.com.br/wp-content/uploads/2023/01/d9f70-clickwallpapers-lion-4k-img2-scaled-1.jpg",
       date: "03-03-2024",
       description:
-        "Las decisiones financieras han trascendido la mera maximización del rendimiento. Actualmente, muchos inversores desean que sus decisiones reflejen sus valores éticos y morales, dando lugar a las inversiones éticas o sostenibles.",
-      link: "/post/3",
+        "Las decisiones financieras han trascendido la mera maximización del rendimiento. Actualmente, muchos inversores desean que sus decisiones reflejen sus valores éticos y morales, dando lugar a las inversiones éticas o sostenibles."
     },
   ];
 
-  const publicacionesFiltradas = publicaciones.filter((publicacion) =>
-    publicacion.title.toLowerCase().includes(busqueda.toLowerCase())
-  );
+  useEffect(() => {
+    const obtenerPost = async () => {
+      try {
+        const postData = await getPost();
+        setPost(postData)
+      } catch (error) {
+        console.error('Error al obtener los rubros:', error);
+      }
+    };
+
+    obtenerPost();
+  }, []);
+
+  const obtenerUrlsDeImagenes = (images) => {
+    return images.map(image => {
+      const regex = /secure_url=(.*?),/;
+      const match = regex.exec(image);
+      return match ? match[1] : '';
+    });
+  };
+
+  // const publicacionesFiltradas = publicaciones.filter((publicacion) =>
+  //   publicacion.title.toLowerCase().includes(busqueda.toLowerCase())
+  // );
 
   return (
     <main>
       <section>
-        {publicacionesFiltradas.map((publicacion) => (
+        {post.map((post, index) => (
           <PostCard
-            key={publicacion.id}
-            title={publicacion.title}
-            description={publicacion.description}
-            date={publicacion.date}
-            imageUrl={publicacion.imageUrl}
-            imageUrl2={publicacion.imageUrl2}
-            link={publicacion.link} 
+            key={post.id}
+            title={post.titulo}
+            description={post.descripcion}
+            date={post.date}
+            images={obtenerUrlsDeImagenes(micro.images)}
           />
         ))}
       </section>

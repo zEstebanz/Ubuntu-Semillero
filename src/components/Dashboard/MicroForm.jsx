@@ -7,6 +7,8 @@ import { ubuntuApi } from '../../utils/services/axiosConfig';
 import getPaises from '../../api/location/getPaises';
 import getProvincias from '../../api/location/getProvincias';
 import { getAccessToken } from "../../utils/helpers/localStorage";
+import { useSession } from '../../hooks/useSession';
+
 
 const Input = styled(TextField)(({ theme }) => ({
     "& label": {
@@ -29,8 +31,12 @@ const Input = styled(TextField)(({ theme }) => ({
 }));
 
 function MicroForm() {
+    const user = useSession();
+
     const [images, setImages] = useState([]);
-    console.log(images)
+    const [files, setFiles] = useState([]);
+
+    const [isFormComplete, setIsFormComplete] = useState(false);
 
     const [provincia, setProvincia] = useState([]);
     const [pais, setPais] = useState([]);
@@ -53,7 +59,14 @@ function MicroForm() {
     useEffect(() => {
         getRubros().then(data => setCategoria(data));
         getPaises().then(data => setPais(data));
-    }, []);
+
+        // Verifica si todos los campos están completos
+        if (counter > 0 && true) {
+            setIsFormComplete(true);
+        } else {
+            setIsFormComplete(false);
+        }
+    }, [counter]);
 
     const fileInputRef = useRef(null);
 
@@ -96,13 +109,12 @@ function MicroForm() {
         setProvincia(event.target.value);
     };
 
-    console.log("Provincia:" + provincia)
-
     const handleChangeImage = (e) => {
         const files = e.target.files;
+        setFiles((fileState) => [...fileState, files[0]])
         const imagesArray = [];
 
-        console.log(files[0].size)
+        console.log(files.length)
 
         if (files[0].size > 3000000) {
             alert('Imagenes mayor a 3mb')
@@ -120,6 +132,8 @@ function MicroForm() {
             reader.readAsDataURL(files[i]);
         }
     };
+
+    console.log(files)
 
     const handleNombreMicroChange = (event) => {
         setNombreMicro(event.target.value);
@@ -145,42 +159,35 @@ function MicroForm() {
         // Crea un objeto con los datos del formulario
         const formData = new FormData();
         formData.append('nombre', nombreMicro);
-        formData.append('idRubro', 1);
+        formData.append('idRubro', 2);
         formData.append('subrubro', subcategoria);
 
         formData.append('idPais', 1);
         formData.append('idProvincia', 1);
 
-
         formData.append('ciudad', ciudad);
         formData.append('descripcion', descripcion);
         formData.append('masInfo', masInfo);
 
-        // email de alta
-        formData.append('email', 'ubuntusemillero@gmail.com')
+        formData.append('email', user.sub);
 
+        // formData.append(`images`, files[0], 'images1')
 
-        images.forEach((image, index) => {
-            formData.append(`images`, image)
+        files.forEach((image, index) => {
+            formData.append(`images`, image, image.name)
         })
 
-        console.log(formData)
-
         try {
-            // Envía los datos a través de Axios
-            const user = decodeUserData(headers.getAuthorization())
 
-            const response = await ubuntuApi.post('/microemprendimientos/admin/create', formData, {
-                
-                headers: {
-                    Authorization: `Bearer ${getAccessToken()}`,
-                }
-            });
+            const response = await ubuntuApi.postForm('/microemprendimientos/admin/create', formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${getAccessToken()}`,
+                        'content-type': 'multipart/form-data'
+                    },
+                });
 
-            // Aquí puedes manejar la respuesta, por ejemplo, mostrar un mensaje de éxito
-            console.log(response.data);
         } catch (error) {
-            // Si hay un error, puedes mostrar un mensaje de error o manejarlo de otra manera
             console.error('Error al enviar los datos:', error);
         }
     };
@@ -328,8 +335,7 @@ function MicroForm() {
                 </Select>
                 {/* End Provincia/Estado */}
 
-
-                {/* --------------------------------------------------------------- */}
+                {/* Ciudad */}
                 <Input
                     type="text"
                     id="ciudad"
@@ -341,6 +347,7 @@ function MicroForm() {
                         mt: 3,
                     }}
                 />
+                {/* Descripcion */}
                 <Input
                     type="text"
                     required
@@ -367,9 +374,6 @@ function MicroForm() {
                     }}
                 />
                 {/* End Mas Info */}
-
-
-                {/* --------------------------------------------------------------- */}
 
                 <Box
                     sx={{
@@ -477,8 +481,8 @@ function MicroForm() {
                     style={{
                         marginBottom: "32px",
                         color: "#FDFDFE",
-                        backgroundColor: '#093C59'
-                        // backgroundColor: isFormComplete ? '#093C59' : '#6E6F70',
+                        backgroundColor: '#093C59',
+                        backgroundColor: isFormComplete ? '#093C59' : '#6E6F70',
                     }}
                     // disabled={!isFormComplete}
                     onClick={handleSubmit} // Agrega el manejador de clic para enviar el formulario

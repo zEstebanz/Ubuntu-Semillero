@@ -4,7 +4,7 @@ import { decodeUserData } from "../../utils/helpers/decodeJWT";
 
 const getPost = async () => {
     try {
-        const { headers } = await ubuntuApi.get('/auth/user/details', {
+        const { headers } = await ubuntuApi.get('microemprendimientos/findAll', {
             headers: {
                 Authorization: `Bearer ${getAccessToken()}`,
             }
