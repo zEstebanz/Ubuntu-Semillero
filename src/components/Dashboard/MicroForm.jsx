@@ -60,13 +60,8 @@ function MicroForm() {
         getRubros().then(data => setCategoria(data));
         getPaises().then(data => setPais(data));
 
-        // Verifica si todos los campos están completos
-        if (counter > 0 && true) {
-            setIsFormComplete(true);
-        } else {
-            setIsFormComplete(false);
-        }
-    }, [counter]);
+       
+    }, []);
 
     const fileInputRef = useRef(null);
 
@@ -482,7 +477,7 @@ function MicroForm() {
                         marginBottom: "32px",
                         color: "#FDFDFE",
                         backgroundColor: '#093C59',
-                        backgroundColor: isFormComplete ? '#093C59' : '#6E6F70',
+                        // backgroundColor: isFormComplete ? '#093C59' : '#6E6F70',
                     }}
                     // disabled={!isFormComplete}
                     onClick={handleSubmit} // Agrega el manejador de clic para enviar el formulario

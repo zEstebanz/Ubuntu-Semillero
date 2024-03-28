@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Divider, Typography } from '@mui/material'
-import getRubros from '../../api/rubros/getRubrosStatistics'
-import getMicroStatistics from '../../api/rubros/getMicroStatistics';
+import getRubros from '../../api/statistics/getRubrosStatistics'
+import getMicroStatistics from '../../api/statistics/getMicroStatistics';
 
 function DashboardAdmin() {
 
   const [rubros, setRubros] = useState([]);
   const [micro, setMicro] = useState([]);
+  
 
   useEffect(() => {
     const obtenerRubros = async () => {
