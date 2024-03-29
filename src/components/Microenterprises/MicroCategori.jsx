@@ -24,14 +24,14 @@ const Categories = () => {
         obtenerRubro();
     }, []);
 
-    const handleButtonClick = async (idRubro) => {
-        try {
-            const rubroData = await getMicro(idRubro);
+    // const handleButtonClick = async (idRubro) => {
+    //     try {
+    //         const rubroData = await getMicro(idRubro);
 
-        } catch (error) {
-            console.log('Error al obtener los rubros:', error)
-        }
-    }
+    //     } catch (error) {
+    //         console.log('Error al obtener los rubros:', error)
+    //     }
+    // }
 
     return (
         <ThemeProvider theme={theme}>
@@ -77,14 +77,15 @@ const Categories = () => {
                             gap: "10px",
                         },
                     }} lx={{}}>
-                        {rubro.map(rubro =>
+                        {rubro?.map((rubro, index) =>
                             <Link
+                                key={index}
                                 component="button"
                                 to={`/microemprendimientos/${rubro.id}`}
                                 style={{
                                     textDecoration: "none"
                                 }}
-                                onClick={() => handleButtonClick(rubro.id)}
+                                // onClick={() => handleButtonClick(rubro.id)}
                             >
                                 <CategoriesCard
                                     imageUrl="./public/img/eco-social.png"

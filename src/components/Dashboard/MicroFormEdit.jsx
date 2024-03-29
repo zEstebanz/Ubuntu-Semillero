@@ -3,6 +3,10 @@ import { Box, Typography, styled, TextField, Select, MenuItem } from '@mui/mater
 import CustomButton from "../../components/buttonCustom";
 import { MessageText } from "./Message/MessageText";
 import upload from "../../../public/img/upload.svg";
+import { ubuntuApi } from '../../utils/services/axiosConfig';
+import { useParams } from 'react-router-dom';
+import { getAccessToken } from '../../utils/helpers/localStorage';
+import { useSession } from '../../hooks/useSession';
 
 const Input = styled(TextField)(({ theme }) => ({
     "& label": {
@@ -29,54 +33,93 @@ const handleImageUpload = () => {
 };
 
 const provinciasArgentinas = [
-    'Buenos Aires',
-    'Catamarca',
-    'Chaco',
-    'Chubut',
-    'Córdoba',
-    'Corrientes',
-    'Entre Ríos',
-    'Formosa',
-    'Jujuy',
-    'La Pampa',
-    'La Rioja',
-    'Mendoza',
-    'Misiones',
-    'Neuquén',
-    'Río Negro',
-    'Salta',
-    'San Juan',
-    'San Luis',
-    'Santa Cruz',
-    'Santa Fe',
-    'Santiago del Estero',
-    'Tierra del Fuego',
-    'Tucumán'
+    {
+        id: 1,
+        nombre: 'Buenos Aires',
+    }
+
+    // 'Catamarca',
+    // 'Chaco',
+    // 'Chubut',
+    // 'Córdoba',
+    // 'Corrientes',
+    // 'Entre Ríos',
+    // 'Formosa',
+    // 'Jujuy',
+    // 'La Pampa',
+    // 'La Rioja',
+    // 'Mendoza',
+    // 'Misiones',
+    // 'Neuquén',
+    // 'Río Negro',
+    // 'Salta',
+    // 'San Juan',
+    // 'San Luis',
+    // 'Santa Cruz',
+    // 'Santa Fe',
+    // 'Santiago del Estero',
+    // 'Tierra del Fuego',
+    // 'Tucumán'
 ];
 
 const paises = [
-    'Argentina',
-    'Chile',
-    'Perú',
-    'Brasil',
-    'Uruguay',
-    'Paraguay',
+    {
+        id: 1,
+        nombre: 'Argentina',
+    }
+
+    // 'Chile',
+    // 'Perú',
+    // 'Brasil',
+    // 'Uruguay',
+    // 'Paraguay',
 ];
+
+const getMicroByID = async (id) => {
+    const res = await ubuntuApi.get(`/microemprendimientos/admin/findById/${id}`, {
+        headers: {
+            Authorization: 'Bearer ' + getAccessToken(),
+        }
+    });
+    console.log(res.data.body)
+    return res.data.body;
+}
+
 function MicroForm() {
+    const user = useSession();
+
+    const { id } = useParams();
+
     const [counter, setCounter] = useState(0);
     const [provincia, setProvincia] = useState('');
+    const [ciudad, setCiudad] = useState('');
     const [categoria, setCategoria] = useState('');
+    const [descripcion, setDescripcion] = useState('');
+    const [info, setInfo] = useState('');
     const [images, setImages] = useState([]);
+    const [files, setFiles] = useState([]);
     const [pais, setPais] = useState('');
+    console.log(categoria);
+
+    console.log({ pais, provincia, files });
+    // const [micro, setMicro] = useState(null);
 
     const [isFormComplete, setIsFormComplete] = useState(false);
 
     const fileInputRef = useRef(null);
 
     useEffect(() => {
+        getMicroByID(id).then(data => {
+            setCategoria(data.subrubro)
+            setPais(data.pais)
+            setProvincia(data.provincia)
+            setCiudad(data.ciudad)
+            setDescripcion(data.descripcion)
+            setInfo(data.masInfo)
+        })
         const allFieldsCompleted = provincia && categoria && pais && ciudad && title && informacion && descripcion; // Verifica si todos los campos están completos
         setIsFormComplete(allFieldsCompleted);
-    }, [provincia, categoria, pais]); // Dependencias del efecto
+    }, []); // Dependencias del efecto
 
     const handleImageUpload = () => {
         // Lógica para manejar la carga de la imagen aquí
@@ -105,9 +148,27 @@ function MicroForm() {
         setPais(event.target.value);
     };
 
+    const handleCiudadChange = (event) => {
+        setCiudad(event.target.value);
+    };
+
+    const handleDescripcionChange = (event) => {
+        setDescripcion(event.target.value);
+    };
+
+    const handleInfoChange = (event) => {
+        setInfo(event.target.value);
+    };
+
     const handleChangeImage = (e) => {
         const files = e.target.files;
+        setFiles((fileState) => [...fileState, files[0]])
         const imagesArray = [];
+
+        if (files[0].size > 3000000) {
+            alert('Imagenes mayor a 3mb')
+            return
+        }
 
         for (let i = 0; i < files.length; i++) {
             const reader = new FileReader();
@@ -118,6 +179,44 @@ function MicroForm() {
                 }
             };
             reader.readAsDataURL(files[i]);
+        }
+    };
+
+
+    const handleSubmit = async () => {
+        // Crea un objeto con los datos del formulario
+        const formData = new FormData();
+        formData.append('nombre', 'holis editado');
+        formData.append('idRubro', 2);
+        formData.append('subrubro', categoria); // debería llamarse dubcategoria la variable
+
+        formData.append('idPais', pais);
+        formData.append('idProvincia', provincia);
+
+        formData.append('ciudad', ciudad);
+        formData.append('descripcion', descripcion);
+        formData.append('masInfo', info);
+
+        formData.append('email', user.sub);
+
+        // formData.append(`images`, files[0], 'images1')
+
+        files.forEach((image, index) => {
+            formData.append(`images`, image, image.name)
+        })
+
+        try {
+
+            const response = await ubuntuApi.putForm('/microemprendimientos/admin/edit/' + id, formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${getAccessToken()}`,
+                        'content-type': 'multipart/form-data'
+                    },
+                });
+
+        } catch (error) {
+            console.error('Error al enviar los datos:', error);
         }
     };
 
@@ -139,7 +238,6 @@ function MicroForm() {
                     component='form'
                     sx={{
                         width: '328px',
-                        display: 'flex',
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -194,24 +292,27 @@ function MicroForm() {
                         sx={{
                             mt: 3,
                         }}
+                        onChange={handleCategoriaChange}
+                        value={categoria}
                     />
 
                     {/* País */}
 
                     <Select
-                        value={pais}
+                        value={pais.id}
                         required
                         onChange={handlePaisChange}
                         fullWidth
                         sx={{ mt: 3 }}
                         displayEmpty
+                        defaultValue={pais.id}
                     >
-                        <MenuItem value="" disabled>
-                            País*
+                        <MenuItem value={pais.id} disabled>
+                            {pais.nombre}
                         </MenuItem>
                         {paises.map((pais) => (
-                            <MenuItem key={pais} value={pais}>
-                                {pais}
+                            <MenuItem key={pais.nombre} value={pais.id}>
+                                {pais.nombre}
                             </MenuItem>
                         ))}
                     </Select>
@@ -219,24 +320,25 @@ function MicroForm() {
                     {/* Provincia/Estado */}
 
                     <Select
-                        value={provincia}
+                        value={provincia.id}
                         required
                         onChange={handleProvinciaChange}
                         fullWidth
                         sx={{ mt: 3 }}
                         displayEmpty
                     >
-                        <MenuItem value="" disabled>
-                            Provincia/Estado*
+                        <MenuItem value={provincia.id} disabled>
+                            {provincia.nombre}
                         </MenuItem>
                         {provinciasArgentinas.map((provincia) => (
-                            <MenuItem key={provincia} value={provincia}>
-                                {provincia}
+                            <MenuItem key={provincia.nombre} value={provincia.id}>
+                                {provincia.nombre}
                             </MenuItem>
                         ))}
                     </Select>
 
                     <Input
+                        value={ciudad}
                         type="text"
                         required
                         id="ciudad"
@@ -245,8 +347,10 @@ function MicroForm() {
                         sx={{
                             mt: 3,
                         }}
+                        onChange={handleCiudadChange}
                     />
                     <Input
+                        value={descripcion}
                         type="text"
                         required
                         id="descripcion"
@@ -255,8 +359,10 @@ function MicroForm() {
                         sx={{
                             mt: 3,
                         }}
+                        onChange={handleDescripcionChange}
                     />
                     <Input
+                        value={info}
                         type="text"
                         required
                         id="informacion"
@@ -265,7 +371,7 @@ function MicroForm() {
                         sx={{
                             mt: 3,
                         }}
-
+                        onChange={handleInfoChange}
                     />
                     <Box
                         sx={{
@@ -368,13 +474,14 @@ function MicroForm() {
                         </Box>
                     </Box>
                     <CustomButton
+                        onClick={handleSubmit}
                         fullWidth
                         style={{
                             marginBottom: "32px",
                             color: "#FDFDFE",
                             backgroundColor: isFormComplete ? '#093C59' : '#6E6F70',
                         }}
-                        disabled={!isFormComplete}
+                    // disabled={!isFormComplete}
                     >
                         Guardar cambios
                     </CustomButton>

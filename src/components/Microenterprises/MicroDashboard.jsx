@@ -2,13 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Grid, Card, CardContent, Typography, Divider, Button, Menu, MenuItem } from '@mui/material';
 import { Link } from 'react-router-dom';
 import getMicroEdit from '../../api/micros/getMicroEdit';
+import { ubuntuApi } from '../../utils/services/axiosConfig';
+import { getAccessToken } from '../../utils/helpers/localStorage';
 
+const hideMicro = async (id) => {
+    const res = ubuntuApi.put(`/microemprendimientos/admin/hide/${id}`, null, {
+        headers: {
+            Authorization: 'Bearer ' + getAccessToken(),
+        }
+    });
+}
 
 function Micro() {
 
     const [expanded, setExpanded] = useState(false);
     const [micros, setMicros] = useState([]);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [reload, setReload] = useState(false);
 
     useEffect(() => {
         const obtenerMicro = async () => {
@@ -24,14 +34,16 @@ function Micro() {
         };
 
         obtenerMicro();
-    }, []);
-    
+    }, [reload]);
+
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
-    const handleClose = () => {
+    const handleClose = (itemId) => {
+        hideMicro(itemId)
+        setReload(!reload)
         setAnchorEl(null);
     };
 
@@ -40,7 +52,7 @@ function Micro() {
         <section>
             <Grid container justifyContent="center">
                 {micros.map((item, index) => (
-                    <Card sx={{
+                    <Card key={index} sx={{
                         width: "328px",
                         borderRadius: "16px",
                         marginBottom: '16px'
@@ -73,14 +85,16 @@ function Micro() {
                                     onClose={handleClose}
                                 >
                                     <MenuItem onClick={handleClose}>
-                                        <Link to="/dashboard-micro/form-edit" style={{
+                                        <Link to={"/dashboard-micro/form-edit/" + item.id} style={{
                                             textDecoration: 'none',
                                             fontSize: '16px',
                                             lineHeight: '24px',
                                             color: '#090909'
                                         }}>Editar</Link>
                                     </MenuItem>
-                                    <MenuItem onClick={handleClose}>
+                                    <MenuItem 
+                                    onClick={() => handleClose(item.id)}
+                                    >
                                         <Link to="#" style={{
                                             textDecoration: 'none',
                                             fontSize: '16px',

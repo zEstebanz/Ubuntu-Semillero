@@ -59,7 +59,7 @@ const router = createBrowserRouter([
                 ]
             },
             {
-                path: '/dashboard-micro/form-edit',
+                path: '/dashboard-micro/form-edit/:id',
                 element: <MicroFormEdit />
             },
             {

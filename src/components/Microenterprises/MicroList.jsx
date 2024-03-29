@@ -7,11 +7,12 @@ import getMicro from '../../api/micros/getMicro';
 const MicroList = () => {
 
     const [micros, setMicros] = useState([]);
+    const { id } = useParams();
 
     useEffect(() => {
         const obtenerMicro = async () => {
             try {
-                const microData = await getMicro();
+                const microData = await getMicro(id);
                 console.log('Datos de micro recibidos:', microData)
                 setMicros(microData);
             } catch (error) {
@@ -20,7 +21,7 @@ const MicroList = () => {
         };
 
         obtenerMicro();
-    }, []);
+    }, [id]);
 
     const obtenerUrlsDeImagenes = (images) => {
         return images.map(image => {
@@ -84,7 +85,7 @@ const MicroList = () => {
             </section>
 
             <section>
-                {micros.map((micro, index) => (
+                {micros?.map((micro, index) => (
                     <div key={index}>
                         <MicroCard
                             key={micro.id}
