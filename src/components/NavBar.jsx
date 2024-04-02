@@ -1,6 +1,7 @@
 import { Menu } from "@mui/icons-material";
 import {
   AppBar,
+  Avatar,
   Box,
   IconButton,
   SwipeableDrawer,
@@ -12,10 +13,13 @@ import { Link } from "react-router-dom";
 import DrawerList from "./DrawerList";
 import CloseIcon from "@mui/icons-material/Close";
 import OutsideClickHandler from "react-outside-click-handler";
+import { useSession } from "./../hooks/useSession";
 
 function NavBar({ setDrawerOpened }) {
   const [open, setOpen] = useState(false);
   const navbarRef = useRef();
+  /*   const user = useSession(); */
+  const user = false;
   const getNavbarHeight = () => {
     if (navbarRef.current) {
       return navbarRef.current.offsetHeight;
@@ -62,13 +66,15 @@ function NavBar({ setDrawerOpened }) {
           <Box
             display="flex"
             width="100%"
-            marginRight="1.5rem"
+            marginLeft={user ? "0.8rem" : ""}
+            marginRight={!user ? "1.5rem" : ""}
             justifyContent="center"
           >
             <Link to="/">
-              <img src={logo} alt="Logo" height="50" />
+              <img src={logo} alt="Logo" height="100%" />
             </Link>
           </Box>
+          {user ? <Avatar>TG</Avatar> : null}
         </Toolbar>
       </AppBar>
       <OutsideClickHandler onOutsideClick={closeDrawer}>

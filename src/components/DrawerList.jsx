@@ -1,8 +1,11 @@
+/* eslint-disable react/prop-types */
 import { List, ListItem, Typography } from "@mui/material";
-import theme from "../theme/theme";
 import { Link } from "react-router-dom";
+import { useSession } from "../hooks/useSession";
 
 function DrawerList({ toggleDrawer }) {
+  /*   const user = useSession(); */
+  const user = true;
   const handleClickLink = () => {
     toggleDrawer();
   };
