@@ -2,23 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { Box, Divider, Typography } from '@mui/material'
 import getRubros from '../../api/statistics/getRubrosStatistics'
 import getMicroStatistics from '../../api/statistics/getMicroStatistics';
+import getMesajes from '../../api/statistics/getMesajes';
 
 function DashboardAdmin() {
 
   const [rubros, setRubros] = useState([]);
   const [micro, setMicro] = useState([]);
-  
+  const [mensaje, setMensaje] = useState([]);
 
   useEffect(() => {
     const obtenerRubros = async () => {
       try {
         const rubrosData = await getRubros();
         const microData = await getMicroStatistics();
+        const mensajeData = await getMesajes();
 
         setRubros(rubrosData);
         setMicro(microData.body);
+        setMensaje(mensajeData.body);
 
-        console.log(microData.body)
+        console.log(mensajeData.body)
 
       } catch (error) {
         console.error('Error al obtener los rubros:', error);
@@ -72,14 +75,19 @@ function DashboardAdmin() {
       <section>
         <div style={{
           width: '328px',
-          maxHeight: '64px',
+          height: '64px',
           backgroundColor: '#093C59',
           margin: 'auto',
-          borderRadius: '8px',
-          padding: '8px 16px'
+          borderRadius: '8px'
         }}>
 
-          <div>
+          <Box
+            sx={{
+              width: '225px',
+              height: '48px',
+              padding: '8px 16px'
+            }}
+          >
 
             <div
               style={{
@@ -101,33 +109,25 @@ function DashboardAdmin() {
                 Nuevos Microemprendimientos
               </Typography>
 
-
-              <div
-                style={{
-                  with: '21px',
-                  height: '25px',
-                }}
-              >
-                {micro.map((item, index) => (
-                  <div key={index}>
-                    <Typography
-                      key={index}
-                      sx={{
-                        color: '#fff',
-                        fontSize: '22px',
-                        fontWeight: 700,
-                        paddingTop: '16px',
-                      }}
-                    >
-                      {item.total}
-                    </Typography>
-                  </div>
-                ))}
-              </div>
+              {micro.map((item, index) => (
+                <div key={index}>
+                  <Typography
+                    key={index}
+                    sx={{
+                      color: '#fff',
+                      fontSize: '22px',
+                      fontWeight: 700,
+                      paddingTop: '8px'
+                    }}
+                  >
+                    {item.total}
+                  </Typography>
+                </div>
+              ))}
 
             </div>
 
-          </div>
+          </Box>
 
         </div>
 
@@ -144,9 +144,9 @@ function DashboardAdmin() {
                   Gestionados
                 </Typography>
                 <Divider sx={{ width: '48px', border: '1px solid #1D9129' }} />
-                {micro.map((item, index) => (
+                {mensaje && mensaje.map((item, index) => (
                   <Typography key={index} sx={{ color: '#090909', fontSize: '20px', fontWeight: 700 }}>
-                    {item.gestionadas}
+                    {item.cantGestionados}
                   </Typography>
                 ))}
               </div>
@@ -159,9 +159,9 @@ function DashboardAdmin() {
                   No gestionados
                 </Typography>
                 <Divider sx={{ width: '48px', border: '1px solid #B86B11' }} />
-                {micro.map((item, index) => (
+                {mensaje && mensaje.map((item, index) => (
                   <Typography key={index} sx={{ color: '#090909', fontSize: '20px', fontWeight: 700 }}>
-                    {item.noGestionadas}
+                    {item.cantNoGestionados}
                   </Typography>
                 ))}
               </div>
@@ -169,6 +169,7 @@ function DashboardAdmin() {
           </div>
         </div>
       </section>
+
       {/* End Estadisticas */}
 
       {/* Micro por Categoria */}
@@ -208,12 +209,13 @@ function DashboardAdmin() {
             />
           </div>
 
-          <div
+          <Box
             style={{
               borderRadius: '8px',
-              padding: '8px 16px',
+              padding: '8px 16px'
             }}
           >
+
             {/* Verificar si rubros está vacío */}
             {rubros.length === 0 ? (
               <Typography
@@ -235,38 +237,32 @@ function DashboardAdmin() {
                       style={{
                         display: 'flex',
                         justifyContent: 'space-between',
-                        alignItems: 'center',
-                        width: '288px',
-                        height: '56px',
+                        alignItems: 'center'
                       }}
                     >
-                      <div style={{
+
+                      <Box style={{
+                        height: '50px',
                         width: '235px'
                       }}>
-                        <Box sx={{
-                          width: '90%',
-                          alignItems: 'flex-start'
-                        }}>
-                          <Typography
-                            sx={{
-                              fontSize: '1rem',
-                              height: '50px',
-                              fontWeight: 400
-                            }}
-                          >
-                            {rubro.nombre}
-                          </Typography>
-                        </Box>
 
-                      </div>
-                      <div
+                        <Typography
+                          sx={{
+                            fontSize: '1rem',
+                            fontWeight: 400
+                          }}
+                        >
+                          {rubro.nombre}
+                        </Typography>
+                      </Box>
+
+                      <Box
                         style={{
                           display: 'flex',
                           justifyContent: 'flex-end',
                           alignItems: 'center',
-                          width: '50px',
-                          height: '100%',
-                          paddingRight: '16px',
+                          paddingRight: '8px',
+                          width: '25px'
                         }}
                       >
                         <Typography
@@ -277,7 +273,7 @@ function DashboardAdmin() {
                         >
                           {rubro.cantidadMicroemprendimientos}
                         </Typography>
-                      </div>
+                      </Box>
                     </div>
                     <Divider
                       sx={{
@@ -293,7 +289,7 @@ function DashboardAdmin() {
             )}
             {/* End Micro. por categoría */}
 
-          </div>
+          </Box>
 
         </div>
       </section>
@@ -323,11 +319,9 @@ function DashboardAdmin() {
         <div style={{
           width: '328px',
           minHeight: '80px',
-          backgroundColor: '#EAEAEA',
           margin: 'auto',
           borderRadius: '8px',
-          border: '1px solid #093C59',
-          padding: '8px 16px'
+          border: '1px solid #093C59'
         }}>
           <div
             style={{
@@ -336,9 +330,10 @@ function DashboardAdmin() {
             }}
           >
 
-            <div style={{
+            <Box style={{
               width: '231px',
               height: '64px',
+              padding: '8px 16px'
             }}
             >
 
@@ -353,33 +348,32 @@ function DashboardAdmin() {
               <Typography
                 sx={{
                   fontSize: '0.875rem',
-                  fontWeight: 500,
-                  paddingTop: '8px'
+                  fontWeight: 500
                 }}
               >
                 17/04/2023
               </Typography>
-            </div>
+            </Box>
 
-            <div
+            <Box
               style={{
                 width: '64px',
                 height: '24px',
-                marginTop: '16px'
+                paddingRight: '8px',
+                marginTop: '25px'
               }}
             >
               <Typography
                 color="primary"
                 sx={{
                   fontSize: '1.125rem',
-                  fontWeight: 700,
-                  paddingTop: '8px',
+                  fontWeight: 700
                 }}
               >
                 <img src="../../../public/img/view.png" alt="view" width={"22px"} height={"15px"} style={{ marginRight: '8px' }} />
                 50
               </Typography>
-            </div>
+            </Box>
 
           </div>
         </div>

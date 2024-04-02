@@ -8,6 +8,7 @@ import getPaises from '../../api/location/getPaises';
 import getProvincias from '../../api/location/getProvincias';
 import { getAccessToken } from "../../utils/helpers/localStorage";
 import { useSession } from '../../hooks/useSession';
+import { MessageHelperText } from "../../components/Contact/MessageHelperText";
 
 
 const Input = styled(TextField)(({ theme }) => ({
@@ -35,32 +36,27 @@ function MicroForm() {
 
     const [images, setImages] = useState([]);
     const [files, setFiles] = useState([]);
-
     const [isFormComplete, setIsFormComplete] = useState(false);
-
     const [provincia, setProvincia] = useState([]);
     const [pais, setPais] = useState([]);
     const [paisSeleccionado, setPaisSeleccionado] = useState('');
     const [paisIdSeleccionado, setPaisIdSeleccionado] = useState('');
-
     const [categoria, setCategoria] = useState([]);
-    const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(''); // Estado para la categoría seleccionada
-
-    const [nombreMicro, setNombreMicro] = useState(''); // Agrega estado para el nombre del microemprendimiento
-
+    const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('');
+    const [nombreMicro, setNombreMicro] = useState('');
     const [ciudad, setCiudad] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [masInfo, setMasInfo] = useState('');
 
-    const [subcategoria, setSubcategoria] = useState(''); // Agrega estado para la subcategoría
+    const [counter, setCounter] = useState(0);
+
+    const [subcategoria, setSubcategoria] = useState('');
 
     // const [isFormComplete, setIsFormComplete] = useState(false);
 
     useEffect(() => {
         getRubros().then(data => setCategoria(data));
         getPaises().then(data => setPais(data));
-
-       
     }, []);
 
     const fileInputRef = useRef(null);
@@ -70,18 +66,18 @@ function MicroForm() {
     };
 
     const handleClick = () => {
-        fileInputRef.current.click(); // Simula hacer clic en el campo de entrada de archivo
+        fileInputRef.current.click();
     };
 
     const handleChange = (event) => {
-        const file = event.target.files[0]; // Obtiene el archivo seleccionado
+        const file = event.target.files[0];
         if (file) {
-            handleImageUpload(file); // Maneja la carga de la imagen
+            handleImageUpload(file);
         }
     };
 
     const handleCategoriaChange = (event) => {
-        setCategoriaSeleccionada(event.target.value); // Actualiza la categoría seleccionada
+        setCategoriaSeleccionada(event.target.value);
     };
 
     const handlePaisChange = async (event) => {
@@ -343,7 +339,7 @@ function MicroForm() {
                     }}
                 />
                 {/* Descripcion */}
-                <Input
+                {/* <Input
                     type="text"
                     required
                     id="descripcion"
@@ -354,9 +350,9 @@ function MicroForm() {
                     sx={{
                         mt: 3,
                     }}
-                />
+                /> */}
                 {/* Mas Info */}
-                <Input
+                {/* <Input
                     type="text"
                     required
                     id="informacion"
@@ -367,7 +363,40 @@ function MicroForm() {
                     sx={{
                         mt: 3,
                     }}
+                /> */}
+
+                <Input
+                    required
+                    type="text"
+                    id="descripcionMicroemprendimiento"
+                    label="Descripción del Microemprendimiento"
+                    helperText={<MessageHelperText counter={counter} />}
+                    fullWidth
+                    multiline
+                    rows={7}
+                    sx={{
+                        mt: 2,
+                    }}
+                    value={masInfo}
+                    onChange={(event) => setCounter(event.target.value.length)}
                 />
+
+                <Input
+                    required
+                    type="text"
+                    id="infoMicroemprendedor"
+                    label="Mas información del Microemprendedor"
+                    helperText={<MessageHelperText counter={counter} />}
+                    fullWidth
+                    multiline
+                    rows={7}
+                    sx={{
+                        mt: 2,
+                    }}
+                    value={masInfo}
+                    onChange={(event) => setCounter(event.target.value.length)}
+                />
+
                 {/* End Mas Info */}
 
                 <Box

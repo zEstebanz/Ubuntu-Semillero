@@ -13,39 +13,41 @@ function PostCard({ title, description, date, images }) {
   const [expanded, setExpanded] = useState(false);
   const descriptionLimit = 100;
 
+  console.log(images)
+
   const toggleExpand = () => {
     setExpanded(!expanded);
   };
 
-  // const renderSwiper = () => {
-  //   if (images.length > 1) {
-  //     return (
-  //       <div style={{ position: "relative" }}>
-  //         <Swiper
-  //           cssMode={true}
-  //           navigation={true}
-  //           pagination={true}
-  //           mousewheel={true}
-  //           keyboard={true}
-  //           modules={[Navigation, Pagination, Mousewheel, Keyboard]}
-  //           className="swiper"
-  //         >
-  //           {images.map((imageUrl, index) => (
-  //             <SwiperSlide key={index} className="swiper-slide">
-  //               <CardMedia component="img" height="128" width="304" image={imageUrl} alt={title} sx={{ borderRadius: "16px" }} />
-  //             </SwiperSlide>
-  //           ))}
-  //         </Swiper>
-  //       </div>
-  //     );
-  //   } else if (images.length === 1) {
-  //     return (
-  //       <CardMedia component="img" height="128" width="304" image={images[0]} alt={title} sx={{ borderRadius: "16px" }} />
-  //     );
-  //   } else {
-  //     return null; // No hay imágenes disponibles
-  //   }
-  // };
+  const renderSwiper = () => {
+    if (images.length > 1) {
+      return (
+        <div style={{ position: "relative" }}>
+          <Swiper
+            cssMode={true}
+            navigation={true}
+            pagination={true}
+            mousewheel={true}
+            keyboard={true}
+            modules={[Navigation, Pagination, Mousewheel, Keyboard]}
+            className="swiper"
+          >
+            {images.map((imageUrl, index) => (
+              <SwiperSlide key={index} className="swiper-slide">
+                <CardMedia component="img" height="128" width="304" image={imageUrl} alt={title} sx={{ borderRadius: "16px" }} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      );
+    } else if (images.length === 1) {
+      return (
+        <CardMedia component="img" height="128" width="304" image={images[0]} alt={title} sx={{ borderRadius: "16px" }} />
+      );
+    } else {
+      return null;  //No hay imágenes disponibles
+    }
+  };
 
   return (
     <Grid container justifyContent="center" paddingTop={"16px"}>
@@ -65,7 +67,6 @@ function PostCard({ title, description, date, images }) {
             paddingBottom: "0.8rem !important",
           }}
         >
-          {/* {renderSwiper()} */}
           <Typography
             variant="subtitles"
             fontWeight={600}
@@ -77,6 +78,8 @@ function PostCard({ title, description, date, images }) {
           >
             {title}
           </Typography>
+          
+          {renderSwiper()}
 
           <Typography
             variant="body2"

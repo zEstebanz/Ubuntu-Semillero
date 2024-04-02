@@ -78,6 +78,7 @@ const Categories = () => {
                         },
                     }} lx={{}}>
                         {rubro?.map((rubro, index) =>
+                        
                             <Link
                                 key={index}
                                 component="button"
@@ -88,7 +89,7 @@ const Categories = () => {
                                 // onClick={() => handleButtonClick(rubro.id)}
                             >
                                 <CategoriesCard
-                                    imageUrl="./public/img/eco-social.png"
+                                    imageUrl={`./public/img/rubros/${rubro.id}.png`}
                                     altText="Logo de Economia Social."
                                     title={rubro.nombre}
                                     dividerColor="green.dark"

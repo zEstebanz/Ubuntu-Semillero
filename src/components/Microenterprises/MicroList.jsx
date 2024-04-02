@@ -56,16 +56,18 @@ const MicroList = () => {
                         Categorias
                     </Typography>
 
-                    <Typography
-                        sx={{
-                            fontSize: "20px",
-                            fontWeight: 600,
-                            textAlign: "center"
-                        }}
-                        color="primary"
-                    >
-                        Agroecología/Orgánicos/Alimentación Saludable
-                    </Typography>
+                    {micros?.map((micro, index) => (
+                        <Typography
+                            sx={{
+                                fontSize: "20px",
+                                fontWeight: 600,
+                                textAlign: "center"
+                            }}
+                            color="primary"
+                        >
+                            {micro.rubro.nombre}
+                        </Typography>
+                    ))}
 
                     <Typography
                         sx={{

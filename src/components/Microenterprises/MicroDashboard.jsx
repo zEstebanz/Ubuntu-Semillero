@@ -92,8 +92,8 @@ function Micro() {
                                             color: '#090909'
                                         }}>Editar</Link>
                                     </MenuItem>
-                                    <MenuItem 
-                                    onClick={() => handleClose(item.id)}
+                                    <MenuItem
+                                        onClick={() => handleClose(item.id)}
                                     >
                                         <Link to="#" style={{
                                             textDecoration: 'none',
@@ -134,7 +134,11 @@ function Micro() {
                                     alignItems: 'center',
                                     paddingTop: '16px'
                                 }}>
-                                    <img src="../../../public/img/right.svg" alt="right" />
+                                    <Link
+                                        to={"/dashboard-micro/view/" + item.id}
+                                    >
+                                        <img src="../../../public/img/right.svg" alt="right" />
+                                    </Link>
                                 </div>
                             </div>
 

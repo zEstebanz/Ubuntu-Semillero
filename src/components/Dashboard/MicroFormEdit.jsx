@@ -1,12 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Box, Typography, styled, TextField, Select, MenuItem } from '@mui/material';
 import CustomButton from "../../components/buttonCustom";
-import { MessageText } from "./Message/MessageText";
 import upload from "../../../public/img/upload.svg";
 import { ubuntuApi } from '../../utils/services/axiosConfig';
 import { useParams } from 'react-router-dom';
 import { getAccessToken } from '../../utils/helpers/localStorage';
 import { useSession } from '../../hooks/useSession';
+import getRubros from '../../api/rubrosCategori/getRubro';
 
 const Input = styled(TextField)(({ theme }) => ({
     "& label": {
@@ -91,15 +91,17 @@ function MicroForm() {
     const { id } = useParams();
 
     const [counter, setCounter] = useState(0);
+    const [nombreMicro, setNombreMicro] = useState('');
     const [provincia, setProvincia] = useState('');
     const [ciudad, setCiudad] = useState('');
-    const [categoria, setCategoria] = useState('');
+    const [categoria, setCategoria] = useState([]);
+    const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('');
+    const [subcategoria, setSubcategoria] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [info, setInfo] = useState('');
     const [images, setImages] = useState([]);
     const [files, setFiles] = useState([]);
     const [pais, setPais] = useState('');
-    console.log(categoria);
 
     console.log({ pais, provincia, files });
     // const [micro, setMicro] = useState(null);
@@ -109,7 +111,9 @@ function MicroForm() {
     const fileInputRef = useRef(null);
 
     useEffect(() => {
+        getRubros().then(data => setCategoria(data));
         getMicroByID(id).then(data => {
+            setNombreMicro(data.nombreMicro)
             setCategoria(data.subrubro)
             setPais(data.pais)
             setProvincia(data.provincia)
@@ -136,12 +140,19 @@ function MicroForm() {
         }
     };
 
-    const handleProvinciaChange = (event) => {
-        setProvincia(event.target.value);
+    const handleNombreMicroChange = (event) => {
+        setNombreMicro(event.target.value)
+    }
+    const handleCategoriaChange = (event) => {
+        setCategoriaSeleccionada(event.target.value);
     };
 
-    const handleCategoriaChange = (event) => {
-        setCategoria(event.target.value);
+    const handleSubcategoriaChange = (event) => {
+        setSubcategoria(event.target.value);
+    };
+
+    const handleProvinciaChange = (event) => {
+        setProvincia(event.target.value);
     };
 
     const handlePaisChange = (event) => {
@@ -181,7 +192,6 @@ function MicroForm() {
             reader.readAsDataURL(files[i]);
         }
     };
-
 
     const handleSubmit = async () => {
         // Crea un objeto con los datos del formulario
@@ -281,8 +291,21 @@ function MicroForm() {
                         Agroecología/Orgánicos/Alimentación saludable
                     </Typography>
 
-                    {/* Sub-Categoría */}
+                    {/* Nombre */}
+                    <Input
+                        type="text"
+                        required
+                        id="title"
+                        label="Nombre del Microemprendimiento*"
+                        fullWidth
+                        sx={{
+                            mt: 3,
+                        }}
+                        onChange={handleNombreMicroChange}
+                        value={nombreMicro}
+                    />
 
+                    {/* Sub-Categoría */}
                     <Input
                         type="text"
                         required

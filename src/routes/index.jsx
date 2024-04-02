@@ -14,7 +14,7 @@ import MicroFormEdit from "../components/Dashboard/MicroFormEdit";
 import MicroForm from "../components/Dashboard/MicroForm";
 import PublicationsForm from "../components/Dashboard/PublicationsForm";
 import PublicationsFormEdit from "../components/Dashboard/PublicationsFormEdit";
-
+import MicroView from "../components/Dashboard/MicroView";
 
 const router = createBrowserRouter([
     {
@@ -61,6 +61,10 @@ const router = createBrowserRouter([
             {
                 path: '/dashboard-micro/form-edit/:id',
                 element: <MicroFormEdit />
+            },
+            {
+                path: '/dashboard-micro/view/:id',
+                element: <MicroView />
             },
             {
                 path: '/dashboard-admin',
