@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { TextField, Grid, Box } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -15,13 +15,13 @@ const SearchBar = ({ busqueda, setBusqueda }) => {
       zIndex="1"
       width="91%"
       margin="1.5rem 1rem"
+      sx={{ backgroundColor: `${busqueda ? "#EAEAEA" : ""}` }}
     >
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
           width: "100%",
-          gap: "8px",
         }}
       >
         <SearchIcon color="black" />

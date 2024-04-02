@@ -2,9 +2,18 @@ import { Box, Typography, Button } from "@mui/material";
 import img from "../../assets/Blog.jpg";
 import PostCard from "../Publications/PostCard";
 import { Link } from "react-router-dom";
+import { ubuntuApi } from "../../utils/services/axiosConfig";
+
+import { useSession } from "./../../hooks/useSession";
 
 function LandingPosts() {
-  const posts = [
+  const session = useSession();
+  console.log(session.user);
+  const posts = ubuntuApi("/publicaciones/ultimasTres").then(
+    (response) => response.data
+  );
+
+  /* [
     {
       id: 1,
       title: "Inversiones Éticas: Más que ganancias",
@@ -34,7 +43,7 @@ function LandingPosts() {
         "Las decisiones financieras han trascendido la mera maximización del rendimiento. Actualmente, muchos inversores desean que sus decisiones reflejen sus valores éticos y morales, dando lugar a las inversiones éticas o sostenibles.Las decisiones financieras han trascendido la mera maximización del rendimiento. Actualmente, muchos inversores desean que sus decisiones reflejen sus valores éticos y morales, dando lugar a las inversiones éticas o sostenibles.Las decisiones financieras han trascendido la mera maximización del rendimiento. Actualmente, muchos inversores desean que sus decisiones reflejen sus valores éticos y morales, dando lugar a las inversiones éticas o sostenibles.Las decisiones financieras han trascendido la mera maximización del rendimiento",
       link: "/post/3",
     },
-  ];
+  ] */
   return (
     <Box
       component="section"
@@ -57,15 +66,15 @@ function LandingPosts() {
         alignItems="center"
         width="100%"
       >
-        {posts?.map((post) => (
+        {/*         {posts?.map((post) => (
           <PostCard
             key={post.id}
-            title={post.title}
-            description={post.description}
-            date={post.date}
+            title={post.titulo}
+            description={post.descripcion}
+            date={post.fechaCreacion}
             imageUrl={post.imageUrl}
           />
-        ))}
+        ))} */}
       </Box>
       <Link to="/publicaciones">
         <Button
