@@ -4,6 +4,13 @@ import SearchOffIcon from "@mui/icons-material/SearchOff";
 import MicroCard from "../Microenterprises/MicroCard";
 
 function MicroResults({ microFilterList }) {
+  const obtenerUrlsDeImagenes = (images) => {
+    return images.map((image) => {
+      const regex = /secure_url=(.*?),/;
+      const match = regex.exec(image);
+      return match ? match[1] : "";
+    });
+  };
   return (
     <Box
       display="flex"
@@ -18,13 +25,14 @@ function MicroResults({ microFilterList }) {
         microFilterList.map((micro) => (
           <MicroCard
             key={micro.id}
-            title={micro.title}
-            entity={micro.entity}
-            categori={micro.categori}
-            location={micro.location}
-            imageUrl={micro.imageUrl}
-            imageUrl2={micro.imageUrl2}
-            imageUrl3={micro.imageUrl3}
+            title={micro.nombre}
+            subcategory={micro.subrubro}
+            category={micro.rubro.nombre}
+            location={`${micro.ciudad ? micro.ciudad + ", " : ""}${
+              micro.provincia.nombre
+            }, ${micro.pais.nombre}`}
+            description={micro.descripcion}
+            images={obtenerUrlsDeImagenes(micro.images)}
             link={micro.link}
           />
         ))

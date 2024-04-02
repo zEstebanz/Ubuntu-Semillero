@@ -7,11 +7,11 @@ import { ubuntuApi } from "../../utils/services/axiosConfig";
 import { useSession } from "./../../hooks/useSession";
 
 function LandingPosts() {
-  const session = useSession();
-  console.log(session.user);
-  const posts = ubuntuApi("/publicaciones/ultimasTres").then(
+  /*   const session = useSession();
+  console.log(session.user); */
+  /*  const posts = ubuntuApi("/publicaciones/ultimasTres").then(
     (response) => response.data
-  );
+  ); */
 
   /* [
     {
