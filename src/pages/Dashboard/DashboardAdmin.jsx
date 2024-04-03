@@ -3,12 +3,14 @@ import { Box, Divider, Typography } from '@mui/material'
 import getRubros from '../../api/statistics/getRubrosStatistics'
 import getMicroStatistics from '../../api/statistics/getMicroStatistics';
 import getMesajes from '../../api/statistics/getMesajes';
+import getPostView from '../../api/statistics/getPostViews';
 
 function DashboardAdmin() {
 
   const [rubros, setRubros] = useState([]);
   const [micro, setMicro] = useState([]);
   const [mensaje, setMensaje] = useState([]);
+  const [postView, setPostView] = useState([]);
 
   useEffect(() => {
     const obtenerRubros = async () => {
@@ -16,13 +18,14 @@ function DashboardAdmin() {
         const rubrosData = await getRubros();
         const microData = await getMicroStatistics();
         const mensajeData = await getMesajes();
+        const postViewData = await getPostView();
 
         setRubros(rubrosData);
         setMicro(microData.body);
-        setMensaje(mensajeData);
+        setMensaje(mensajeData); 
+        setPostView(postViewData.body);
 
-        console.log(mensajeData)
-
+        console.log(postViewData)
       } catch (error) {
         console.error('Error al obtener los rubros:', error);
       }
