@@ -12,11 +12,41 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-function MicroCard({ title, entity, categori, location, imageUrl, imageUrl2, imageUrl3, link }) {
+function MicroCard({ title, entity, category, location, images, masInfo, descripcion }) {
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpand = () => {
     setExpanded(!expanded);
+  };
+
+  const renderSwiper = () => {
+    if (images.length > 1) {
+      return (
+        <div style={{ position: "relative" }}>
+          <Swiper
+            cssMode={true}
+            navigation={true}
+            pagination={true}
+            mousewheel={true}
+            keyboard={true}
+            modules={[Navigation, Pagination, Mousewheel, Keyboard]}
+            className="swiper"
+          >
+            {images.map((imageUrl, index) => (
+              <SwiperSlide key={index} className="swiper-slide">
+                <CardMedia component="img" height="128" width="304" image={imageUrl} alt={title} sx={{ borderRadius: "16px" }} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      );
+    } else if (images.length === 1) {
+      return (
+        <CardMedia component="img" height="128" width="304" image={images[0]} alt={title} sx={{ borderRadius: "16px" }} />
+      );
+    } else {
+      return null; // No hay imágenes disponibles
+    }
   };
 
   return (
@@ -29,30 +59,7 @@ function MicroCard({ title, entity, categori, location, imageUrl, imageUrl2, ima
         gap: "16px"
       }}>
         <CardContent>
-
-          <div style={{ position: "relative" }}>
-            <Swiper
-              cssMode={true}
-              navigation={true}
-              pagination={true}
-              mousewheel={true}
-              keyboard={true}
-              modules={[Navigation, Pagination, Mousewheel, Keyboard]}
-              className="swiper"
-            >
-              <SwiperSlide className="swiper-slide">
-                <CardMedia component="img" height="128" width="304" image={imageUrl} alt={title} sx={{ borderRadius: "16px" }} />
-              </SwiperSlide>
-              <SwiperSlide className="swiper-slide">
-                <CardMedia component="img" height="128" width="304" image={imageUrl2} alt={title} sx={{ borderRadius: "16px" }} />
-              </SwiperSlide>
-              <SwiperSlide className="swiper-slide">
-                <CardMedia component="img" height="128" width="304" image={imageUrl3} alt={title} sx={{ borderRadius: "16px" }} />
-              </SwiperSlide>
-            </Swiper>
-
-          </div>
-
+          {renderSwiper()}
           <Typography
             variant="h6"
             gutterBottom
@@ -92,7 +99,7 @@ function MicroCard({ title, entity, categori, location, imageUrl, imageUrl2, ima
               marginBottom: '16px'
             }}
           >
-            {categori}
+            {category}
           </Typography>
           <Typography
             sx={{
@@ -116,7 +123,7 @@ function MicroCard({ title, entity, categori, location, imageUrl, imageUrl2, ima
                 Descripción del Microemprendimiento
               </Typography>
               <Typography variant="body2" sx={{ marginBottom: '16px' }}>
-                Promueven un modelo de agricultura sostenible, protegiendo el medio ambiente, el agua y las semillas autóctonas. Cultivan frutas, verduras, plantas medicinales y crean derivados. Editan también contenidos educativos, gestionan un banco de semillas y comercializan o intercambian excedentes.
+                {descripcion}
               </Typography>
 
               <Divider sx={{ width: '296px', margin: 'auto', marginBottom: '16px', height: '4px', borderBottom: '1px solid #090909' }} />
@@ -125,7 +132,7 @@ function MicroCard({ title, entity, categori, location, imageUrl, imageUrl2, ima
                 Más información de interés
               </Typography>
               <Typography variant="body2" sx={{ marginBottom: '16px' }}>
-                Nació del sueño de restaurar la salud y adoptar un estilo de vida ideal. Este proyecto familiar creció fundamentado en la permacultura, biodinámica y agroecología, comprometiéndose con la soberanía alimentaria, el bienestar, el regreso al campo, la venta directa y la dignidad de la vida campesina.
+                {masInfo}
               </Typography>
 
               <div style={{ textAlign: 'center' }}>

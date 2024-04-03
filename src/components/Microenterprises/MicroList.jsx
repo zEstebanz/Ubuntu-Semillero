@@ -1,45 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Container, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import MicroCard from './MicroCard';
+import getMicro from '../../api/micros/getMicro';
 
 const MicroList = () => {
 
-    const [expanded, setExpanded] = useState(false);
+    const [micros, setMicros] = useState([]);
     const { id } = useParams();
 
-    const microenterprises = [
-        {
-            id: 1,
-            title: 'EcoSenda',
-            imageUrl: '../../../public/img/post.jpeg',
-            imageUrl2: '../../../public/img/post1.jpeg',
-            imageUrl3: '../../../public/img/post2.jpeg',
-            date: '03-03-2024',
-            entity: 'Finca agroecológica',
-            categori: 'Agroecología/Orgánicos/Alimentación saludable',
-            location: 'Tunuyán, Mendoza, Argentina',
-            link: '',
-            contact: ''
-        },
-        {
-            id: 2,
-            title: 'EcoSenda',
-            imageUrl: '../../../public/img/post.jpeg',
-            imageUrl2: '../../../public/img/post1.jpeg',
-            imageUrl3: '../../../public/img/post2.jpeg',
-            date: '03-03-2024',
-            entity: 'Finca agroecológica',
-            categori: 'Agroecología/Orgánicos/Alimentación saludable',
-            location: 'Tunuyán, Mendoza, Argentina',
-            link: '',
-            contact: ''
-        },
-        
-    ];
+    useEffect(() => {
+        const obtenerMicro = async () => {
+            try {
+                const microData = await getMicro(id);
+                console.log('Datos de micro recibidos:', microData)
+                setMicros(microData);
+            } catch (error) {
+                console.error('Error al obtener los rubros:', error);
+            }
+        };
 
-    const toggleExpand = () => {
-        setExpanded(!expanded);
+        obtenerMicro();
+    }, [id]);
+
+    const obtenerUrlsDeImagenes = (images) => {
+        return images.map(image => {
+            const regex = /secure_url=(.*?),/;
+            const match = regex.exec(image);
+            return match ? match[1] : '';
+        });
     };
 
     return (
@@ -54,8 +43,8 @@ const MicroList = () => {
                     paddingBottom: 3,
                     paddingLeft: 2,
                     paddingRight: 2
-                }}> 
-                    
+                }}>
+
                     <Typography
                         variant="h5"
                         color="common.black"
@@ -67,16 +56,18 @@ const MicroList = () => {
                         Categorias
                     </Typography>
 
-                    <Typography
-                        sx={{
-                            fontSize: "20px",
-                            fontWeight: 600,
-                            textAlign: "center"
-                        }}
-                        color="primary"
-                    >
-                        Agroecología/Orgánicos/Alimentación Saludable
-                    </Typography>
+                    {micros?.map((micro, index) => (
+                        <Typography
+                            sx={{
+                                fontSize: "20px",
+                                fontWeight: 600,
+                                textAlign: "center"
+                            }}
+                            color="primary"
+                        >
+                            {micro.rubro.nombre}
+                        </Typography>
+                    ))}
 
                     <Typography
                         sx={{
@@ -96,20 +87,20 @@ const MicroList = () => {
             </section>
 
             <section>
-                {
-                    microenterprises.map(microenterprises => (
+                {micros?.map((micro, index) => (
+                    <div key={index}>
                         <MicroCard
-                            key={microenterprises.id}
-                            title={microenterprises.title}
-                            entity={microenterprises.entity}
-                            categori={microenterprises.categori}
-                            imageUrl={microenterprises.imageUrl}
-                            imageUrl2={microenterprises.imageUrl2}
-                            imageUrl3={microenterprises.imageUrl3}
-                            location={microenterprises.location}
+                            key={micro.id}
+                            title={micro.nombre}
+                            entity={micro.rubro.nombre}
+                            category={micro.subrubro}
+                            location={`${micro.ciudad ? micro.ciudad + ', ' : ''}${micro.provincia.nombre}, ${micro.pais.nombre}`}
+                            images={obtenerUrlsDeImagenes(micro.images)}
+                            masInfo={micro.masInfo}
+                            descripcion={micro.descripcion}
                         />
-                    ))
-                }
+                    </div>
+                ))}
             </section>
         </main>
     );

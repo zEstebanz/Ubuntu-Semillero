@@ -45,6 +45,7 @@ export const Micro = ({ children }) => {
             <section>
                 <Outlet />
             </section>
+            
         </main>
     )
 }
