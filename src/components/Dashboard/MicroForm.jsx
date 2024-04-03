@@ -339,7 +339,7 @@ function MicroForm() {
                     }}
                 />
                 {/* Descripcion */}
-                {/* <Input
+                <Input
                     type="text"
                     required
                     id="descripcion"
@@ -350,9 +350,9 @@ function MicroForm() {
                     sx={{
                         mt: 3,
                     }}
-                /> */}
+                />
                 {/* Mas Info */}
-                {/* <Input
+                <Input
                     type="text"
                     required
                     id="informacion"
@@ -363,9 +363,9 @@ function MicroForm() {
                     sx={{
                         mt: 3,
                     }}
-                /> */}
+                />
 
-                <Input
+                {/* <Input
                     required
                     type="text"
                     id="descripcionMicroemprendimiento"
@@ -395,7 +395,7 @@ function MicroForm() {
                     }}
                     value={masInfo}
                     onChange={(event) => setCounter(event.target.value.length)}
-                />
+                /> */}
 
                 {/* End Mas Info */}
 

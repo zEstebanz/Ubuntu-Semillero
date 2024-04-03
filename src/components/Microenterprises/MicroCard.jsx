@@ -11,6 +11,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { Link } from 'react-router-dom';
 
 function MicroCard({ title, entity, category, location, images, masInfo, descripcion }) {
   const [expanded, setExpanded] = useState(false);
@@ -136,9 +137,17 @@ function MicroCard({ title, entity, category, location, images, masInfo, descrip
               </Typography>
 
               <div style={{ textAlign: 'center' }}>
-                <Button variant="contained" color="primary" sx={{ borderRadius: '100px', padding: '10px 24px', textTransform: 'none' }}>
-                  <Typography sx={{ fontSize: '16px', lineHeight: '20px' }}>Contactar</Typography>
-                </Button>
+                <Link to={"/contacto"} style={{
+                  textDecoration: "none",
+                  color: "white"
+                }}>
+                  <Button variant="contained" color="primary" sx={{ borderRadius: '100px', padding: '10px 24px', textTransform: 'none' }}>
+                    <Typography sx={{ fontSize: '16px', lineHeight: '20px' }}>
+
+                      Contactar
+                    </Typography>
+                  </Button>
+                </Link>
               </div>
             </>
           )}

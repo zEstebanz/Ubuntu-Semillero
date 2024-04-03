@@ -19,9 +19,9 @@ function DashboardAdmin() {
 
         setRubros(rubrosData);
         setMicro(microData.body);
-        setMensaje(mensajeData.body);
+        setMensaje(mensajeData);
 
-        console.log(mensajeData.body)
+        console.log(mensajeData)
 
       } catch (error) {
         console.error('Error al obtener los rubros:', error);
@@ -144,11 +144,11 @@ function DashboardAdmin() {
                   Gestionados
                 </Typography>
                 <Divider sx={{ width: '48px', border: '1px solid #1D9129' }} />
-                {mensaje && mensaje.map((item, index) => (
-                  <Typography key={index} sx={{ color: '#090909', fontSize: '20px', fontWeight: 700 }}>
-                    {item.cantGestionados}
-                  </Typography>
-                ))}
+
+                <Typography sx={{ color: '#090909', fontSize: '20px', fontWeight: 700 }}>
+                  {mensaje.cantGestionados}
+                </Typography>
+
               </div>
             </div>
 
@@ -159,11 +159,9 @@ function DashboardAdmin() {
                   No gestionados
                 </Typography>
                 <Divider sx={{ width: '48px', border: '1px solid #B86B11' }} />
-                {mensaje && mensaje.map((item, index) => (
-                  <Typography key={index} sx={{ color: '#090909', fontSize: '20px', fontWeight: 700 }}>
-                    {item.cantNoGestionados}
-                  </Typography>
-                ))}
+                <Typography sx={{ color: '#090909', fontSize: '20px', fontWeight: 700 }}>
+                  {mensaje.cantNoGestionados}
+                </Typography>
               </div>
             </div>
           </div>

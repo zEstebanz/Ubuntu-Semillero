@@ -13,10 +13,7 @@ const getMicroDashView = async () => {
 
         const user = decodeUserData(headers.getAuthorization())
 
-        const res = await ubuntuApi.post(`/admin/findById/${id}`,
-            {
-                email: user.sub
-            },
+        const res = await ubuntuApi.post(`/microemprendimientos/admin/findById/${id}`,
             {
                 headers: {
                     Authorization: `Bearer ${getAccessToken()}`,
