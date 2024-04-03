@@ -7,7 +7,7 @@ import theme from '../../theme/theme.js';
 
 const Categories = () => {
   const handleClick = () => {
-    console.log('Click');
+    // console.log('Click');
   };
 
   return (

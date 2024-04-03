@@ -13,7 +13,7 @@ const MicroList = () => {
         const obtenerMicro = async () => {
             try {
                 const microData = await getMicro(id);
-                console.log('Datos de micro recibidos:', microData)
+                // console.log('Datos de micro recibidos:', microData)
                 setMicros(microData);
             } catch (error) {
                 console.error('Error al obtener los rubros:', error);

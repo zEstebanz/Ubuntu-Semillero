@@ -13,7 +13,7 @@ function PostCard({ title, description, date, images }) {
   const [expanded, setExpanded] = useState(false);
   const descriptionLimit = 100;
 
-  console.log(images)
+  // console.log(images)
 
   const toggleExpand = () => {
     setExpanded(!expanded);
