@@ -1,16 +1,18 @@
 /* eslint-disable react/prop-types */
 import { Menu } from "@mui/icons-material";
+import LogoutIcon from "@mui/icons-material/Logout";
 import {
   AppBar,
   Avatar,
   Box,
+  Button,
   IconButton,
   SwipeableDrawer,
   Toolbar,
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import logo from "../assets/logoUbuntu.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DrawerList from "./DrawerList";
 import CloseIcon from "@mui/icons-material/Close";
 import OutsideClickHandler from "react-outside-click-handler";
@@ -18,7 +20,9 @@ import { useSession } from "./../hooks/useSession";
 
 function NavBar({ setDrawerOpened }) {
   const [open, setOpen] = useState(false);
+  const [displayCloseSession, setDisplayCloseSession] = useState(false);
   const navbarRef = useRef();
+  const navigate = useNavigate();
   const user = useSession();
   console.log(user);
 
@@ -42,6 +46,7 @@ function NavBar({ setDrawerOpened }) {
     const lastnameInitial = user.Apellido.substring(0, 1);
     return nameInitial + lastnameInitial;
   };
+  const logOut = () => {};
 
   useEffect(() => {
     /*     window.addEventListener("scroll", handleScroll);
@@ -60,7 +65,7 @@ function NavBar({ setDrawerOpened }) {
 
   return (
     <div ref={navbarRef}>
-      <AppBar position="static" color="transparent">
+      <AppBar position="static" color="transparent" className="nav-bar">
         <Toolbar>
           <IconButton
             edge="start"
@@ -82,9 +87,32 @@ function NavBar({ setDrawerOpened }) {
             </Link>
           </Box>
           {user ? (
-            <Avatar style={{ backgroundColor: "black" }}>
-              {getInitials()}
-            </Avatar>
+            <div className="">
+              <div onClick={() => setDisplayCloseSession(!displayCloseSession)}>
+                <Avatar style={{ backgroundColor: "black" }}>
+                  {getInitials()}
+                </Avatar>
+              </div>
+              {displayCloseSession ? (
+                <Button
+                  onClick={() => logOut()}
+                  style={{
+                    position: "absolute",
+                    top: "3.5rem",
+                    right: "0.4rem",
+                    zIndex: "1",
+                    color: "red",
+                    backgroundColor: "white",
+                    borderRadius: "0.1rem",
+                  }}
+                  variant="contained"
+                >
+                  <LogoutIcon color="black" />
+                </Button>
+              ) : (
+                ""
+              )}
+            </div>
           ) : null}
         </Toolbar>
       </AppBar>
