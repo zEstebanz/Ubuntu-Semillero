@@ -4,7 +4,7 @@ import MicroCategori from "../components/Microenterprises/MicroCategori";
 import { Outlet } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
-import MicroResults from "../components/landing/MicroResults";
+import MicroResults from "../components/MicroResults";
 import axios from "axios";
 import { ubuntuApi } from "../utils/services/axiosConfig";
 

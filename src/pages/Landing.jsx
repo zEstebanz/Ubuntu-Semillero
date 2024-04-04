@@ -4,7 +4,7 @@ import { Hero } from "../components/landing/Hero";
 import LandingPosts from "../components/landing/LandingPosts";
 import SearchBar from "./../components/SearchBar";
 import { useEffect, useState } from "react";
-import MicroResults from "../components/landing/MicroResults";
+import MicroResults from "../components/MicroResults";
 import { ubuntuApi } from "../utils/services/axiosConfig";
 import axios from "axios";
 
@@ -17,9 +17,6 @@ export const Landing = () => {
     const fetchMicroList = async () => {
       try {
         const response = await ubuntuApi.get("/microemprendimientos/findAll");
-        /* const response = await axios.get(
-          "http://localhost:8080/microemprendimientos/findAll"
-        ); */
         console.log(response.data.body);
         setMicroList(response.data.body);
       } catch (error) {

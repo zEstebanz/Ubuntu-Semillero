@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Box, Paper, Typography } from "@mui/material";
 import SearchOffIcon from "@mui/icons-material/SearchOff";
-import MicroCard from "../Microenterprises/MicroCard";
+import MicroCard from "./Microenterprises/MicroCard";
 
 function MicroResults({ microFilterList }) {
   const obtenerUrlsDeImagenes = (images) => {
@@ -21,7 +21,7 @@ function MicroResults({ microFilterList }) {
       <Typography marginBottom="2.5rem" variant="titles">
         Resultados de tu búsqueda
       </Typography>
-      {microFilterList ? (
+      {microFilterList.length ? (
         microFilterList.map((micro) => (
           <MicroCard
             key={micro.id}

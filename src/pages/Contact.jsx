@@ -11,7 +11,7 @@ import { MessageHelperText } from "../components/Contact/MessageHelperText";
 import { useEffect, useState } from "react";
 import CustomButton from "../components/buttonCustom";
 import SearchBar from "../components/SearchBar";
-import MicroResults from "../components/landing/MicroResults";
+import MicroResults from "../components/MicroResults";
 import axios from "axios";
 
 const Subtitle = styled(Typography)(({ theme }) => ({

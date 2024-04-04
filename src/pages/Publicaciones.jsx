@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import PublicacionList from "../components/Publications/PublicationList";
 import SearchBar from "../components/SearchBar";
-import MicroResults from "../components/landing/MicroResults";
+import MicroResults from "../components/MicroResults";
 import axios from "axios";
 
 export const Publicaciones = () => {

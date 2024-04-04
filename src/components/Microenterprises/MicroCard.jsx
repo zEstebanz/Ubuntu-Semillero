@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import {
   Card,
@@ -22,15 +23,16 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 function MicroCard({
+  key,
   title,
-  entity,
-  categori,
+  subcategory,
+  category,
   location,
-  imageUrl,
-  imageUrl2,
-  imageUrl3,
-  link,
+  description,
+  images,
+  moreInfo,
 }) {
+  console.log(images);
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpand = () => {
@@ -52,19 +54,31 @@ function MicroCard({
           <div style={{ position: "relative" }}>
             <Swiper
               cssMode={true}
-              navigation={true}
-              pagination={true}
+              navigation={images.length > 1 ? true : false}
+              pagination={images.length > 1 ? true : false}
               mousewheel={true}
               keyboard={true}
               modules={[Navigation, Pagination, Mousewheel, Keyboard]}
               className="swiper"
             >
-              <SwiperSlide className="swiper-slide">
+              {images.map((image) => (
+                <SwiperSlide key={key} className="swiper-slide">
+                  <CardMedia
+                    component="img"
+                    height="128"
+                    width="304"
+                    image={image}
+                    alt={title}
+                    sx={{ borderRadius: "16px" }}
+                  />
+                </SwiperSlide>
+              ))}
+              {/* <SwiperSlide className="swiper-slide">
                 <CardMedia
                   component="img"
                   height="128"
                   width="304"
-                  image={imageUrl}
+                  image={images[0]}
                   alt={title}
                   sx={{ borderRadius: "16px" }}
                 />
@@ -74,7 +88,7 @@ function MicroCard({
                   component="img"
                   height="128"
                   width="304"
-                  image={imageUrl2}
+                  image={images[1]}
                   alt={title}
                   sx={{ borderRadius: "16px" }}
                 />
@@ -84,11 +98,11 @@ function MicroCard({
                   component="img"
                   height="128"
                   width="304"
-                  image={imageUrl3}
+                  image={images[2]}
                   alt={title}
                   sx={{ borderRadius: "16px" }}
                 />
-              </SwiperSlide>
+              </SwiperSlide> */}
             </Swiper>
           </div>
 
@@ -118,7 +132,7 @@ function MicroCard({
               width: "100%",
             }}
           >
-            {entity}
+            {subcategory}
           </Typography>
           <Typography
             sx={{
@@ -131,7 +145,7 @@ function MicroCard({
               marginBottom: "16px",
             }}
           >
-            {categori}
+            {category}
           </Typography>
           <Typography
             sx={{
@@ -162,11 +176,7 @@ function MicroCard({
                 Descripción del Microemprendimiento
               </Typography>
               <Typography variant="body2" sx={{ marginBottom: "16px" }}>
-                Promueven un modelo de agricultura sostenible, protegiendo el
-                medio ambiente, el agua y las semillas autóctonas. Cultivan
-                frutas, verduras, plantas medicinales y crean derivados. Editan
-                también contenidos educativos, gestionan un banco de semillas y
-                comercializan o intercambian excedentes.
+                {description}
               </Typography>
 
               <Divider
@@ -186,11 +196,7 @@ function MicroCard({
                 Más información de interés
               </Typography>
               <Typography variant="body2" sx={{ marginBottom: "16px" }}>
-                Nació del sueño de restaurar la salud y adoptar un estilo de
-                vida ideal. Este proyecto familiar creció fundamentado en la
-                permacultura, biodinámica y agroecología, comprometiéndose con
-                la soberanía alimentaria, el bienestar, el regreso al campo, la
-                venta directa y la dignidad de la vida campesina.
+                {moreInfo}
               </Typography>
 
               <div style={{ textAlign: "center" }}>
