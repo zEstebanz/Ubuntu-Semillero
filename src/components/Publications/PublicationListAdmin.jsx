@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-import PostCard from "./PostCard";
-import getPost from "../../api/publications/getPost";
+import PostCardAdmin from "./PostCardAdmin";
+import getPostAdmin from "../../api/publications/getPostAdmin.js";
 
-const PublicacionList = ({ busqueda }) => {
+const PublicacionList = ({ }) => {
 
   const [post, setPost] = useState([]);
 
   useEffect(() => {
     const obtenerPost = async () => {
       try {
-        const postData = await getPost();
+        const postData = await getPostAdmin();
         setPost(postData)
+        console.log(postData)
       } catch (error) {
-        console.error('Error al obtener los rubros:', error);
+        console.error('Error al obtener las Publicaciones:', error);
       }
     };
 
@@ -23,7 +24,7 @@ const PublicacionList = ({ busqueda }) => {
     <main>
       <section>
         {post.map((post, index) => (
-          <PostCard
+          <PostCardAdmin
             key={post.id}
             title={post.titulo}
             description={post.descripcion}

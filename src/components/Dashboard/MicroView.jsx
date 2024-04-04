@@ -28,12 +28,13 @@ const Input = styled(TextField)(({ theme }) => ({
     },
 }));
 
-const getMicroViewById = async (id) => {
-    const res = await ubuntuApi.get(`/admin/findById/${id}`, {
+const getMicroByID = async (id) => {
+    const res = await ubuntuApi.get(`/microemprendimientos/admin/findById/${id}`, {
         headers: {
             Authorization: 'Bearer ' + getAccessToken(),
         }
     });
+    console.log(res.data.body)
     return res.data.body;
 }
 
@@ -44,17 +45,12 @@ function MicroView() {
     const [micro, setMicro] = useState([]);
 
     useEffect(() => {
-        const obtenerMicro = async () => {
-            try {
-                const rubroData = await getMicroViewById();
-                setMicro(rubroData);
-            } catch (error) {
-                console.error('Error al obtener los rubros:', error);
-            }
-        };
-
-        obtenerMicro();
-    }, []);
+        getMicroByID(id).then(data => {
+            setMicro(data); // Actualiza el estado con los datos obtenidos de la API
+        }).catch(error => {
+            console.error('Error al obtener microemprendimiento:', error);
+        });
+    }, [id]);
 
     return (
         <section>
@@ -120,11 +116,15 @@ function MicroView() {
                         </Typography>
 
                         {/* Sub-Categoría */}
+                        <Typography>
+                            {micro.nombre}
+                        </Typography>
+                        
                         <Input
                             type="text"
                             required
                             id="title"
-                            label="Subcategoría"
+                            label={micro.subcategoria}
                             fullWidth
                             sx={{
                                 mt: 3,

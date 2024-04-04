@@ -3,12 +3,14 @@ import { Box, Divider, Typography } from '@mui/material'
 import getRubros from '../../api/statistics/getRubrosStatistics'
 import getMicroStatistics from '../../api/statistics/getMicroStatistics';
 import getMesajes from '../../api/statistics/getMesajes';
+import getPostView from '../../api/statistics/getPostViews';
 
 function DashboardAdmin() {
 
   const [rubros, setRubros] = useState([]);
   const [micro, setMicro] = useState([]);
   const [mensaje, setMensaje] = useState([]);
+  const [postView, setPostView] = useState([]);
 
   useEffect(() => {
     const obtenerRubros = async () => {
@@ -16,13 +18,14 @@ function DashboardAdmin() {
         const rubrosData = await getRubros();
         const microData = await getMicroStatistics();
         const mensajeData = await getMesajes();
+        const postViewData = await getPostView();
 
         setRubros(rubrosData);
         setMicro(microData.body);
-        setMensaje(mensajeData.body);
+        setMensaje(mensajeData); 
+        setPostView(postViewData.body);
 
-        console.log(mensajeData.body)
-
+        console.log(postViewData)
       } catch (error) {
         console.error('Error al obtener los rubros:', error);
       }
@@ -144,11 +147,11 @@ function DashboardAdmin() {
                   Gestionados
                 </Typography>
                 <Divider sx={{ width: '48px', border: '1px solid #1D9129' }} />
-                {mensaje && mensaje.map((item, index) => (
-                  <Typography key={index} sx={{ color: '#090909', fontSize: '20px', fontWeight: 700 }}>
-                    {item.cantGestionados}
-                  </Typography>
-                ))}
+
+                <Typography sx={{ color: '#090909', fontSize: '20px', fontWeight: 700 }}>
+                  {mensaje.cantGestionados}
+                </Typography>
+
               </div>
             </div>
 
@@ -159,11 +162,9 @@ function DashboardAdmin() {
                   No gestionados
                 </Typography>
                 <Divider sx={{ width: '48px', border: '1px solid #B86B11' }} />
-                {mensaje && mensaje.map((item, index) => (
-                  <Typography key={index} sx={{ color: '#090909', fontSize: '20px', fontWeight: 700 }}>
-                    {item.cantNoGestionados}
-                  </Typography>
-                ))}
+                <Typography sx={{ color: '#090909', fontSize: '20px', fontWeight: 700 }}>
+                  {mensaje.cantNoGestionados}
+                </Typography>
               </div>
             </div>
           </div>

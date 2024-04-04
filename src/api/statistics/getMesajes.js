@@ -1,29 +1,21 @@
-import { ubuntuApi } from "../../utils/services/axiosConfig";
 import { getAccessToken } from "../../utils/helpers/localStorage";
-import { decodeUserData } from "../../utils/helpers/decodeJWT";
+import { ubuntuApi } from "../../utils/services/axiosConfig";
 
-const getMensajes = async () => {
+// Función para obtener los micros desde el backend
+const getMensaje = async () => {
     try {
-        const { headers } = await ubuntuApi.get('/auth/user/details', {
+        const res = await ubuntuApi.get('/mensaje/estadistica', {
             headers: {
-                Authorization: `Bearer ${getAccessToken()}`,
+                Authorization: 'Bearer ' + getAccessToken(),
             }
-        });
-        const user = decodeUserData(headers.getAuthorization())
+        }); // Reemplaza '/ruta-del-endpoint' con la ruta correcta de tu backend
 
-        const res = await ubuntuApi.post('/mensaje/estadistica',
-            {
-                headers: {
-                    Authorization: `Bearer ${getAccessToken()}`,
-                }
-            });
-
+        console.log('Estadisticas:', res)
         return res.data;
-
     } catch (error) {
-        console.error('Error al obtener los mensajes:', error);
-        return [];
+        console.error('Error al obtener los micros:', error);
+        return []; // Devuelve una lista vacía en caso de error
     }
-};
+}
 
-export default getMensajes;
+export default getMensaje;

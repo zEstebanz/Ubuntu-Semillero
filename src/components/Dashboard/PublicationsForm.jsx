@@ -44,15 +44,6 @@ function PublicationsForm() {
 
     const fileInputRef = useRef(null);
 
-    useEffect(() => {
-        // Verifica si todos los campos están completos
-        if (counter > 0 && true) {
-            setIsFormComplete(true);
-        } else {
-            setIsFormComplete(false);
-        }
-    }, [counter]);
-
     const handleClick = () => {
         fileInputRef.current.click();
     };
@@ -92,13 +83,16 @@ function PublicationsForm() {
     }
 
     const handleSubmit = async () => {
+        // Crea un objeto con los datos del formulario
         const formData = new FormData();
+        formData.append('nombre', nombreMicro);
+        formData.append('descripcion', descripcion);
+        formData.append('nombre', nombreMicro);
 
-        formData.append('titulo', nombre);
-        formData.append('descripcion', descripcion)
-        // formData.append('fecha-creacion', date)
 
         formData.append('email', user.sub);
+
+        // formData.append(`images`, files[0], 'images1')
 
         files.forEach((image, index) => {
             formData.append(`images`, image, image.name)
@@ -106,7 +100,7 @@ function PublicationsForm() {
 
         try {
 
-            const response = await ubuntuApi.postForm('/#', formData,
+            const response = await ubuntuApi.postForm('/publicaciones/admin/create', formData,
                 {
                     headers: {
                         Authorization: `Bearer ${getAccessToken()}`,
@@ -159,6 +153,7 @@ function PublicationsForm() {
                     label="Titulo*"
                     value={nombre}
                     fullWidth
+                    onChange={handleNombre}
                     sx={{
                         mt: 3,
                     }}
@@ -176,7 +171,10 @@ function PublicationsForm() {
                     sx={{
                         mt: 2,
                     }}
-                    onChange={(event) => setCounter(event.target.value.length)}
+                    onChange={(event) => {
+                        setCounter(event.target.value.length);
+                        handleDescripcion(event);
+                    }}
                 />
                 <Box
                     sx={{
@@ -216,7 +214,7 @@ function PublicationsForm() {
                                 />
                             ))}
                         </div>
-                        
+
                         {/* Renderiza el botón solo si hay menos de 3 imágenes cargadas */}
                         {images.length < 3 && (
                             <button
