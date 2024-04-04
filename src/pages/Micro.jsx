@@ -20,10 +20,6 @@ export const Micro = ({ children }) => {
     const fetchMicroList = async () => {
       try {
         const response = await ubuntuApi.get("/microemprendimientos/findAll");
-        /*         const response = await axios.get(
-          "http://localhost:8080/microemprendimientos/findAll"
-        ); */
-        console.log(response.data.body);
         setMicroList(response.data.body);
       } catch (error) {
         console.error(

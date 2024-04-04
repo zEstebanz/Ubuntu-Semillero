@@ -4,6 +4,7 @@ import PublicacionList from "../components/Publications/PublicationList";
 import SearchBar from "../components/SearchBar";
 import MicroResults from "../components/MicroResults";
 import axios from "axios";
+import { ubuntuApi } from "../utils/services/axiosConfig";
 
 export const Publicaciones = () => {
   const [busqueda, setBusqueda] = useState("");
@@ -13,10 +14,7 @@ export const Publicaciones = () => {
   useEffect(() => {
     const fetchMicroList = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8080/microemprendimientos/findAll"
-        );
-        console.log(response.data.body);
+        const response = await ubuntuApi.get("/microemprendimientos/findAll");
         setMicroList(response.data.body);
       } catch (error) {
         console.error(

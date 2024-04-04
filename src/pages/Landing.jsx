@@ -17,7 +17,6 @@ export const Landing = () => {
     const fetchMicroList = async () => {
       try {
         const response = await ubuntuApi.get("/microemprendimientos/findAll");
-        console.log(response.data.body);
         setMicroList(response.data.body);
       } catch (error) {
         console.error(
