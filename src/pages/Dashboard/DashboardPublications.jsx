@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import CustomButton from "../../components/buttonCustom";
-import PublicacionList from '../../components/Publications/PublicationList';
+import PublicacionListAdmin from '../../components/Publications/PublicationListAdmin';
 import { Outlet, useLocation, Link } from 'react-router-dom';
 
 
@@ -71,7 +71,7 @@ function DashboardPublications() {
               </Typography>
 
               {/* Aquí se llama al componente PublicacionList */}
-              <PublicacionList busqueda={""} />
+              <PublicacionListAdmin busqueda={""} />
               
             </Box>
           )}

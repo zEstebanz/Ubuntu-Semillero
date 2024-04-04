@@ -4,7 +4,7 @@ const getPostPublic = async () => {
         const res = await ubuntuApi.get('/publicaciones/ultimasTres');
         return res.data;
     } catch (error) {
-        console.error('Error al obtener los micros:', error);
+        console.error('Error al obtener las ultimas 3 publicaciones', error);
     }
 }
 export default getPostPublic;
