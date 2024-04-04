@@ -18,8 +18,9 @@ import { useSession } from "./../hooks/useSession";
 function NavBar({ setDrawerOpened }) {
   const [open, setOpen] = useState(false);
   const navbarRef = useRef();
-  /*   const user = useSession(); */
-  const user = false;
+  const user = useSession();
+  console.log(user);
+
   const getNavbarHeight = () => {
     if (navbarRef.current) {
       return navbarRef.current.offsetHeight;
@@ -34,6 +35,11 @@ function NavBar({ setDrawerOpened }) {
     if (open) {
       toggleDrawer();
     }
+  };
+  const getInitials = () => {
+    const nameInitial = user.Nombre.substring(0, 1);
+    const lastnameInitial = user.Apellido.substring(0, 1);
+    return nameInitial + lastnameInitial;
   };
 
   useEffect(() => {
@@ -74,7 +80,11 @@ function NavBar({ setDrawerOpened }) {
               <img src={logo} alt="Logo" height="100%" />
             </Link>
           </Box>
-          {user ? <Avatar>TG</Avatar> : null}
+          {user ? (
+            <Avatar style={{ backgroundColor: "black" }}>
+              {getInitials()}
+            </Avatar>
+          ) : null}
         </Toolbar>
       </AppBar>
       <OutsideClickHandler onOutsideClick={closeDrawer}>
