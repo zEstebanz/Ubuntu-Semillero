@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Menu } from "@mui/icons-material";
 import {
   AppBar,
