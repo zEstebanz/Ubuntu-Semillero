@@ -13,7 +13,7 @@ const SearchBar = ({ busqueda, setBusqueda }) => {
       className="search-bar"
       position="absolute"
       zIndex="1"
-      width="91%"
+      width="92%"
       margin="1.5rem 1rem"
       sx={{ backgroundColor: `${busqueda ? "#EAEAEA" : ""}` }}
     >

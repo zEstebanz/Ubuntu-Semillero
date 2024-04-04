@@ -52,7 +52,7 @@ export const Banner = ({
           color="common.white"
           variant="h2"
           sx={{
-            mt: 5,
+            marginTop: "6rem",
           }}
         >
           {sectionTitle.toUpperCase()}
@@ -60,6 +60,7 @@ export const Banner = ({
         <Title
           color="common.white"
           variant="h1"
+          width="14rem"
           sx={{
             pr: 10,
             mt: {

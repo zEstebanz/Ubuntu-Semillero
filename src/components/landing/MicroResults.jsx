@@ -33,7 +33,7 @@ function MicroResults({ microFilterList }) {
             }, ${micro.pais.nombre}`}
             description={micro.descripcion}
             images={obtenerUrlsDeImagenes(micro.images)}
-            link={micro.link}
+            moreInfo={micro.masInfo}
           />
         ))
       ) : (

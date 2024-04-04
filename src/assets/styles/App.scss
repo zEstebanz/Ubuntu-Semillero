@@ -13,7 +13,7 @@
 }
 
 .section-micro {
-    padding: 16px;
+    /* padding: 16px; */
     min-height: 488px;
     color: #FDFDFE;
 
@@ -124,7 +124,7 @@
 }
 
 .section-publications {
-    padding: 16px;
+    /* padding: 16px; */
     min-height: 488px;
     color: #FDFDFE;
 
@@ -269,3 +269,8 @@
     filter: blur(1.5px);
 }
 
+.contact-section {
+    Banner {
+        margin-top: 3rem;
+    }
+}
