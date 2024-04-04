@@ -13,7 +13,7 @@ const getPostAdmin = async () => {
 
         //cambiar endpoint
 
-        const res = await ubuntuApi.get('/publicaciones/admin/ultimasDiez',
+        const res = await ubuntuApi.get('/publicaciones/ultimasTres',
             {
                 headers: {
                     Authorization: `Bearer ${getAccessToken()}`,
