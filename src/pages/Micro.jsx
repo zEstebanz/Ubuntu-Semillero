@@ -74,13 +74,6 @@ export const Micro = ({ children }) => {
             {pathname === "/microemprendimientos" ? <MicroCategori /> : null}
           </section>
 
-            <section>
-                <Outlet />
-            </section>
-            
-        </main>
-    )
-}
           <section>
             <Outlet />
           </section>
