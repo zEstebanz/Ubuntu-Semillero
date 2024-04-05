@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import {
   Card,
@@ -16,19 +18,60 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import { useSession } from "./../../hooks/useSession";
-
-// eslint-disable-next-line react/prop-types
-function PostCard({ title, description, date, imageUrl, imageUrl2 }) {
+function PostCard({ title, description, date, images }) {
   const [expanded, setExpanded] = useState(false);
-  const logged = useSession();
-  console.log(logged);
-  /*   const images = [imageUrl, imageUrl, imageUrl];
-  const [currentSlide, setCurrentSlide] = useState(0); */
+  /* const images = [imageUrl, imageUrl, imageUrl]; */
+  const [currentSlide, setCurrentSlide] = useState(0);
   const descriptionLimit = 100;
+
+  console.log(images);
 
   const toggleExpand = () => {
     setExpanded(!expanded);
+  };
+
+  const renderSwiper = () => {
+    if (images.length > 1) {
+      return (
+        <div style={{ position: "relative" }}>
+          <Swiper
+            cssMode={true}
+            navigation={true}
+            pagination={true}
+            mousewheel={true}
+            keyboard={true}
+            modules={[Navigation, Pagination, Mousewheel, Keyboard]}
+            className="swiper"
+          >
+            {images.map((imageUrl, index) => (
+              <SwiperSlide key={index} className="swiper-slide">
+                <CardMedia
+                  component="img"
+                  height="128"
+                  width="304"
+                  image={imageUrl}
+                  alt={title}
+                  sx={{ borderRadius: "16px" }}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      );
+    } else if (images.length === 1) {
+      return (
+        <CardMedia
+          component="img"
+          height="128"
+          width="304"
+          image={images[0]}
+          alt={title}
+          sx={{ borderRadius: "16px" }}
+        />
+      );
+    } else {
+      return null; //No hay imágenes disponibles
+    }
   };
 
   return (
@@ -61,38 +104,7 @@ function PostCard({ title, description, date, imageUrl, imageUrl2 }) {
             {title}
           </Typography>
 
-          <div style={{ position: "relative" }}>
-            <Swiper
-              cssMode={true}
-              navigation={true}
-              pagination={{ clickable: true }} // Puntos de paginación debajo de la imagen
-              mousewheel={true}
-              keyboard={true}
-              modules={[Navigation, Pagination, Mousewheel, Keyboard]}
-              className="swiper"
-            >
-              <SwiperSlide className="swiper-slide">
-                <CardMedia
-                  component="img"
-                  height="128"
-                  width="304"
-                  image={imageUrl}
-                  alt={title}
-                  sx={{ borderRadius: "16px" }}
-                />
-              </SwiperSlide>
-              <SwiperSlide className="swiper-slide">
-                <CardMedia
-                  component="img"
-                  height="128"
-                  width="304"
-                  image={imageUrl2}
-                  alt={title}
-                  sx={{ borderRadius: "16px" }}
-                />
-              </SwiperSlide>
-            </Swiper>
-          </div>
+          {renderSwiper()}
 
           <Typography
             variant="body2"

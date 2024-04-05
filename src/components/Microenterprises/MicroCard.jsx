@@ -21,6 +21,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { Link } from "react-router-dom";
 
 function MicroCard({
   key,
@@ -37,6 +38,50 @@ function MicroCard({
 
   const toggleExpand = () => {
     setExpanded(!expanded);
+  };
+
+  const renderSwiper = () => {
+    if (images.length > 1) {
+      return (
+        <div style={{ position: "relative" }}>
+          <Swiper
+            cssMode={true}
+            navigation={true}
+            pagination={true}
+            mousewheel={true}
+            keyboard={true}
+            modules={[Navigation, Pagination, Mousewheel, Keyboard]}
+            className="swiper"
+          >
+            {images.map((imageUrl, index) => (
+              <SwiperSlide key={index} className="swiper-slide">
+                <CardMedia
+                  component="img"
+                  height="128"
+                  width="304"
+                  image={imageUrl}
+                  alt={title}
+                  sx={{ borderRadius: "16px" }}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      );
+    } else if (images.length === 1) {
+      return (
+        <CardMedia
+          component="img"
+          height="128"
+          width="304"
+          image={images[0]}
+          alt={title}
+          sx={{ borderRadius: "16px" }}
+        />
+      );
+    } else {
+      return null; // No hay imágenes disponibles
+    }
   };
 
   return (
@@ -200,19 +245,27 @@ function MicroCard({
               </Typography>
 
               <div style={{ textAlign: "center" }}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  sx={{
-                    borderRadius: "100px",
-                    padding: "10px 24px",
-                    textTransform: "none",
+                <Link
+                  to={"/contacto"}
+                  style={{
+                    textDecoration: "none",
+                    color: "white",
                   }}
                 >
-                  <Typography sx={{ fontSize: "16px", lineHeight: "20px" }}>
-                    Contactar
-                  </Typography>
-                </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{
+                      borderRadius: "100px",
+                      padding: "10px 24px",
+                      textTransform: "none",
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "16px", lineHeight: "20px" }}>
+                      Contactar
+                    </Typography>
+                  </Button>
+                </Link>
               </div>
             </>
           )}

@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+
 import { Layout } from "../components/Layout";
 import { Landing } from "../pages/Landing";
 import { Micro } from "../pages/Micro";
@@ -6,6 +7,14 @@ import { Publicaciones } from "../pages/Publicaciones";
 import { Login } from "../pages/Login"
 import { Contact } from "../pages/Contact";
 import MicroList from "../components/Microenterprises/MicroList";
+import DashboardMicro from "../pages/Dashboard/DashboardMicro";
+import DashboardPublications from "../pages/Dashboard/DashboardPublications";
+import DashboardAdmin from "../pages/Dashboard/DashboardAdmin";
+import MicroFormEdit from "../components/Dashboard/MicroFormEdit";
+import MicroForm from "../components/Dashboard/MicroForm";
+import PublicationsForm from "../components/Dashboard/PublicationsForm";
+import PublicationsFormEdit from "../components/Dashboard/PublicationsFormEdit";
+import MicroView from "../components/Dashboard/MicroView";
 
 const router = createBrowserRouter([
     {
@@ -38,9 +47,46 @@ const router = createBrowserRouter([
                 path: '/contacto',
                 element: <Contact />
             },
+            //dashboard
+            {
+                path: '/dashboard-micro',
+                element: <DashboardMicro />,
+                children: [
+                    {
+                        path: '/dashboard-micro/form',
+                        element: <MicroForm />
+                    }
+                ]
+            },
+            {
+                path: '/dashboard-micro/form-edit/:id',
+                element: <MicroFormEdit />
+            },
+            {
+                path: '/dashboard-micro/view/:id',
+                element: <MicroView />
+            },
+            {
+                path: '/dashboard-admin',
+                element: <DashboardAdmin />
+            },
+            {
+                path: '/dashboard-publications',
+                element: <DashboardPublications />,
+                children: [
+                    {
+                        path: '/dashboard-publications/form',
+                        element: <PublicationsForm />
+                    },
+                    {
+                        path: '/dashboard-publications/form-edit',
+                        element: <PublicationsFormEdit />
+                    }
+                ]
+            },
         ]
     },
 
 ]);
 
-export default router;
+export default router;  

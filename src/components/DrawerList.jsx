@@ -35,6 +35,38 @@ function DrawerList({ toggleDrawer }) {
           <Typography variant="subtitles">Publicaciones</Typography>
         </Link>
       </ListItem>
+
+      {/* Dashboards */}
+
+      <ListItem>
+        <Link
+          onClick={handleClickLink}
+          to="/dashboard-admin"
+          style={{ textDecoration: "none", color: "white" }}
+        >
+          <Typography variant="subtitles">Dashboard Administrador</Typography>
+        </Link>
+      </ListItem>
+
+      <ListItem>
+        <Link
+          onClick={handleClickLink}
+          to="/dashboard-micro"
+          style={{ textDecoration: "none", color: "white" }}
+        >
+          <Typography variant="subtitles">DashboardMicro</Typography>
+        </Link>
+      </ListItem>
+
+      <ListItem>
+        <Link
+          onClick={handleClickLink}
+          to="/dashboard-publications"
+          style={{ textDecoration: "none", color: "white" }}
+        >
+          <Typography variant="subtitles">DashboardPublications</Typography>
+        </Link>
+      </ListItem>
     </List>
   );
 }

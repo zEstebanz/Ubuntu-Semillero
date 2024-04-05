@@ -1,11 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import CategoriesCard from '../Categories/categoriesCard.jsx';
 import theme from '../../theme/theme.js';
+import getRubro from '../../api/rubrosCategori/getRubro.js'
+import getMicro from '../../api/micros/getMicro.js';
 
 const Categories = () => {
+
+    const [rubro, setRubro] = useState([]);
+
+    useEffect(() => {
+        const obtenerRubro = async () => {
+            try {
+                const rubroData = await getRubro();
+                setRubro(rubroData);
+            } catch (error) {
+                console.error('Error al obtener los rubros:', error);
+            }
+        };
+
+        obtenerRubro();
+    }, []);
+
+    // const handleButtonClick = async (idRubro) => {
+    //     try {
+    //         const rubroData = await getMicro(idRubro);
+
+    //     } catch (error) {
+    //         console.log('Error al obtener los rubros:', error)
+    //     }
+    // }
 
     return (
         <ThemeProvider theme={theme}>
@@ -17,7 +43,7 @@ const Categories = () => {
                     margin: "auto",
                 }}
             >
-               
+
                 <Box
                     sx={{
                         display: "flex",
@@ -51,73 +77,25 @@ const Categories = () => {
                             gap: "10px",
                         },
                     }} lx={{}}>
-                        <Link
-                            component="button"
-                            to="/microemprendimientos/1"
-                            style={{
-                                textDecoration: "none"
-                            }}
-                        >
-                            <CategoriesCard
-                                imageUrl="./public/img/eco-social.png"
-                                altText="Logo de Economia Social."
-                                title="Economía social/Desarrollo local/ Inclusión financiera"
-                                dividerColor="green.dark"
-                            />
-                        </Link>
-
-
-                        <Link
-                            component="button"
-                            to="/microemprendimientos/2"
-                            style={{
-                                textDecoration: "none"
-                            }}
-                        >
-
-                            <CategoriesCard
-                                imageUrl="./public/img/agroecologia.png"
-                                altText="Logo de Agroecologia."
-                                title="Agroecología/Orgánicos/
-  Alimentación saludable"
-                                dividerColor="green.dark"
-                                link="#"
-                            />
-                        </Link>
-
-                        <Link
-                            component="button"
-                            to="/microemprendimientos/3"
-                            style={{
-                                textDecoration: "none"
-                            }}
-                        >
-                            <CategoriesCard
-                                imageUrl="./public/img/conservacion.png"
-                                altText="Logo de Conservación."
-                                title="Conservación/Regeneración/
-  Servicios ecosistémicos"
-                                dividerColor="green.dark"
-                                link="#"
-                            />
-
-                        </Link>
-
-
-                        <Link
-                            component="button"
-                            to="/microemprendimientos/4"
-                            style={{
-                                textDecoration: "none"
-                            }}
-                        >
-                            <CategoriesCard
-                                imageUrl="./public/img/empresas.png"
-                                altText="Logo de Empresas."
-                                title="Empresas/Organismos de impacto/Economía circular"
-                                dividerColor="green.dark"
-                            />
-                        </Link>
+                        {rubro?.map((rubro, index) =>
+                        
+                            <Link
+                                key={index}
+                                component="button"
+                                to={`/microemprendimientos/${rubro.id}`}
+                                style={{
+                                    textDecoration: "none"
+                                }}
+                                // onClick={() => handleButtonClick(rubro.id)}
+                            >
+                                <CategoriesCard
+                                    imageUrl={`./public/img/rubros/${rubro.id}.png`}
+                                    altText="Logo de Economia Social."
+                                    title={rubro.nombre}
+                                    dividerColor="green.dark"
+                                />
+                            </Link>
+                        )}
                     </Box>
                 </Box>
             </Box>
