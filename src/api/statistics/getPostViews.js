@@ -2,7 +2,7 @@ import { ubuntuApi } from "../../utils/services/axiosConfig";
 import { getAccessToken } from "../../utils/helpers/localStorage";
 import { decodeUserData } from "../../utils/helpers/decodeJWT";
 
-const getPostView = async () => {
+const getMicroStatistics = async () => {
     try {
         const { headers } = await ubuntuApi.get('/auth/user/details', {
             headers: {
@@ -11,7 +11,7 @@ const getPostView = async () => {
         });
         const user = decodeUserData(headers.getAuthorization())
 
-        const res = await ubuntuApi.get('/publicaciones/admin/ultimasDiez',
+        const res = await ubuntuApi.post('/publicaciones/',
             {
                 email: user.sub
             },
@@ -24,9 +24,9 @@ const getPostView = async () => {
         return res.data;
 
     } catch (error) {
-        console.error('Error al obtener las utlimas 10 publicaciones:', error);
+        console.error('Error al obtener los rubros:', error);
         return [];
     }
 };
 
-export default getPostView;
+export default getMicroStatistics;

@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Box, Typography, styled, TextField, Select, MenuItem } from '@mui/material';
-import CustomButton from "../../components/buttonCustom";
+import CustomButton from "../buttonCustom";
 import upload from "../../../public/img/upload.svg";
 import { ubuntuApi } from '../../utils/services/axiosConfig';
 import { useParams } from 'react-router-dom';
@@ -66,6 +66,7 @@ function MicroView() {
                         mx: 'auto',
                     }}
                     maxWidth='sm'
+                    key={micro.id}
                 >
 
                     <Box
@@ -112,7 +113,7 @@ function MicroView() {
                                 paddingTop: '8px'
                             }}
                         >
-                            categoria
+                            {micro.rubro}
                         </Typography>
 
                         {/* Sub-Categoría */}
@@ -124,7 +125,7 @@ function MicroView() {
                             type="text"
                             required
                             id="title"
-                            label={micro.subcategoria}
+                            label={micro.nombre}
                             fullWidth
                             sx={{
                                 mt: 3,
