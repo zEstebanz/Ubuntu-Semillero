@@ -24,16 +24,16 @@ function MicroResults({ microFilterList }) {
       {microFilterList.length ? (
         microFilterList.map((micro) => (
           <MicroCard
-            key={micro.id}
+            microId={micro.id}
             title={micro.nombre}
             subcategory={micro.subrubro}
             category={micro.rubro.nombre}
             location={`${micro.ciudad ? micro.ciudad + ", " : ""}${
               micro.provincia.nombre
             }, ${micro.pais.nombre}`}
-            description={micro.descripcion}
+            descripcion={micro.descripcion}
             images={obtenerUrlsDeImagenes(micro.images)}
-            moreInfo={micro.masInfo}
+            masInfo={micro.masInfo}
           />
         ))
       ) : (

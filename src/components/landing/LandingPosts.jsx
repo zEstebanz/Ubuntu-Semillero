@@ -5,21 +5,23 @@ import { useEffect, useState } from "react";
 import getPostPublic from "../../api/publications/getPostPublic";
 
 function LandingPosts() {
+
   const [posts, setPost] = useState([]);
 
   useEffect(() => {
     const obtenerMicro = async () => {
       try {
         const postData = await getPostPublic();
-        console.log("Datos de micro recibidos:", postData);
+        console.log('Datos de micro recibidos:', postData)
         setPost(postData);
       } catch (error) {
-        console.error("Error al obtener los rubros:", error);
+        console.error('Error al obtener los rubros:', error);
       }
     };
 
     obtenerMicro();
   }, []);
+
 
   return (
     <Box
@@ -43,7 +45,7 @@ function LandingPosts() {
         alignItems="center"
         width="100%"
       >
-        {/*         {posts?.map((post) => (
+        {posts?.map((post) => (
           <PostCard
             key={post.id}
             title={post.titulo}
@@ -51,7 +53,7 @@ function LandingPosts() {
             date={post.fecha}
             images={post.images}
           />
-        ))} */}
+        ))}
       </Box>
       <Link to="/publicaciones">
         <Button

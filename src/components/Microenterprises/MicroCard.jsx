@@ -23,21 +23,23 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Link } from "react-router-dom";
 
-function MicroCard({
-  key,
-  title,
+function MicroCard({ microId, title, entity, category, location, images, masInfo, descripcion,  key,
+  
   subcategory,
-  category,
-  location,
+
+
   description,
-  images,
-  moreInfo,
-}) {
-  console.log(images);
+
+  moreInfo,}) {
+    console.log(images);
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpand = () => {
     setExpanded(!expanded);
+  };
+
+  const handleContactClick = () => {
+    console.log("ID del microemprendimiento a contactar:", microId);
   };
 
   const renderSwiper = () => {
@@ -221,7 +223,7 @@ function MicroCard({
                 Descripción del Microemprendimiento
               </Typography>
               <Typography variant="body2" sx={{ marginBottom: "16px" }}>
-                {description}
+                {descripcion}
               </Typography>
 
               <Divider
@@ -241,29 +243,13 @@ function MicroCard({
                 Más información de interés
               </Typography>
               <Typography variant="body2" sx={{ marginBottom: "16px" }}>
-                {moreInfo}
+              {masInfo} 
               </Typography>
 
-              <div style={{ textAlign: "center" }}>
-                <Link
-                  to={"/contacto"}
-                  style={{
-                    textDecoration: "none",
-                    color: "white",
-                  }}
-                >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{
-                      borderRadius: "100px",
-                      padding: "10px 24px",
-                      textTransform: "none",
-                    }}
-                  >
-                    <Typography sx={{ fontSize: "16px", lineHeight: "20px" }}>
-                      Contactar
-                    </Typography>
+              <div style={{ textAlign: 'center' }}>
+              <Link to={`/contacto/${title.replace(/\s+/g, '/')}/${microId}`}>
+                  <Button variant="contained" color="primary" sx={{ borderRadius: '100px', padding: '10px 24px', textTransform: 'none' }} onClick={handleContactClick}>
+                    <Typography sx={{ fontSize: '16px', lineHeight: '20px' }}>Contactar</Typography>
                   </Button>
                 </Link>
               </div>

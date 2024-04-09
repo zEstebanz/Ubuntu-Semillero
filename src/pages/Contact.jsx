@@ -1,19 +1,16 @@
-import {
-  Box,
-  FormControl,
-  TextField,
-  Typography,
-  styled,
-  useFormControl,
-} from "@mui/material";
-import { Banner } from "../components/Banner";
+import { Box, FormControl, TextField, Typography, styled, useFormControl } from "@mui/material"
+import { Banner } from "../components/Banner"
 import { MessageHelperText } from "../components/Contact/MessageHelperText";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { useFormik } from "formik";
 import CustomButton from "../components/buttonCustom";
 import SearchBar from "../components/SearchBar";
 import MicroResults from "../components/MicroResults";
 import axios from "axios";
 import { ubuntuApi } from "../utils/services/axiosConfig";
+import CustomModal from "../components/modalCustom";
+import { useParams } from 'react-router-dom';
+import { sendMessage, validationSchema } from "../api/message/sendMessage";
 
 const Subtitle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitles,
@@ -47,12 +44,59 @@ const Input = styled(TextField)(({ theme }) => ({
 
 export const Contact = () => {
   const [counter, setCounter] = useState(0);
-  const messageDefaultValue = `Hola, me gustaría recibir más información sobre cómo invertir en el Microemprendimiento.
+    const { id, microId, title, microemprendimiento } = useParams();
 
-Aguardo su contacto.
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState({
+        title: '',
+        message: '',
+        icon: ''
+    });
 
-Gracias.
-`;
+    const formik = useFormik({
+      initialValues: {
+          apellidoYNombre: "",
+          email: "",
+          telefono: "",
+          texto: "",
+      },
+      validationSchema: validationSchema,
+      onSubmit: async (values) => {
+          const modalContent = await sendMessage(values, id);
+          setModalContent(modalContent);
+          setModalOpen(true);
+      },
+  });
+
+  const handleInputChange = (event) => {
+      const { id, value } = event.target;
+      let formattedValue = value;
+
+      if (id === "apellidoYNombre") {
+          if (!value.includes(",")) {
+              formattedValue = value.replace(/^(\w+)\s+(\w+)$/, "$1, $2");
+          }
+      }
+
+      if (id === "texto") {
+          if (value.length <= 300) {
+              setCounter(value.length);
+              formik.setFieldValue(id, value);
+          }
+      } else {
+          formik.setFieldValue(id, formattedValue);
+      }
+  };
+
+  const handleRetry = () => {
+      formik.handleSubmit();
+      setModalOpen(false);
+  };
+
+  const handleCloseModal = () => {
+      setModalOpen(false);
+  };
+
   const [search, setSearch] = useState("");
   const [microList, setMicroList] = useState([]);
   const [microFilterList, setMicroFilterList] = useState([]);
@@ -80,130 +124,141 @@ Gracias.
     setMicroFilterList(filteredMicroList);
   }, [search, microList]);
 
-  return (
-    <div>
-      <SearchBar busqueda={search} setBusqueda={setSearch} />
+    return (
+        <div>
+          <SearchBar busqueda={search} setBusqueda={setSearch} />
       {search ? (
         <MicroResults microFilterList={microFilterList} />
       ) : (
         <div className="contact-section">
-          <Banner
-            sectionTitle="contacto"
-            title="Contactanos para obtener información detallada sobre cómo podés invertir en un futuro más sostenible"
-            imageURL="/img/contact-hero-bg.jpeg"
-          />
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              pt: 5,
-              px: 2,
-              mx: "auto",
-            }}
-            maxWidth="sm"
-          >
-            <Typography
-              variant="h3"
-              width="22rem"
-              sx={{
-                fontSize: "1.45rem",
-                textAlign: "center",
-                fontWeight: 500,
-              }}
-            >
-              Por favor, completá el formulario. Nos comunicaremos en breve.
-            </Typography>
-            <Subtitle
-              variant="h4"
-              color="primary.main"
-              sx={{
-                fontWeight: 600,
-                mt: 4,
-              }}
-            >
-              EcoSenda
-            </Subtitle>
-            <Paragraph
-              sx={{
-                textAlign: "center",
-                mt: 2,
-              }}
-            >
-              Vas a contactar a Ubuntu para recibir más información acerca del
-              Microemprendimiento seleccionado.
-            </Paragraph>
+             <Banner
+                sectionTitle="contacto"
+                title="Contactanos para obtener información detallada sobre cómo podés invertir en un futuro más sostenible"
+                imageURL="/img/contact-hero-bg.jpeg"
+            />
             <Box
-              component="form"
-              sx={{
-                width: 1,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    pt: 5,
+                    px: 2,
+                    mx: 'auto',
+                }}
+                maxWidth='sm'
             >
-              <Input
-                type="text"
-                required
-                id="full-name"
-                label="Nombre y Apellido"
-                fullWidth
-                sx={{
-                  mt: 3,
-                }}
-              />
-              <Input
-                type="text"
-                required
-                id="email"
-                label="Correo electrónico"
-                fullWidth
-                sx={{
-                  mt: 2,
-                }}
-              />
-              <Input
-                type="text"
-                required
-                id="phone"
-                label="Teléfono"
-                helperText={
-                  <Typography color="common.black" variant="p">
-                    Con el siguiente formato +54 9 261 002 002
-                  </Typography>
-                }
-                fullWidth
-                sx={{
-                  mt: 2,
-                }}
-              />
-              <Input
-                required
-                type="text"
-                id="message"
-                label="Mensaje"
-                helperText={<MessageHelperText counter={counter} />}
-                fullWidth
-                multiline
-                rows={7}
-                defaultValue={messageDefaultValue}
-                sx={{
-                  mt: 2,
-                }}
-                onChange={(event) => setCounter(event.target.value.length)}
-              />
-              <CustomButton
-                fullWidth
-                sx={{
-                  my: 5,
-                }}
-              >
-                Enviar
-              </CustomButton>
+                <Typography
+                    variant="h3"
+                    sx={{
+                        fontSize: '1.375rem',
+                        textAlign: 'center',
+                        fontWeight: 500
+                    }}
+                >
+                    Por favor, completá el formulario. Nos comunicaremos en breve.
+                </Typography>
+                <Subtitle
+                    variant="h4"
+                    color='primary.main'
+                    sx={{
+                        fontWeight: 600,
+                        mt: 4,
+                    }}
+                >
+                    {title}
+                </Subtitle>
+                <Paragraph
+                    sx={{
+                        textAlign: 'center',
+                        mt: 2,
+                    }}
+                >
+                    Vas a contactar a Ubuntu para recibir más información acerca del Microemprendimiento seleccionado.
+                </Paragraph>
+                <Box
+                    component='form'
+                    onSubmit={formik.handleSubmit}
+                    sx={{
+                        width: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Input
+                        id="apellidoYNombre"
+                        label="Apellido y Nombre"
+                        fullWidth
+                        sx={{
+                            mt: 3,
+                        }}
+                        {...formik.getFieldProps('apellidoYNombre')}
+                        value={formik.values.apellidoYNombre}
+                        onChange={handleInputChange}
+
+                        error={formik.touched.apellidoYNombre && Boolean(formik.errors.apellidoYNombre)}
+                        helperText={formik.touched.apellidoYNombre && formik.errors.apellidoYNombre}
+                    />
+                    <Input
+                        id="email"
+                        label="Correo electrónico"
+                        fullWidth
+                        sx={{
+                            mt: 2,
+                        }}
+                        {...formik.getFieldProps('email')}
+                        error={formik.touched.email && Boolean(formik.errors.email)}
+                        helperText={formik.touched.email && formik.errors.email}
+                    />
+                    <Input
+                        id="telefono"
+                        label="Teléfono"
+                        fullWidth
+                        sx={{
+                            mt: 2,
+                        }}
+                        {...formik.getFieldProps('telefono')}
+                        error={formik.touched.telefono && Boolean(formik.errors.telefono)}
+                        helperText={formik.touched.telefono && formik.errors.telefono}
+                    />
+                    <Input
+                        id="texto"
+                        label="Mensaje"
+                        fullWidth
+                        multiline
+                        rows={7}
+                        sx={{
+                            mt: 2,
+                        }}
+                        {...formik.getFieldProps('texto')}
+                        onChange={handleInputChange}
+                        error={formik.touched.texto && Boolean(formik.errors.texto)}
+                        helperText={(formik.touched.texto && formik.errors.texto) || <MessageHelperText counter={counter} />}
+                    />
+                    <CustomButton
+                        type="submit"
+                        fullWidth
+                        sx={{
+                            my: 5,
+                        }}
+                        disabled={!formik.dirty || !formik.isValid}
+                    >
+                        Enviar
+                    </CustomButton>
+                </Box>
             </Box>
-          </Box>
+
+            <CustomModal
+                open={modalOpen}
+                onClose={handleCloseModal}
+                title={modalContent.title}
+                message={modalContent.message}
+                icon={modalContent.icon}
+                buttons={modalContent.icon === 'check' ? [{ text: 'Aceptar', onClick: handleCloseModal }] : [{ text: 'Cancelar', onClick: handleCloseModal }, { text: 'Intentar nuevamente', onClick: handleRetry }]}
+            />
+            
         </div>
-      )}
-    </div>
+    )
+}    </div>
   );
 };
