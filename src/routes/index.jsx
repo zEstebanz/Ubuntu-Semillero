@@ -77,13 +77,13 @@ const router = createBrowserRouter([
                     {
                         path: '/dashboard-publications/form',
                         element: <PublicationsForm />
-                    },
-                    {
-                        path: '/dashboard-publications/form-edit',
-                        element: <PublicationsFormEdit />
                     }
                 ]
             },
+            {
+                path: '/dashboard-publications/form-edit',
+                element: <PublicationsFormEdit />
+            }
         ]
     },
 

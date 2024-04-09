@@ -9,7 +9,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-function PostCardAdmin({ title, description, date, images }) {
+function PostCardAdmin({ title, description, date, images, id }) {
     const [expanded, setExpanded] = useState(false);
     const descriptionLimit = 100;
     const [anchorEl, setAnchorEl] = useState(null);
@@ -128,7 +128,7 @@ function PostCardAdmin({ title, description, date, images }) {
                             onClose={handleClose}
                         >
                             <MenuItem onClick={handleClose}>
-                                <Link to={"/dashboard-micro/form-edit/"} style={{
+                                <Link to={"/dashboard-publications/form-edit/" + id} style={{
                                     textDecoration: 'none',
                                     fontSize: '16px',
                                     lineHeight: '24px',
@@ -136,7 +136,7 @@ function PostCardAdmin({ title, description, date, images }) {
                                 }}>Editar</Link>
                             </MenuItem>
                             <MenuItem
-                                onClick={() => handleClose(item.id)}
+                                onClick={() => handleClose(id)}
                             >
                                 <Link to="#" style={{
                                     textDecoration: 'none',

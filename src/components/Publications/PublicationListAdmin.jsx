@@ -25,7 +25,7 @@ const PublicacionList = ({ }) => {
       <section>
         {post.map((post) => (
           <PostCardAdmin
-            key={post.id}
+            id={post.id}
             title={post.titulo}
             description={post.descripcion}
             date={post.fechaCreacion}

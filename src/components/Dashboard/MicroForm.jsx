@@ -49,6 +49,7 @@ function MicroForm() {
     const [ciudad, setCiudad] = useState('');
     const [descripcion, setDescripcion] = useState('');
 
+    const [errorMessageOpen, setErrorMessageOpen] = useState(false);
     const [successMessageOpen, setSuccessMessageOpen] = useState(false);
 
     const [masInfo, setMasInfo] = useState('');
@@ -161,7 +162,7 @@ function MicroForm() {
     };
 
     const handleSubmit = async () => {
-        // Crea un objeto con los datos del formulario
+     
         const formData = new FormData();
         formData.append('nombre', nombreMicro);
         formData.append('idRubro', 2);
@@ -191,16 +192,21 @@ function MicroForm() {
                         'content-type': 'multipart/form-data'
                     },
                 });
-
+            if (response.status === 200) {
+                setSuccessMessageOpen(true);
+            }
         } catch (error) {
             console.error('Error al enviar los datos:', error);
+            setErrorMessageOpen(true);
         }
 
-        setSuccessMessageOpen(true);
     };
 
     const handleCloseSuccessMessage = () => {
         setSuccessMessageOpen(false);
+    };
+    const handleCloseErrorMessage = () => {
+        setErrorMessageOpen(false);
     };
 
     return (
@@ -404,38 +410,6 @@ function MicroForm() {
                     }}
                 />
 
-                {/* <Input
-                    required
-                    type="text"
-                    id="descripcionMicroemprendimiento"
-                    label="Descripción del Microemprendimiento"
-                    helperText={<MessageHelperText counter={counter} />}
-                    fullWidth
-                    multiline
-                    rows={7}
-                    sx={{
-                        mt: 2,
-                    }}
-                    value={masInfo}
-                    onChange={(event) => setCounter(event.target.value.length)}
-                />
-
-                <Input
-                    required
-                    type="text"
-                    id="infoMicroemprendedor"
-                    label="Mas información del Microemprendedor"
-                    helperText={<MessageHelperText counter={counter} />}
-                    fullWidth
-                    multiline
-                    rows={7}
-                    sx={{
-                        mt: 2,
-                    }}
-                    value={masInfo}
-                    onChange={(event) => setCounter(event.target.value.length)}
-                /> */}
-
                 {/* End Mas Info */}
 
                 <Box
@@ -554,6 +528,7 @@ function MicroForm() {
                     Crear Microemprendimiento
                 </CustomButton>
 
+                {/* mensaje de Exito */}
                 <Box
                     sx={{
                         display: 'flex',
@@ -608,6 +583,84 @@ function MicroForm() {
                             sx={{
                                 width: '328px',
                                 height: '184px',
+                                borderRadius: '28px',
+                                backgroundColor: '#FDFDFE',
+                                color: '#FDFDFE'
+                            }}
+                        />
+                    </Snackbar>
+                </Box>
+
+                {/* mensaje de Error */}
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Snackbar
+                        open={errorMessageOpen}
+                        autoHideDuration={null}
+                        onClose={handleCloseErrorMessage}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    >
+                        <SnackbarContent
+                            message={
+                                <>
+                                    <div style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center', // Centrar contenido verticalmente
+                                        margin: '0px 0px 16px 0px',
+                                    }}>
+                                        <div style={{
+                                            height: '40px',
+                                            width: '40px',
+                                            border: '2px solid #BC1111',
+                                            borderRadius: '50%',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            marginBottom: '8px', // Añadir un espacio entre la imagen y el texto
+                                        }}>
+                                            <img src="../../../public/img/error.svg" alt="check" style={{ width: '24px', height: '24px' }} />
+                                        </div>
+                                        <span
+                                            style={{
+                                                fontSize: '1rem',
+                                                color: '#333333',
+                                                fontWeight: '400',
+                                                fontSize: '18px',
+                                                lineHeight: '32px',
+                                                textAlign: 'center'
+                                            }}
+                                        >
+                                            Lo sentimos, los cambios no pudieron ser guardados.
+                                        </span>
+                                        <span
+                                            style={{
+                                                fontSize: '1rem',
+                                                color: '#333333',
+                                                fontWeight: '400',
+                                                fontSize: '16px',
+                                                lineHeight: '32px'
+                                            }}
+                                        >
+                                            Por favor, volvé a intentarlo.
+                                        </span>
+                                        {/* Al hacer clic en el enlace, oculta el Snackbar */}
+                                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '16px' }}>
+                                            <Link to="/dashboard-micro" variant="button" style={{ marginRight: '8px', textDecoration: 'none', fontSize: '14px', color: '#093C59', fontWeight: 600, marginRight: '16px' }} onClick={() => setErrorMessageOpen(false)}>Cancelar</Link>
+                                            <Link to="/dashboard-micro/form" variant="button" style={{ textDecoration: 'none', fontSize: '14px', color: '#093C59', fontWeight: 600 }} onClick={() => { setErrorMessageOpen(false); }}>Intentar Nuevamente</Link>
+                                        </div>
+
+                                    </div>
+                                </>
+                            }
+                            sx={{
+                                width: '328px',
+                                height: '208px',
                                 borderRadius: '28px',
                                 backgroundColor: '#FDFDFE',
                                 color: '#FDFDFE'

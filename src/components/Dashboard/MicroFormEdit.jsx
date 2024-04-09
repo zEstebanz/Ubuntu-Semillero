@@ -85,7 +85,7 @@ const getMicroByID = async (id) => {
     return res.data.body;
 }
 
-function MicroForm() {
+function MicroFormEdit() {
     const user = useSession();
 
     const { id } = useParams();
@@ -521,4 +521,4 @@ function MicroForm() {
     )
 }
 
-export default MicroForm;
+export default MicroFormEdit;
