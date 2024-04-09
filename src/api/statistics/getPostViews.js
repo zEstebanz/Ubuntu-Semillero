@@ -11,7 +11,7 @@ const getMicroStatistics = async () => {
         });
         const user = decodeUserData(headers.getAuthorization())
 
-        const res = await ubuntuApi.post('/publicaciones/',
+        const res = await ubuntuApi.post('/publicaciones/admin/ultimasDiez',
             {
                 email: user.sub
             },
@@ -20,7 +20,7 @@ const getMicroStatistics = async () => {
                     Authorization: `Bearer ${getAccessToken()}`,
                 }
             });
-
+        console.log(res)
         return res.data;
 
     } catch (error) {

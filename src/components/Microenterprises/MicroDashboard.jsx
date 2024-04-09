@@ -76,7 +76,10 @@ function Micro() {
                                 }}
                             >
                                 {item.nombre}
-                                <button onClick={handleClick}>
+                                <button onClick={handleClick}
+                                    style={{
+                                        border: 'none'
+                                    }}>
                                     <img src="../../../public/img/menu-edit.svg" alt="menu" />
                                 </button>
                                 <Menu

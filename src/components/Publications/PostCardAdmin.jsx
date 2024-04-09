@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, Typography, Button, Grid, CardMedia, Menu, MenuItem } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Navigation, Pagination, Mousewheel, Keyboard } from 'swiper/modules';
@@ -14,24 +14,41 @@ function PostCardAdmin({ title, description, date, images }) {
     const descriptionLimit = 100;
     const [anchorEl, setAnchorEl] = useState(null);
     const [showSubMenu, setShowSubMenu] = useState(false);
+    const [reload, setReload] = useState(false);
+
+    useEffect(() => {
+        const obtenerMicro = async () => {
+            try {
+                const microData = await getPostEdit();
+
+                setMicros(microData.body);
+
+                console.log(microData)
+            } catch (error) {
+                console.error('Error al obtener los rubros:', error);
+            }
+        };
+
+        obtenerMicro();
+    }, [reload]);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
-    const handleClose = () => {
+    const handleClose = (itemId) => {
+        hideMicro(itemId)
+        setReload(!reload)
         setAnchorEl(null);
     };
+
     const toggleExpand = () => {
         setExpanded(!expanded);
     };
 
-
-
     const toggleSubMenu = () => {
         setShowSubMenu(!showSubMenu);
     };
-
 
     const renderSwiper = () => {
         if (images.length > 1) {
@@ -102,7 +119,6 @@ function PostCardAdmin({ title, description, date, images }) {
                                 marginRight: "16px",
                                 marginBottom: "16px",
                                 border: 'none'
-
                             }}>
                             <img src="../../../public/img/menu-edit.svg" alt="menu" />
                         </button>
@@ -120,7 +136,7 @@ function PostCardAdmin({ title, description, date, images }) {
                                 }}>Editar</Link>
                             </MenuItem>
                             <MenuItem
-                                onClick={() => handleClose('')}
+                                onClick={() => handleClose(item.id)}
                             >
                                 <Link to="#" style={{
                                     textDecoration: 'none',

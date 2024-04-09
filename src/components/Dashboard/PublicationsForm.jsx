@@ -31,7 +31,7 @@ function PublicationsForm() {
     const user = useSession();
 
     const [counter, setCounter] = useState(0);
-    const [isFormComplete, setIsFormComplete] = useState(false);
+    // const [isFormComplete, setIsFormComplete] = useState(false);
 
     const [images, setImages] = useState([]);
     const [files, setFiles] = useState([]);
@@ -40,15 +40,20 @@ function PublicationsForm() {
     const [date, setDate] = useState([]);
     const [descripcion, setDescripcion] = useState([]);
 
+    const maxLength = 2000;
+
     const messageDefaultValue = `Ingresa el contenido de la publicación*`;
 
     const fileInputRef = useRef(null);
 
-    const handleClick = () => {
+    const handleClick = (e) => {
+        e.preventDefault();
         fileInputRef.current.click();
     };
 
     const handleChangeImage = (e) => {
+        e.preventDefault();
+
         const files = e.target.files;
         setFiles((fileState) => [...fileState, files[0]])
         const imagesArray = [];
@@ -80,33 +85,31 @@ function PublicationsForm() {
     }
     const handleDescripcion = (event) => {
         setDescripcion(event.target.value)
+        const text = event.target.value;
+        if (text.length <= maxLength) {
+            setDescripcion(text);
+        }
     }
 
     const handleSubmit = async () => {
-        // Crea un objeto con los datos del formulario
         const formData = new FormData();
-        formData.append('nombre', nombreMicro);
+        formData.append('titulo', nombre);
         formData.append('descripcion', descripcion);
-        formData.append('nombre', nombreMicro);
 
-
-        formData.append('email', user.sub);
-
-        // formData.append(`images`, files[0], 'images1')
-
-        files.forEach((image, index) => {
-            formData.append(`images`, image, image.name)
-        })
+        // Añade cada imagen al FormData
+        images.forEach((image, index) => {
+            formData.append('images[]', image);
+        });     
 
         try {
+            const response = await ubuntuApi.postForm('/publicaciones/admin/create', formData, {
+                headers: {
+                    Authorization: `Bearer ${getAccessToken()}`,
+                    // No necesitas establecer content-type ya que FormData lo manejará automáticamente
+                },
+            });
 
-            const response = await ubuntuApi.postForm('/publicaciones/admin/create', formData,
-                {
-                    headers: {
-                        Authorization: `Bearer ${getAccessToken()}`,
-                        'content-type': 'multipart/form-data'
-                    },
-                });
+            // Aquí puedes manejar la respuesta del servidor si es necesario
 
         } catch (error) {
             console.error('Error al enviar los datos:', error);
@@ -150,7 +153,7 @@ function PublicationsForm() {
                     type="text"
                     required
                     id="full-name"
-                    label="Titulo*"
+                    label="Titulo"
                     value={nombre}
                     fullWidth
                     onChange={handleNombre}
@@ -163,13 +166,16 @@ function PublicationsForm() {
                     type="text"
                     helperText={<MessageText counter={counter} />}
                     //defaultValue={messageDefaultValue}
-                    placeholder='Ingresa el contenido de la publicación*'
+                    label='Ingresa el contenido de la publicación'
                     value={descripcion}
                     fullWidth
                     multiline
                     rows={7}
                     sx={{
                         mt: 2,
+                    }}
+                    inputProps={{
+                        maxLength: maxLength,
                     }}
                     onChange={(event) => {
                         setCounter(event.target.value.length);
@@ -283,9 +289,11 @@ function PublicationsForm() {
                     style={{
                         marginBottom: "32px",
                         color: "#FDFDFE",
-                        backgroundColor: isFormComplete ? '#093C59' : '#6E6F70',
+                        backgroundColor: '#093C59',
+                        // backgroundColor: isFormComplete ? '#093C59' : '#6E6F70',
                     }}
-                    disabled={!isFormComplete}
+                    // disabled={!isFormComplete}
+                    onClick={handleSubmit}
                 >
                     Crear publicación
                 </CustomButton>

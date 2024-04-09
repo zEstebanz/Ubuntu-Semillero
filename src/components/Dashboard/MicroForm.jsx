@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Box, Typography, styled, TextField, Select, MenuItem } from '@mui/material';
+import { Box, Typography, styled, TextField, Select, MenuItem, Snackbar, SnackbarContent } from '@mui/material';
 import CustomButton from "../../components/buttonCustom";
 import upload from "../../../public/img/upload.svg";
 import getRubros from '../../api/rubrosCategori/getRubro';
@@ -9,6 +9,8 @@ import getProvincias from '../../api/location/getProvincias';
 import { getAccessToken } from "../../utils/helpers/localStorage";
 import { useSession } from '../../hooks/useSession';
 import { MessageHelperText } from "../../components/Contact/MessageHelperText";
+import { MessageText } from "./Message/MessageText";
+import { Link } from 'react-router-dom';
 
 
 const Input = styled(TextField)(({ theme }) => ({
@@ -46,7 +48,11 @@ function MicroForm() {
     const [nombreMicro, setNombreMicro] = useState('');
     const [ciudad, setCiudad] = useState('');
     const [descripcion, setDescripcion] = useState('');
+
+    const [successMessageOpen, setSuccessMessageOpen] = useState(false);
+
     const [masInfo, setMasInfo] = useState('');
+    const maxLength = 2000;
 
     const [counter, setCounter] = useState(0);
 
@@ -140,10 +146,18 @@ function MicroForm() {
 
     const handleDescripcion = (event) => {
         setDescripcion(event.target.value);
+        const text = event.target.value;
+        if (text.length <= maxLength) { // Verifica si el texto es menor o igual al máximo permitido
+            setDescripcion(text);
+        }
     };
 
     const handleMasInfo = (event) => {
         setMasInfo(event.target.value);
+        const text = event.target.value;
+        if (text.length <= maxLength) { // Verifica si el texto es menor o igual al máximo permitido
+            setMasInfo(text);
+        }
     };
 
     const handleSubmit = async () => {
@@ -181,6 +195,12 @@ function MicroForm() {
         } catch (error) {
             console.error('Error al enviar los datos:', error);
         }
+
+        setSuccessMessageOpen(true);
+    };
+
+    const handleCloseSuccessMessage = () => {
+        setSuccessMessageOpen(false);
     };
 
     return (
@@ -221,7 +241,7 @@ function MicroForm() {
                     type="text"
                     required
                     id="title"
-                    label="Nombre del Microemprendimiento*"
+                    label="Nombre del Microemprendimiento"
                     fullWidth
                     sx={{
                         mt: 3,
@@ -340,28 +360,47 @@ function MicroForm() {
                 />
                 {/* Descripcion */}
                 <Input
-                    type="text"
                     required
-                    id="descripcion"
-                    label="Descripción del Microemprendimiento*"
+                    type="text"
+                    helperText={<MessageText counter={counter} />}
+                    //defaultValue={messageDefaultValue}
+                    label='Descripción del Microemprendimiento'
                     value={descripcion}
-                    onChange={handleDescripcion}
                     fullWidth
+                    multiline
+                    rows={7}
                     sx={{
-                        mt: 3,
+                        mt: 2,
+                    }}
+                    inputProps={{
+                        maxLength: maxLength, // Establece la longitud máxima permitida
+                    }}
+                    onChange={(event) => {
+                        setCounter(event.target.value.length);
+                        handleDescripcion(event);
                     }}
                 />
                 {/* Mas Info */}
+
                 <Input
-                    type="text"
                     required
-                    id="informacion"
-                    label="Más información del Microemprendimiento*"
+                    type="text"
+                    helperText={<MessageText counter={counter} />}
+                    //defaultValue={messageDefaultValue}
+                    label='Más información del Microemprendimiento'
                     value={masInfo}
-                    onChange={handleMasInfo}
                     fullWidth
+                    multiline
+                    rows={7}
                     sx={{
-                        mt: 3,
+                        mt: 2,
+                    }}
+                    inputProps={{
+                        maxLength: maxLength, // Establece la longitud máxima permitida
+                    }}
+                    onChange={(event) => {
+                        setCounter(event.target.value.length);
+                        handleMasInfo(event);
                     }}
                 />
 
@@ -439,80 +478,143 @@ function MicroForm() {
 
                         {/* Renderiza el botón solo si hay menos de 3 imágenes cargadas */}
                         {images.length < 3 && (
-                            <button
-                                style={{
-                                    width: '152px',
-                                    height: '40px',
-                                    padding: '10px 16px',
-                                    border: 'none',
-                                    gap: '8px',
-                                    borderRadius: '100px',
-                                    fontSize: '0.75rem',
-                                    fontWeight: 700,
-                                    textAlign: 'center',
-                                    textTransform: 'none',
-                                    backgroundColor: '#093C59',
-                                    color: '#FDFDFE',
-                                    marginTop: '16px' // Añade un margen superior
-                                }}
-                                onClick={handleClick}
-                                disabled={images.length === 3} // Deshabilita el botón cuando hay 3 imágenes cargadas
-                            >
-                                <img
-                                    src={upload}
-                                    alt="Upload Icon"
+                            <>
+                                <button
                                     style={{
-                                        marginRight: '8px',
-                                        verticalAlign: 'middle',
+                                        width: '152px',
+                                        height: '40px',
+                                        padding: '10px 16px',
+                                        border: 'none',
+                                        gap: '8px',
+                                        borderRadius: '100px',
+                                        fontSize: '0.75rem',
+                                        fontWeight: 700,
+                                        textAlign: 'center',
+                                        textTransform: 'none',
+                                        backgroundColor: '#093C59',
+                                        color: '#FDFDFE',
+                                        marginTop: '16px' // Añade un margen superior
                                     }}
-                                />
-                                Subir imagen
-                            </button>
+                                    onClick={handleClick}
+                                    disabled={images.length === 3} // Deshabilita el botón cuando hay 3 imágenes cargadas
+                                >
+                                    <img
+                                        src={upload}
+                                        alt="Upload Icon"
+                                        style={{
+                                            marginRight: '8px',
+                                            verticalAlign: 'middle',
+                                        }}
+                                    />
+                                    Subir imagen
+                                </button>
+
+                                <Box
+                                    sx={{
+                                        mt: 2,
+                                    }}
+                                >
+                                    <Typography
+                                        color="black"
+                                        sx={{
+                                            display: 'block',
+                                            fontWeight: 400,
+                                            fontSize: '0.75rem'
+                                        }}
+                                    >
+                                        *Requerida al menos una imagen
+                                    </Typography>
+                                    <Typography
+                                        color="black"
+                                        sx={{
+                                            display: 'block',
+                                            fontWeight: 400,
+                                            fontSize: '0.75rem'
+                                        }}
+                                    >
+                                        Hasta 3 imágenes.
+                                        <br />
+                                        Máximo 3Mb cada una
+                                    </Typography>
+                                </Box>
+                            </>
                         )}
                     </Box>
-
-                    <Box
-                        sx={{
-                            mt: 2,
-                        }}
-                    >
-                        <Typography
-                            color="black"
-                            sx={{
-                                display: 'block',
-                                fontWeight: 400,
-                                fontSize: '0.75rem'
-                            }}
-                        >
-                            *Requerida al menos una imagen
-                        </Typography>
-                        <Typography
-                            color="black"
-                            sx={{
-                                display: 'block',
-                                fontWeight: 400,
-                                fontSize: '0.75rem'
-                            }}
-                        >
-                            Hasta 3 imágenes.
-                            <br />
-                            Máximo 3Mb cada una
-                        </Typography>
-                    </Box>
                 </Box>
+
                 <CustomButton
                     fullWidth
                     style={{
                         marginBottom: "32px",
                         color: "#FDFDFE",
                         backgroundColor: '#093C59',
-                        // backgroundColor: isFormComplete ? '#093C59' : '#6E6F70',
                     }}
-                    // disabled={!isFormComplete}
-                    onClick={handleSubmit} // Agrega el manejador de clic para enviar el formulario
+                    onClick={handleSubmit}
                 >
                     Crear Microemprendimiento
                 </CustomButton>
+
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Snackbar
+                        open={successMessageOpen}
+                        autoHideDuration={null}
+                        onClose={handleCloseSuccessMessage}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    >
+                        <SnackbarContent
+                            message={
+                                <>
+                                    <div style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center', // Centrar contenido verticalmente
+                                        margin: '0px 0px 16px 0px',
+                                    }}>
+                                        <div style={{
+                                            height: '40px',
+                                            width: '40px',
+                                            border: '2px solid #1D9129',
+                                            borderRadius: '50%',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            marginBottom: '8px', // Añadir un espacio entre la imagen y el texto
+                                        }}>
+                                            <img src="../../../public/img/check.svg" alt="check" style={{ width: '24px', height: '24px' }} />
+                                        </div>
+                                        <span
+                                            style={{
+                                                fontSize: '1rem',
+                                                color: '#333333',
+                                                fontWeight: '400',
+                                                fontSize: '18px',
+                                                lineHeight: '32px',
+                                                textAlign: 'center'
+                                            }}
+                                        >
+                                            Microemprendimiento cargado con éxito
+                                        </span>
+                                        {/* Al hacer clic en el enlace, oculta el Snackbar */}
+                                        <Link to="/dashboard-admin" variant="button" style={{ display: 'block', textDecoration: 'none', fontSize: '14px', color: '#093C59', fontWeight: 600, textAlign: 'end', marginTop: '16px' }} onClick={() => setSuccessMessageOpen(false)}>Aceptar</Link>
+                                    </div>
+                                </>
+                            }
+                            sx={{
+                                width: '328px',
+                                height: '184px',
+                                borderRadius: '28px',
+                                backgroundColor: '#FDFDFE',
+                                color: '#FDFDFE'
+                            }}
+                        />
+                    </Snackbar>
+                </Box>
             </Box>
         </section>
     )

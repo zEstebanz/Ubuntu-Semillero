@@ -91,9 +91,10 @@ function MicroForm() {
     const { id } = useParams();
 
     const [counter, setCounter] = useState(0);
-    const [nombreMicro, setNombreMicro] = useState('');
+    const [nombre, setNombreMicro] = useState('');
     const [provincia, setProvincia] = useState('');
     const [ciudad, setCiudad] = useState('');
+    const [rubro, setRubro] = useState('');
     const [categoria, setCategoria] = useState([]);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('');
     const [subcategoria, setSubcategoria] = useState('');
@@ -113,7 +114,8 @@ function MicroForm() {
     useEffect(() => {
         getRubros().then(data => setCategoria(data));
         getMicroByID(id).then(data => {
-            setNombreMicro(data.nombreMicro)
+            setNombreMicro(data.nombre)
+            setRubro(data.rubro)
             setCategoria(data.subrubro)
             setPais(data.pais)
             setProvincia(data.provincia)
@@ -276,8 +278,9 @@ function MicroForm() {
                             paddingTop: '32px'
                         }}
                     >
-                        EcoSenda
+                        {nombre}
                     </Typography>
+
                     <Typography
                         variant="h3"
                         sx={{
@@ -288,7 +291,7 @@ function MicroForm() {
                             paddingTop: '8px'
                         }}
                     >
-                        Agroecología/Orgánicos/Alimentación saludable
+                        {rubro.nombre}
                     </Typography>
 
                     {/* Nombre */}
@@ -302,8 +305,9 @@ function MicroForm() {
                             mt: 3,
                         }}
                         onChange={handleNombreMicroChange}
-                        value={nombreMicro}
+                        value={nombre}
                     />
+
 
                     {/* Sub-Categoría */}
                     <Input
@@ -428,6 +432,7 @@ function MicroForm() {
                                             width: '328px',
                                             height: '112px',
                                             borderRadius: "4px",
+                                            objectFit: "cover"
                                         }}
                                     />
                                 ))}
@@ -502,7 +507,8 @@ function MicroForm() {
                         style={{
                             marginBottom: "32px",
                             color: "#FDFDFE",
-                            backgroundColor: isFormComplete ? '#093C59' : '#6E6F70',
+                            backgroundColor: '#093C59',
+                            // backgroundColor: isFormComplete ? '#093C59' : '#6E6F70',
                         }}
                     // disabled={!isFormComplete}
                     >
