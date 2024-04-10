@@ -1,6 +1,6 @@
-import React from 'react';
-import { TextField, Grid, Box } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import React, { useState } from "react";
+import { TextField, Grid, Box } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 const SearchBar = ({ busqueda, setBusqueda }) => {
   
@@ -9,16 +9,23 @@ const SearchBar = ({ busqueda, setBusqueda }) => {
   };
 
   return (
-    <Grid container justifyContent="center" className="search-bar">
+    <Grid
+      container
+      className="search-bar"
+      position="absolute"
+      zIndex="1"
+      width="92%"
+      margin="1.5rem 1rem"
+      sx={{ backgroundColor: `${busqueda ? "#EAEAEA" : ""}` }}
+    >
       <Box
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          width: '100%',
-          gap: '8px'
+          display: "flex",
+          alignItems: "center",
+          width: "100%",
         }}
       >
-        <SearchIcon color='black'/>
+        <SearchIcon color="black" />
         <TextField
           name="message"
           label=""
@@ -28,11 +35,11 @@ const SearchBar = ({ busqueda, setBusqueda }) => {
           value={busqueda}
           onChange={handleBusquedaChange}
           sx={{
-            '& .MuiOutlinedInput-root': {
-              borderRadius: 0
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 0,
             },
             "& fieldset": {
-              border: 'none'
+              border: "none",
             },
           }}
         />

@@ -91,6 +91,7 @@ const MicroList = () => {
                     <div key={index}>
                         <MicroCard
                             key={micro.id}
+                            microId={micro.id}
                             title={micro.nombre}
                             entity={micro.rubro.nombre}
                             category={micro.subrubro}

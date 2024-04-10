@@ -60,7 +60,7 @@ const Categories = () => {
             }}
             marginBottom={3}
           >
-            Categorias
+            Categorías 
           </Typography>
 
           <Box sx={{
@@ -97,7 +97,7 @@ const Categories = () => {
               textDecoration: 'none',
               color: 'white'
             }} >
-              Ver más categorías
+              Ir a categorías
             </Link>
           </CustomButton>
         </Box>

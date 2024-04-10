@@ -82,11 +82,19 @@ function DrawerList({ toggleDrawer }) {
                   <Typography variant="subtitles">Publicaciones</Typography>
                 </Link>
               </ListItem>
+              <ListItem>
+                <Link
+                  onClick={handleClickLink}
+                  to="/solicitudes-contacto"
+                  style={{ textDecoration: "none", color: "white", fontSize: '18px' }}
+                >
+                  <Typography variant="subtitles">Solicitudes de Contacto</Typography>
+                </Link>
+              </ListItem>
             </>
 
           )
       }
-
     </List>
   );
 }
