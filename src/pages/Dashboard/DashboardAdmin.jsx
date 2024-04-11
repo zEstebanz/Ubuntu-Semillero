@@ -13,7 +13,7 @@ function DashboardAdmin() {
   const [postView, setPostView] = useState([]);
 
   useEffect(() => {
-    const obtenerRubros = async () => {
+    const getStatistics = async () => {
       try {
         const rubrosData = await getRubros();
         const microData = await getMicroStatistics();
@@ -22,16 +22,15 @@ function DashboardAdmin() {
 
         setRubros(rubrosData);
         setMicro(microData.body);
-        setMensaje(mensajeData); 
-        setPostView(postViewData.body);
+        setMensaje(mensajeData);
+        setPostView(postViewData);
 
-        console.log(postViewData)
       } catch (error) {
-        console.error('Error al obtener los rubros:', error);
+        console.error('Error al obtener las Estadisticas:', error);
       }
     };
 
-    obtenerRubros();
+    getStatistics();
   }, []);
 
   return (
@@ -317,67 +316,72 @@ function DashboardAdmin() {
           Visualizaciones por Publicación
         </Typography>
 
-        <div style={{
-          width: '328px',
-          minHeight: '80px',
-          margin: 'auto',
-          borderRadius: '8px',
-          border: '1px solid #093C59'
-        }}>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between'
-            }}
-          >
+        {postView.map((postView, index) =>
+          <div style={{
+            width: '328px',
+            minHeight: '80px',
+            margin: 'auto',
+            borderRadius: '8px',
+            border: '1px solid #093C59',
+            marginBottom: '16px'
+          }}>
 
-            <Box style={{
-              width: '231px',
-              height: '64px',
-              padding: '8px 16px'
-            }}
-            >
 
-              <Typography
-                sx={{
-                  fontSize: '1rem',
-                  fontWeight: 600
-                }}
-              >
-                Inversiones Éticas: Más que ganacias
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: '0.875rem',
-                  fontWeight: 500
-                }}
-              >
-                17/04/2023
-              </Typography>
-            </Box>
-
-            <Box
+            <div
               style={{
-                width: '64px',
-                height: '24px',
-                paddingRight: '8px',
-                marginTop: '25px'
+                display: 'flex',
+                justifyContent: 'space-between'
               }}
             >
-              <Typography
-                color="primary"
-                sx={{
-                  fontSize: '1.125rem',
-                  fontWeight: 700
+              <Box style={{
+                width: '231px',
+                height: '64px',
+                padding: '8px 16px'
+              }}
+              >
+
+                <Typography
+                  sx={{
+                    fontSize: '1rem',
+                    fontWeight: 600
+                  }}
+                >
+                  {postView.titulo}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: '0.875rem',
+                    fontWeight: 500
+                  }}
+                >
+                  {postView.fechaCreacion}
+                </Typography>
+              </Box>
+
+              <Box
+                style={{
+                  width: '64px',
+                  height: '24px',
+                  paddingRight: '8px',
+                  marginTop: '25px'
                 }}
               >
-                <img src="../../../public/img/view.png" alt="view" width={"22px"} height={"15px"} style={{ marginRight: '8px' }} />
-                50
-              </Typography>
-            </Box>
+                <Typography
+                  color="primary"
+                  sx={{
+                    fontSize: '1.125rem',
+                    fontWeight: 700
+                  }}
+                >
+                  <img src="../../../public/img/view.png" alt="view" width={"22px"} height={"15px"} style={{ marginRight: '8px' }} />
+                  {postView.cantVistas}
+                </Typography>
+              </Box>
+
+            </div>
 
           </div>
-        </div>
+        )}
 
       </section>
       {/* End Visualizaciones por Publicacion */}
