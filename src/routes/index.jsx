@@ -15,6 +15,8 @@ import MicroForm from "../components/Dashboard/MicroForm";
 import PublicationsForm from "../components/Dashboard/PublicationsForm";
 import PublicationsFormEdit from "../components/Dashboard/PublicationsFormEdit";
 import MicroView from "../components/Dashboard/MicroView";
+import DashboardSolicitudes from "../pages/Dashboard/DashboardSolicitudes";
+import Formulario from "../pages/Dashboard/SolicitudesForm";
 
 const router = createBrowserRouter([
     {
@@ -44,7 +46,7 @@ const router = createBrowserRouter([
                 element: <Login />
             },
             {
-                path: '/contacto',
+                path: '/contacto/:title/:id',
                 element: <Contact />
             },
             //dashboard
@@ -83,7 +85,18 @@ const router = createBrowserRouter([
             {
                 path: '/dashboard-publications/form-edit/:id',
                 element: <PublicationsFormEdit />
-            }
+            },
+            {
+                path: "/solicitudes-contacto",
+                element: <DashboardSolicitudes />
+            },
+            {
+                path: "/formulario/:id",
+                element: <Formulario />
+
+
+            },
+
         ]
     },
 

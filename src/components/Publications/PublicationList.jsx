@@ -3,16 +3,15 @@ import PostCard from "./PostCard";
 import getPost from "../../api/publications/getPost";
 
 const PublicacionList = ({ busqueda }) => {
-
   const [post, setPost] = useState([]);
 
   useEffect(() => {
     const obtenerPost = async () => {
       try {
         const postData = await getPost();
-        setPost(postData)
+        setPost(postData);
       } catch (error) {
-        console.error('Error al obtener los rubros:', error);
+        console.error("Error al obtener los rubros:", error);
       }
     };
 
@@ -22,7 +21,7 @@ const PublicacionList = ({ busqueda }) => {
   return (
     <main>
       <section>
-        {post.map((post, index) => (
+        {post?.map((post, index) => (
           <PostCard
             key={post.id}
             title={post.titulo}
