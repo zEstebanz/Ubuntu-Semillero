@@ -81,7 +81,7 @@ const router = createBrowserRouter([
                 ]
             },
             {
-                path: '/dashboard-publications/form-edit',
+                path: '/dashboard-publications/form-edit/:id',
                 element: <PublicationsFormEdit />
             }
         ]

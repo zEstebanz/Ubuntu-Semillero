@@ -3,6 +3,9 @@ import { Box, Typography, styled, TextField, Button } from '@mui/material';
 import CustomButton from "../../components/buttonCustom";
 import { MessageText } from "./Message/MessageText";
 import upload from "../../../public/img/upload.svg";
+import { useParams } from 'react-router-dom';
+import { useSession } from '../../hooks/useSession';
+import { ubuntuApi } from '../../utils/services/axiosConfig';
 
 const Input = styled(TextField)(({ theme }) => ({
     "& label": {
@@ -28,7 +31,24 @@ const handleImageUpload = () => {
     // Lógica para manejar la carga de la imagen aquí
 };
 
+
+const getPostId = async (id) => {
+    const res = await ubuntuApi.get(`publicaciones/admin/findById/${id}`, {
+        headers: {
+            Authorization: 'Bearer ' + getAccessToken(),
+        }
+    });
+    console.log(res.data.body)
+    return res.data.body;
+}
+
+
 function PublicationsForm() {
+
+    const user = useSession();
+
+    const { id } = useParams();
+
     const [nombre, setNombre] = useState([]);
     const [descripcion, setDescripcion] = useState([]);
     const maxLength = 2000;
@@ -38,16 +58,26 @@ function PublicationsForm() {
 
     const [isFormComplete, setIsFormComplete] = useState(false);
     const [images, setImages] = useState([]);
-    const messageDefaultValue = `Ingresa el contenido de la publicación*`;
+    // const messageDefaultValue = `Ingresa el contenido de la publicación*`;
     const fileInputRef = useRef(null);
 
     useEffect(() => {
+
+        getPostId(id).then(data => {
+            setNombre(data.titulo)
+            setDescripcion(data.descripcion)
+        })
+
         // Verifica si todos los campos están completos
         if (counter > 0 && true) {
             setIsFormComplete(true);
         } else {
             setIsFormComplete(false);
         }
+
+        const allFieldsCompleted = nombre; // Verifica si todos los campos están completos
+        setIsFormComplete(allFieldsCompleted);
+
     }, [counter]);
 
     const handleClick = (e) => {
@@ -164,10 +194,11 @@ function PublicationsForm() {
                     >
                         Modificá los datos de la publicación
                     </Typography>
+
                     <Input
                         type="text"
                         required
-                        id="full-name"
+                        id="titulo"
                         label="Titulo"
                         value={nombre}
                         fullWidth
@@ -176,6 +207,7 @@ function PublicationsForm() {
                             mt: 3,
                         }}
                     />
+                    
                     <Input
                         required
                         type="text"

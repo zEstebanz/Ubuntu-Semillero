@@ -95,22 +95,30 @@ function PublicationsForm() {
         const formData = new FormData();
         formData.append('titulo', nombre);
         formData.append('descripcion', descripcion);
+        formData.append('isDeleted', false);
+        formData.append('idUsuario', 1)
 
         // Añade cada imagen al FormData
-        images.forEach((image, index) => {
-            formData.append('images[]', image);
-        });     
+        //  images.forEach((image, index) => {
+        //      formData.append('images[]', image);
+        //  });
 
+        // images.forEach((file) => {
+        //     formData.append('images', file);
+        // });
+
+        files.forEach((image, index) => {
+            formData.append(`images`, image, image.name)
+        })
+        
         try {
             const response = await ubuntuApi.postForm('/publicaciones/admin/create', formData, {
                 headers: {
                     Authorization: `Bearer ${getAccessToken()}`,
+                    'content-type': 'multipart/form-data'
                     // No necesitas establecer content-type ya que FormData lo manejará automáticamente
                 },
             });
-
-            // Aquí puedes manejar la respuesta del servidor si es necesario
-
         } catch (error) {
             console.error('Error al enviar los datos:', error);
         }

@@ -36,6 +36,8 @@ const Input = styled(TextField)(({ theme }) => ({
 function MicroForm() {
     const user = useSession();
 
+    const [submit, setSubmit] = useState(true);
+
     const [images, setImages] = useState([]);
     const [files, setFiles] = useState([]);
     const [isFormComplete, setIsFormComplete] = useState(false);
@@ -59,6 +61,8 @@ function MicroForm() {
 
     const [subcategoria, setSubcategoria] = useState('');
 
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
     // const [isFormComplete, setIsFormComplete] = useState(false);
 
     useEffect(() => {
@@ -161,8 +165,16 @@ function MicroForm() {
         }
     };
 
+
     const handleSubmit = async () => {
-     
+
+
+        if (isSubmitting) {
+            return; // Evitar múltiples envíos si ya se está procesando una solicitud
+        }
+
+        setIsSubmitting(true);
+        
         const formData = new FormData();
         formData.append('nombre', nombreMicro);
         formData.append('idRubro', 2);
@@ -194,10 +206,16 @@ function MicroForm() {
                 });
             if (response.status === 200) {
                 setSuccessMessageOpen(true);
+                setSubmit(false);
             }
+
         } catch (error) {
             console.error('Error al enviar los datos:', error);
             setErrorMessageOpen(true);
+            setSubmit(false);
+        }
+        finally {
+            setIsSubmitting(false); // Habilitar nuevamente el botón de envío
         }
 
     };
@@ -516,17 +534,19 @@ function MicroForm() {
                     </Box>
                 </Box>
 
-                <CustomButton
-                    fullWidth
-                    style={{
-                        marginBottom: "32px",
-                        color: "#FDFDFE",
-                        backgroundColor: '#093C59',
-                    }}
-                    onClick={handleSubmit}
-                >
-                    Crear Microemprendimiento
-                </CustomButton>
+                {submit &&
+                    <CustomButton
+                        fullWidth
+                        style={{
+                            marginBottom: "32px",
+                            color: "#FDFDFE",
+                            backgroundColor: '#093C59',
+                        }}
+                        onClick={handleSubmit}
+                    >
+                        Crear Microemprendimiento
+                    </CustomButton>
+                }
 
                 {/* mensaje de Exito */}
                 <Box
@@ -668,6 +688,7 @@ function MicroForm() {
                         />
                     </Snackbar>
                 </Box>
+
             </Box>
         </section>
     )
