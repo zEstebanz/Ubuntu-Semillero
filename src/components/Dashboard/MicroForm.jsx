@@ -9,7 +9,7 @@ import getProvincias from '../../api/location/getProvincias';
 import { getAccessToken } from "../../utils/helpers/localStorage";
 import { useSession } from '../../hooks/useSession';
 import { MessageHelperText } from "../../components/Contact/MessageHelperText";
-import { MessageText } from "./Message/MessageText";
+import { MicroMessageText } from "./Message/MicroMessageText";
 import { Link } from 'react-router-dom';
 
 
@@ -55,7 +55,7 @@ function MicroForm() {
     const [successMessageOpen, setSuccessMessageOpen] = useState(false);
 
     const [masInfo, setMasInfo] = useState('');
-    const maxLength = 2000;
+    const maxLength = 300;
 
     const [counter, setCounter] = useState(0);
 
@@ -212,7 +212,6 @@ function MicroForm() {
         } catch (error) {
             console.error('Error al enviar los datos:', error);
             setErrorMessageOpen(true);
-            setSubmit(false);
         }
         finally {
             setIsSubmitting(false); // Habilitar nuevamente el botón de envío
@@ -386,7 +385,7 @@ function MicroForm() {
                 <Input
                     required
                     type="text"
-                    helperText={<MessageText counter={counter} />}
+                    helperText={<MicroMessageText counter={counter} />}
                     //defaultValue={messageDefaultValue}
                     label='Descripción del Microemprendimiento'
                     value={descripcion}
@@ -409,7 +408,7 @@ function MicroForm() {
                 <Input
                     required
                     type="text"
-                    helperText={<MessageText counter={counter} />}
+                    helperText={<MicroMessageText counter={counter} />}
                     //defaultValue={messageDefaultValue}
                     label='Más información del Microemprendimiento'
                     value={masInfo}
