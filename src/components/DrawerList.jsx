@@ -67,6 +67,15 @@ function DrawerList({ toggleDrawer }) {
           <Typography variant="subtitles">DashboardPublications</Typography>
         </Link>
       </ListItem>
+      <ListItem>
+        <Link
+          onClick={handleClickLink}
+          to="/solicitudes-contacto"
+          style={{ textDecoration: "none", color: "white" }}
+        >
+          <Typography variant="subtitles">DashboardSolicitudes</Typography>
+        </Link>
+      </ListItem>
     </List>
   );
 }

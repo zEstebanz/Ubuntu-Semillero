@@ -36,7 +36,7 @@ const Goals = () => {
                         margin: '0 0 1rem 0',
                     }
                 }}>        <ul>
-                        <li>Facilitar a productores o microemprendedores el acceso a microcréditos que les permitandesarrollar sus iniciativas empresariales.</li>
+                        <li>Facilitar a productores o microemprendedores el acceso a microcréditos que les permitan desarrollar sus iniciativas empresariales.</li>
                         <li>Proporcionar financiación a empresas y organizaciones que ejecutan proyectos con objetivos sociales, ambientales y culturales.</li>
                         <li>Ofrecer a potenciales inversores la oportunidad de participar en proyectos con impacto significativo.</li>
                     </ul>
