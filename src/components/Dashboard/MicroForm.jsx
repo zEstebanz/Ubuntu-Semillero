@@ -168,7 +168,6 @@ function MicroForm() {
 
     const handleSubmit = async () => {
 
-
         if (isSubmitting) {
             return; // Evitar múltiples envíos si ya se está procesando una solicitud
         }
