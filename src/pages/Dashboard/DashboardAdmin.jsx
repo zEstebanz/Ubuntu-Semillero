@@ -4,6 +4,7 @@ import getRubros from '../../api/statistics/getRubrosStatistics'
 import getMicroStatistics from '../../api/statistics/getMicroStatistics';
 import getMesajes from '../../api/statistics/getMesajes';
 import getPostView from '../../api/statistics/getPostViews';
+import { useSession } from '../../hooks/useSession';
 
 function DashboardAdmin() {
 
@@ -11,6 +12,8 @@ function DashboardAdmin() {
   const [micro, setMicro] = useState([]);
   const [mensaje, setMensaje] = useState([]);
   const [postView, setPostView] = useState([]);
+
+  const user = useSession();
 
   useEffect(() => {
     const getStatistics = async () => {

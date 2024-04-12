@@ -29,7 +29,7 @@ function Micro() {
 
                 setMicros(microData.body);
 
-                console.log(microData)
+                // console.log(microData)
             } catch (error) {
                 console.error('Error al obtener los rubros:', error);
             }

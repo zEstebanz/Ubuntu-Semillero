@@ -2,6 +2,8 @@ import Goals from "../components/landing/goals";
 import Categories from "../components/landing/categories";
 import { Hero } from "../components/landing/Hero";
 import LandingPosts from "../components/landing/LandingPosts";
+import { useSession } from "../hooks/useSession";
+
 import SearchBar from "./../components/SearchBar";
 import { useEffect, useState } from "react";
 import MicroResults from "../components/MicroResults";
@@ -9,6 +11,7 @@ import { ubuntuApi } from "../utils/services/axiosConfig";
 import axios from "axios";
 
 export const Landing = () => {
+  const user = useSession();
   const [search, setSearch] = useState("");
   const [microList, setMicroList] = useState([]);
   const [microFilterList, setMicroFilterList] = useState([]);

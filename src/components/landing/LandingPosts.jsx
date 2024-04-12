@@ -12,7 +12,7 @@ function LandingPosts() {
     const obtenerMicro = async () => {
       try {
         const postData = await getPostPublic();
-        console.log('Datos de micro recibidos:', postData)
+        // console.log('Datos de micro recibidos:', postData)
         setPost(postData);
       } catch (error) {
         console.error('Error al obtener los rubros:', error);

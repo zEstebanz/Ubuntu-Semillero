@@ -94,7 +94,7 @@ function MicroForm() {
 
         //setPaisSeleccionado(selectedCountryId); // Actualiza el país seleccionado
         //setPaisIdSeleccionado(selectedCountryId);
-        console.log(selectedCountryId)
+        // console.log(selectedCountryId)
         try {
             const provincia = await getProvincias(selectedCountryId);
             setProvincia(provincia);
@@ -112,7 +112,7 @@ function MicroForm() {
         setFiles((fileState) => [...fileState, files[0]])
         const imagesArray = [];
 
-        console.log(files.length)
+        // console.log(files.length)
 
         if (files[0].size > 3000000) {
             alert('Imagenes mayor a 3mb')
@@ -131,7 +131,7 @@ function MicroForm() {
         }
     };
 
-    console.log(files)
+    // console.log(files)
 
     const handleNombreMicroChange = (event) => {
         setNombreMicro(event.target.value);

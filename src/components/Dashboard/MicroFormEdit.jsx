@@ -81,7 +81,7 @@ const getMicroByID = async (id) => {
             Authorization: 'Bearer ' + getAccessToken(),
         }
     });
-    console.log(res.data.body)
+    // console.log(res.data.body)
     return res.data.body;
 }
 
