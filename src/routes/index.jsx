@@ -92,15 +92,14 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "/solicitudes-contacto",
-                        element: <DashboardSolicitudes/>
+                        element: <DashboardSolicitudes />
+                    },
+                    {
+                        path: "/formulario/:id",
+                        element: <Formulario />
                     },
                 ]
             },
-            {
-                path: "/formulario/:id",
-                element: <Formulario/>
-            },
-
         ]
     },
 

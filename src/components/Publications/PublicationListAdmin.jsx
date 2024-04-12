@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import PostCardAdmin from "./PostCardAdmin";
+import PostCardAdmin from "./PostCardAdmin.jsx";
 import getPostAdmin from "../../api/publications/getPostAdmin.js";
 
 const PublicacionList = ({ }) => {
@@ -23,12 +23,12 @@ const PublicacionList = ({ }) => {
   return (
     <main>
       <section>
-        {post.map((post, index) => (
+        {post.map((post) => (
           <PostCardAdmin
-            key={post.id}
+            id={post.id}
             title={post.titulo}
             description={post.descripcion}
-            date={post.date}
+            date={post.fechaCreacion}
             images={post.images}
           />
         ))}

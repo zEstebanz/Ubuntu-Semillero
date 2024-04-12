@@ -1,4 +1,4 @@
-import { List, ListItem, Typography } from "@mui/material";
+import { List, ListItem, Typography, Divider } from "@mui/material";
 import theme from "../theme/theme";
 import { Link } from "react-router-dom";
 import { useSession } from "../hooks/useSession";
@@ -12,7 +12,6 @@ function DrawerList({ toggleDrawer }) {
   };
   return (
     <List>
-
 
       {/* Dashboards */}
       {
@@ -46,6 +45,16 @@ function DrawerList({ toggleDrawer }) {
                   <Typography variant="subtitles">Publicaciones</Typography>
                 </Link>
               </ListItem>
+              <Divider variant="middle" sx={{mt: 1, mb: 1, background: '#DDDDDD'}}/>
+              <ListItem>
+                <Link
+                  onClick={handleClickLink}
+                  to="/login"
+                  style={{ textDecoration: "none", color: "white", fontSize: '18px' }}
+                >
+                  <Typography variant="subtitles">Ingreso Administrador</Typography>
+                </Link>
+              </ListItem>
             </>
           )
           : (
@@ -72,16 +81,6 @@ function DrawerList({ toggleDrawer }) {
                   <Typography variant="subtitles">Microemprendimientos</Typography>
                 </Link>
               </ListItem>
-
-              <ListItem>
-                <Link
-                  onClick={handleClickLink}
-                  to="/dashboard-publications"
-                  style={{ textDecoration: "none", color: "white", fontSize: '18px' }}
-                >
-                  <Typography variant="subtitles">Publicaciones</Typography>
-                </Link>
-              </ListItem>
               <ListItem>
                 <Link
                   onClick={handleClickLink}
@@ -89,6 +88,15 @@ function DrawerList({ toggleDrawer }) {
                   style={{ textDecoration: "none", color: "white", fontSize: '18px' }}
                 >
                   <Typography variant="subtitles">Solicitudes de Contacto</Typography>
+                </Link>
+              </ListItem>
+              <ListItem>
+                <Link
+                  onClick={handleClickLink}
+                  to="/dashboard-publications"
+                  style={{ textDecoration: "none", color: "white", fontSize: '18px' }}
+                >
+                  <Typography variant="subtitles">Publicaciones</Typography>
                 </Link>
               </ListItem>
             </>

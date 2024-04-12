@@ -29,7 +29,13 @@ const handleImageUpload = () => {
 };
 
 function PublicationsForm() {
+    const [nombre, setNombre] = useState([]);
+    const [descripcion, setDescripcion] = useState([]);
+    const maxLength = 2000;
+
+
     const [counter, setCounter] = useState(0);
+
     const [isFormComplete, setIsFormComplete] = useState(false);
     const [images, setImages] = useState([]);
     const messageDefaultValue = `Ingresa el contenido de la publicación*`;
@@ -44,14 +50,24 @@ function PublicationsForm() {
         }
     }, [counter]);
 
-    const handleClick = () => {
+    const handleClick = (e) => {
+        e.preventDefault();
         fileInputRef.current.click();
     };
 
-
     const handleChangeImage = (e) => {
+        e.preventDefault();
+
         const files = e.target.files;
+        setFiles((fileState) => [...fileState, files[0]])
         const imagesArray = [];
+
+        console.log(files.length)
+
+        if (files[0].size > 3000000) {
+            alert('Imagenes mayor a 3mb')
+            return
+        }
 
         for (let i = 0; i < files.length; i++) {
             const reader = new FileReader();
@@ -62,6 +78,45 @@ function PublicationsForm() {
                 }
             };
             reader.readAsDataURL(files[i]);
+        }
+    };
+
+    const handleNombre = (event) => {
+        setNombre(event.target.value)
+    }
+    const handleDate = (event) => {
+        setDate(event.target.value)
+    }
+    const handleDescripcion = (event) => {
+        setDescripcion(event.target.value)
+        const text = event.target.value;
+        if (text.length <= maxLength) {
+            setDescripcion(text);
+        }
+    }
+
+    const handleSubmit = async () => {
+        const formData = new FormData();
+        formData.append('titulo', nombre);
+        formData.append('descripcion', descripcion);
+
+        // Añade cada imagen al FormData
+        images.forEach((image, index) => {
+            formData.append('images[]', image);
+        });
+
+        try {
+            const response = await ubuntuApi.postForm('/publicaciones/admin/create', formData, {
+                headers: {
+                    Authorization: `Bearer ${getAccessToken()}`,
+                    // No necesitas establecer content-type ya que FormData lo manejará automáticamente
+                },
+            });
+
+            // Aquí puedes manejar la respuesta del servidor si es necesario
+
+        } catch (error) {
+            console.error('Error al enviar los datos:', error);
         }
     };
 
@@ -114,7 +169,9 @@ function PublicationsForm() {
                         required
                         id="full-name"
                         label="Titulo"
+                        value={nombre}
                         fullWidth
+                        onChange={handleNombre}
                         sx={{
                             mt: 3,
                         }}
@@ -124,14 +181,21 @@ function PublicationsForm() {
                         type="text"
                         helperText={<MessageText counter={counter} />}
                         //defaultValue={messageDefaultValue}
-                        placeholder='Ingresa el contenido de la publicación*'
+                        label='Ingresa el contenido de la publicación'
+                        value={descripcion}
                         fullWidth
                         multiline
                         rows={7}
                         sx={{
                             mt: 2,
                         }}
-                        onChange={(event) => setCounter(event.target.value.length)}
+                        inputProps={{
+                            maxLength: maxLength,
+                        }}
+                        onChange={(event) => {
+                            setCounter(event.target.value.length);
+                            handleDescripcion(event);
+                        }}
                     />
                     <Box
                         sx={{
@@ -151,7 +215,7 @@ function PublicationsForm() {
                                 accept="image/*"
                                 multiple
                                 ref={fileInputRef}
-                                style={{ display: 'none' }}
+                                style={{ display: 'none' }} // Oculta visualmente el campo de entrada de archivo
                                 onChange={handleChangeImage}
                                 disabled={images.length === 3} // Deshabilita el input cuando hay 3 imágenes cargadas
                             />
@@ -166,6 +230,7 @@ function PublicationsForm() {
                                             width: '328px',
                                             height: '112px',
                                             borderRadius: "4px",
+                                            objectFit: "cover"
                                         }}
                                     />
                                 ))}
