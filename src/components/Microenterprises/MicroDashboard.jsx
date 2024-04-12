@@ -20,8 +20,13 @@ function Micro() {
     const [anchorEl, setAnchorEl] = useState(null);
     const [reload, setReload] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [mensajeOcultado, setMensajeOcultado] = useState(false);
     const [successMessageOpen, setSuccessMessageOpen] = useState(false);
 
+    const handleCloseSuccessMessage = () => {
+        setSuccessMessageOpen(false);
+    };
+    
     useEffect(() => {
         const obtenerMicro = async () => {
             try {
@@ -52,10 +57,7 @@ function Micro() {
     const handleHideClick = (itemId) => {
         setSnackbarOpen(true);
         handleClose(itemId);
-    };
-
-    const handleCloseSuccessMessage = () => {
-        setSuccessMessageOpen(false);
+        setMensajeOcultado(true);
     };
 
     return (
@@ -106,6 +108,7 @@ function Micro() {
                                             color: '#090909'
                                         }}>Editar</Link>
                                     </MenuItem>
+
                                     <MenuItem
                                         onClick={() => handleHideClick(item.id)}
                                     >
@@ -118,6 +121,7 @@ function Micro() {
                                     </MenuItem>
 
                                     {/* Snackbar para mostrar mensaje de éxito */}
+
                                     <Box
                                         sx={{
                                             display: 'flex',
@@ -162,10 +166,10 @@ function Micro() {
                                                                     textAlign: 'center'
                                                                 }}
                                                             >
-                                                                Publicación ocultada con éxito
+                                                                Microemprendimiento cargado con éxito
                                                             </span>
                                                             {/* Al hacer clic en el enlace, oculta el Snackbar */}
-                                                            <Link to="/dashboard-admin" variant="button" style={{ display: 'block', textDecoration: 'none', fontSize: '14px', color: '#093C59', fontWeight: 600, textAlign: 'end', marginTop: '16px' }} onClick={() => setSuccessMessageOpen(false)}>Aceptar</Link>
+                                                            <Link variant="button" style={{ display: 'block', textDecoration: 'none', fontSize: '14px', color: '#093C59', fontWeight: 600, textAlign: 'end', marginTop: '16px' }} onClick={() => setSuccessMessageOpen(false)}>Aceptar</Link>
                                                         </div>
                                                     </>
                                                 }
@@ -179,7 +183,6 @@ function Micro() {
                                             />
                                         </Snackbar>
                                     </Box>
-
                                 </Menu>
 
                             </Typography>

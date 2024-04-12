@@ -173,7 +173,7 @@ function MicroForm() {
         }
 
         setIsSubmitting(true);
-        
+
         const formData = new FormData();
         formData.append('nombre', nombreMicro);
         formData.append('idRubro', 2);
