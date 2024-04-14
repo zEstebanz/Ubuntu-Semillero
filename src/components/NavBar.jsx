@@ -67,7 +67,7 @@ function NavBar({ setDrawerOpened }) {
 
   return (
     <div ref={navbarRef}>
-      <AppBar position="static" color="transparent" className="nav-bar">
+      <AppBar position="static" color="transparent" sx={{ boxShadow: 0 }}>
         <Toolbar>
           <IconButton
             edge="start"

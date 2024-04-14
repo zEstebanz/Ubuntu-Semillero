@@ -27,6 +27,7 @@ const getUser = async () => {
 export const useSession = () => {
     const dispatch = useDispatch();
     const user = useSelector(store => store.auth.user);
+    console.log(user)
 
     useEffect(() => {
         getUser()

@@ -7,11 +7,6 @@
 }
 
 .search-bar {
-    top: 80px;
-    left: 16px;
-    right: 16px;
-    width: auto;
-    height: 56px;
     padding: 0px 16px 0px 16px;
     border-radius: 100px;
     gap: 16px;
@@ -26,7 +21,7 @@
 }
 
 .section-micro {
-    padding: 16px;
+    /* padding: 16px; */
     min-height: 488px;
     color: #FDFDFE;
 
@@ -137,7 +132,7 @@
 }
 
 .section-publications {
-    padding: 16px;
+    /* padding: 16px; */
     min-height: 488px;
     color: #FDFDFE;
 
@@ -282,3 +277,8 @@
     filter: blur(1.5px);
 }
 
+.contact-section {
+    Banner {
+        margin-top: 3rem;
+    }
+}
