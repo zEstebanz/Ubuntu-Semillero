@@ -6,6 +6,7 @@ import {
   Avatar,
   Box,
   Button,
+  ButtonGroup,
   IconButton,
   SwipeableDrawer,
   Toolbar,
@@ -17,6 +18,7 @@ import DrawerList from "./DrawerList";
 import CloseIcon from "@mui/icons-material/Close";
 import OutsideClickHandler from "react-outside-click-handler";
 import { useSession } from "./../hooks/useSession";
+import { Typography } from "@mui/material";
 
 function NavBar({ setDrawerOpened }) {
   const [open, setOpen] = useState(false);
@@ -94,21 +96,41 @@ function NavBar({ setDrawerOpened }) {
                 </Avatar>
               </div>
               {displayCloseSession ? (
-                <Button
-                  onClick={() => logOut()}
-                  style={{
-                    position: "absolute",
-                    top: "3.5rem",
-                    right: "0.4rem",
-                    zIndex: "1",
-                    color: "red",
-                    backgroundColor: "white",
-                    borderRadius: "0.1rem",
-                  }}
-                  variant="contained"
+                <Box
+                  position="absolute"
+                  top="3.5rem"
+                  right="0.4rem"
+                  zIndex="1"
+                  bgcolor="white"
+                  borderRadius="0.1rem"
                 >
-                  <LogoutIcon color="black" />
-                </Button>
+                  <ButtonGroup
+                    style={{
+                      backgroundColor: "white",
+                      boxShadow: "0 0 0 1px rgba(0, 0, 0, 0.05)",
+                    }}
+                    orientation="vertical"
+                  >
+                    <Link
+                      to="/dashbord-admin"
+                      style={{
+                        borderBottom: "1.5px solid",
+                        borderColor: "black",
+                      }}
+                    >
+                      <Button style={{ border: "0" }}>Ir a mi perfil</Button>
+                    </Link>
+                    <Button
+                      style={{
+                        border: "0",
+                      }}
+                      onClick={() => logOut()}
+                    >
+                      {/* <LogoutIcon color="black" /> */}
+                      Cerrar sesion
+                    </Button>
+                  </ButtonGroup>
+                </Box>
               ) : (
                 ""
               )}
