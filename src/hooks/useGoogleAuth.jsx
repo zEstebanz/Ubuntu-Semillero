@@ -18,7 +18,6 @@ export const useGoogleAuth = (wrapperRef) => {
                     Authorization: `Bearer ${response.credential}`
                 }
             });
-            console.log(headers);
             const accessToken = headers.getAuthorization();
 
             dispatch(setCredentials(accessToken));

@@ -7,6 +7,8 @@ import { useParams } from 'react-router-dom';
 import { getAccessToken } from '../../utils/helpers/localStorage';
 import { useSession } from '../../hooks/useSession';
 import getRubros from '../../api/rubrosCategori/getRubro';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Input = styled(TextField)(({ theme }) => ({
     "& label": {
@@ -81,7 +83,7 @@ const getMicroByID = async (id) => {
             Authorization: 'Bearer ' + getAccessToken(),
         }
     });
-    console.log(res.data.body)
+    // console.log(res.data.body)
     return res.data.body;
 }
 
@@ -122,6 +124,7 @@ function MicroFormEdit() {
             setCiudad(data.ciudad)
             setDescripcion(data.descripcion)
             setInfo(data.masInfo)
+            setImages(data.images)
         })
         const allFieldsCompleted = provincia && categoria && pais && ciudad && title && informacion && descripcion; // Verifica si todos los campos están completos
         setIsFormComplete(allFieldsCompleted);
@@ -200,7 +203,7 @@ function MicroFormEdit() {
         const formData = new FormData();
         formData.append('nombre', 'holis editado');
         formData.append('idRubro', 2);
-        formData.append('subrubro', categoria); // debería llamarse dubcategoria la variable
+        formData.append('subrubro', categoria); // debería llamarse subcategoria la variable
 
         formData.append('idPais', pais);
         formData.append('idProvincia', provincia);
@@ -308,7 +311,6 @@ function MicroFormEdit() {
                         value={nombre}
                     />
 
-
                     {/* Sub-Categoría */}
                     <Input
                         type="text"
@@ -324,7 +326,6 @@ function MicroFormEdit() {
                     />
 
                     {/* País */}
-
                     <Select
                         value={pais.id}
                         required
@@ -345,7 +346,6 @@ function MicroFormEdit() {
                     </Select>
 
                     {/* Provincia/Estado */}
-
                     <Select
                         value={provincia.id}
                         required
@@ -400,6 +400,67 @@ function MicroFormEdit() {
                         }}
                         onChange={handleInfoChange}
                     />
+
+                    {/* Columna de imágenes */}
+                    <Box
+                        sx={{
+                            position: 'relative', // Establece el posicionamiento relativo para el contenedor de imágenes
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            marginTop: '20px',
+                            borderRadius: '4px'
+                        }}
+                    >
+                        {images.map((image, index) => (
+                            <Box key={index} style={{ position: 'relative', margin: '0 5px', overflow: 'hidden', position: 'relative' }}>
+                                <img
+                                    src={image}
+                                    style={{
+                                        width: '104px',
+                                        height: '80px',
+                                        opacity: '0.9',
+                                        borderRadius: '4px',
+                                        objectFit: 'cover'
+                                    }}
+                                    alt={`Image ${index + 1}`}
+                                />
+                                <Box sx={{
+                                    position: 'absolute',
+                                    top: '5px',
+                                    right: '5px',
+                                    display: 'flex',
+                                    alignItems: 'center'
+                                }}>
+                                    <Box sx={{
+                                        background: '#09090999',
+                                        borderRadius: '50%',
+                                        width: '24px',
+                                        height: '24px',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        marginRight: '5px'
+                                    }}>
+                                        <img src="../../../public/img/edit.svg" alt="" />
+
+                                    </Box>
+                                    <Box sx={{
+                                        background: '#09090999',
+                                        borderRadius: '50%',
+                                        width: '24px',
+                                        height: '24px',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        <img src="../../../public/img/delete.svg" alt="" />
+                                    </Box>
+                                </Box>
+                            </Box>
+                        ))}
+                    </Box>
+
                     <Box
                         sx={{
                             mt: 2
@@ -421,86 +482,71 @@ function MicroFormEdit() {
                                 onChange={handleChangeImage}
                                 disabled={images.length === 3} // Deshabilita el input cuando hay 3 imágenes cargadas
                             />
-
-                            <div>
-                                {images.map((image, index) => (
-                                    <img
-                                        key={index}
-                                        src={image}
-                                        alt={`preview ${index}`}
-                                        style={{
-                                            width: '328px',
-                                            height: '112px',
-                                            borderRadius: "4px",
-                                            objectFit: "cover"
-                                        }}
-                                    />
-                                ))}
-                            </div>
-
                             {/* Renderiza el botón solo si hay menos de 3 imágenes cargadas */}
                             {images.length < 3 && (
-                                <button
-                                    style={{
-                                        width: '152px',
-                                        height: '40px',
-                                        padding: '10px 16px',
-                                        border: 'none',
-                                        gap: '8px',
-                                        borderRadius: '100px',
-                                        fontSize: '0.75rem',
-                                        fontWeight: 700,
-                                        textAlign: 'center',
-                                        textTransform: 'none',
-                                        backgroundColor: '#093C59',
-                                        color: '#FDFDFE',
-                                        marginTop: '16px' // Añade un margen superior
-                                    }}
-                                    onClick={handleClick}
-                                    disabled={images.length === 3} // Deshabilita el botón cuando hay 3 imágenes cargadas
-                                >
-                                    <img
-                                        src={upload}
-                                        alt="Upload Icon"
+                                <div>
+                                    <button
                                         style={{
-                                            marginRight: '8px',
-                                            verticalAlign: 'middle',
+                                            width: '152px',
+                                            height: '40px',
+                                            padding: '10px 16px',
+                                            border: 'none',
+                                            gap: '8px',
+                                            borderRadius: '100px',
+                                            fontSize: '0.75rem',
+                                            fontWeight: 700,
+                                            textAlign: 'center',
+                                            textTransform: 'none',
+                                            backgroundColor: '#093C59',
+                                            color: '#FDFDFE',
+                                            marginTop: '16px' // Añade un margen superior
                                         }}
-                                    />
-                                    Subir imagen
-                                </button>
+                                        onClick={handleClick}
+                                        disabled={images.length === 3} // Deshabilita el botón cuando hay 3 imágenes cargadas
+                                    >
+                                        <img
+                                            src={upload}
+                                            alt="Upload Icon"
+                                            style={{
+                                                marginRight: '8px',
+                                                verticalAlign: 'middle',
+                                            }}
+                                        />
+                                        Subir imagen
+                                    </button>
+                                    <Box
+                                        sx={{
+                                            mt: 2,
+                                        }}
+                                    >
+                                        <Typography
+                                            color="black"
+                                            sx={{
+                                                display: 'block',
+                                                fontWeight: 400,
+                                                fontSize: '0.75rem'
+                                            }}
+                                        >
+                                            *Requerida al menos una imagen
+                                        </Typography>
+                                        <Typography
+                                            color="black"
+                                            sx={{
+                                                display: 'block',
+                                                fontWeight: 400,
+                                                fontSize: '0.75rem'
+                                            }}
+                                        >
+                                            Hasta 3 imágenes.
+                                            <br />
+                                            Máximo 3Mb cada una
+                                        </Typography>
+                                    </Box>
+                                </div>
                             )}
                         </Box>
-
-                        <Box
-                            sx={{
-                                mt: 2,
-                            }}
-                        >
-                            <Typography
-                                color="black"
-                                sx={{
-                                    display: 'block',
-                                    fontWeight: 400,
-                                    fontSize: '0.75rem'
-                                }}
-                            >
-                                *Requerida al menos una imagen
-                            </Typography>
-                            <Typography
-                                color="black"
-                                sx={{
-                                    display: 'block',
-                                    fontWeight: 400,
-                                    fontSize: '0.75rem'
-                                }}
-                            >
-                                Hasta 3 imágenes.
-                                <br />
-                                Máximo 3Mb cada una
-                            </Typography>
-                        </Box>
                     </Box>
+                    
                     <CustomButton
                         onClick={handleSubmit}
                         fullWidth

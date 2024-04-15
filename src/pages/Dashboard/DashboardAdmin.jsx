@@ -4,6 +4,7 @@ import getRubros from '../../api/statistics/getRubrosStatistics'
 import getMicroStatistics from '../../api/statistics/getMicroStatistics';
 import getMesajes from '../../api/statistics/getMesajes';
 import getPostView from '../../api/statistics/getPostViews';
+import { useSession } from '../../hooks/useSession';
 
 function DashboardAdmin() {
 
@@ -11,6 +12,8 @@ function DashboardAdmin() {
   const [micro, setMicro] = useState([]);
   const [mensaje, setMensaje] = useState([]);
   const [postView, setPostView] = useState([]);
+
+  const user = useSession();
 
   useEffect(() => {
     const getStatistics = async () => {
@@ -32,6 +35,16 @@ function DashboardAdmin() {
 
     getStatistics();
   }, []);
+
+  const formatDate = (date) => {
+    // Obtén los elementos de la fecha
+    const day = date[2];
+    const month = date[1] < 10 ? '0' + date[1] : date[1];
+    const year = date[0];
+
+    // Formatea la fecha en el formato deseado
+    return `${day}/${month}/${year}`;
+  };
 
   return (
     <main>
@@ -325,8 +338,6 @@ function DashboardAdmin() {
             border: '1px solid #093C59',
             marginBottom: '16px'
           }}>
-
-
             <div
               style={{
                 display: 'flex',
@@ -354,7 +365,7 @@ function DashboardAdmin() {
                     fontWeight: 500
                   }}
                 >
-                  {postView.fechaCreacion}
+                  {formatDate(postView.fechaCreacion)}
                 </Typography>
               </Box>
 

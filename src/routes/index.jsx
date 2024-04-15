@@ -15,6 +15,7 @@ import MicroForm from "../components/Dashboard/MicroForm";
 import PublicationsForm from "../components/Dashboard/PublicationsForm";
 import PublicationsFormEdit from "../components/Dashboard/PublicationsFormEdit";
 import MicroView from "../components/Dashboard/MicroView";
+import { ProtectedRoute } from "./ProtectedRoute";
 import DashboardSolicitudes from "../pages/Dashboard/DashboardSolicitudes";
 import Formulario from "../pages/Dashboard/SolicitudesForm";
 
@@ -51,35 +52,52 @@ const router = createBrowserRouter([
             },
             //dashboard
             {
-                path: '/dashboard-micro',
-                element: <DashboardMicro />,
+                element: <ProtectedRoute />,
                 children: [
                     {
-                        path: '/dashboard-micro/form',
-                        element: <MicroForm />
-                    }
-                ]
-            },
-            {
-                path: '/dashboard-micro/form-edit/:id',
-                element: <MicroFormEdit />
-            },
-            {
-                path: '/dashboard-micro/view/:id',
-                element: <MicroView />
-            },
-            {
-                path: '/dashboard-admin',
-                element: <DashboardAdmin />
-            },
-            {
-                path: '/dashboard-publications',
-                element: <DashboardPublications />,
-                children: [
+                        path: '/dashboard-micro',
+                        element: <DashboardMicro />,
+                        children: [
+                            {
+                                path: '/dashboard-micro/form',
+                                element: <MicroForm />
+                            }
+                        ]
+                    },
                     {
-                        path: '/dashboard-publications/form',
-                        element: <PublicationsForm />
-                    }
+                        path: '/dashboard-micro/form-edit/:id',
+                        element: <MicroFormEdit />
+                    },
+                    {
+                        path: '/dashboard-micro/view/:id',
+                        element: <MicroView />
+                    },
+                    {
+                        path: '/dashboard-admin',
+                        element: <DashboardAdmin />
+                    },
+                    {
+                        path: '/dashboard-publications',
+                        element: <DashboardPublications />,
+                        children: [
+                            {
+                                path: '/dashboard-publications/form',
+                                element: <PublicationsForm />
+                            },
+                            {
+                                path: '/dashboard-publications/form-edit',
+                                element: <PublicationsFormEdit />
+                            }
+                        ]
+                    },
+                    {
+                        path: "/solicitudes-contacto",
+                        element: <DashboardSolicitudes />
+                    },
+                    {
+                        path: "/formulario/:id",
+                        element: <Formulario />
+                    },
                 ]
             },
             {
@@ -93,8 +111,6 @@ const router = createBrowserRouter([
             {
                 path: "/formulario/:id",
                 element: <Formulario />
-
-
             },
 
         ]

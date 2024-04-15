@@ -116,18 +116,27 @@ function PostCard({ title, description, date, images }) {
           >
             {date}
           </Typography>
+
           <Typography
             variant="body2"
             fontWeight={600}
             color="common.black"
             className={expanded ? "expanded" : "collapsed"}
             fontSize={"16px"}
+            sx={{
+              whiteSpace: 'pre-wrap', // cumple su funcion? 
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
           >
             {expanded
               ? description
               : description.slice(0, descriptionLimit) +
-                (description.length > descriptionLimit ? "..." : "")}
+              (description.length > descriptionLimit ? "..." : "")
+            }
           </Typography>
+
           <Button
             variant="text"
             sx={{
@@ -148,7 +157,7 @@ function PostCard({ title, description, date, images }) {
           </Button>
         </CardContent>
       </Card>
-    </Grid>
+    </Grid >
   );
 }
 

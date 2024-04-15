@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 const Categories = () => {
   const handleClick = () => {
-    console.log('Click');
+    // console.log('Click');
   };
 
   const [rubro, setRubro] = useState([]);

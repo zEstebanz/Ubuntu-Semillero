@@ -20,13 +20,8 @@ function Micro() {
     const [anchorEl, setAnchorEl] = useState(null);
     const [reload, setReload] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [mensajeOcultado, setMensajeOcultado] = useState(false);
     const [successMessageOpen, setSuccessMessageOpen] = useState(false);
 
-    const handleCloseSuccessMessage = () => {
-        setSuccessMessageOpen(false);
-    };
-    
     useEffect(() => {
         const obtenerMicro = async () => {
             try {
@@ -34,7 +29,7 @@ function Micro() {
 
                 setMicros(microData.body);
 
-                console.log(microData)
+                // console.log(microData)
             } catch (error) {
                 console.error('Error al obtener los rubros:', error);
             }
@@ -57,8 +52,12 @@ function Micro() {
     const handleHideClick = (itemId) => {
         setSnackbarOpen(true);
         handleClose(itemId);
-        setMensajeOcultado(true);
+        setSuccessMessageOpen(true);
     };
+
+    const handleCloseSuccessMessage = () => {
+        setSuccessMessageOpen(false);
+    }
 
     return (
 
@@ -120,72 +119,73 @@ function Micro() {
                                         }}>Ocultar</Link>
                                     </MenuItem>
 
-                                    {/* Snackbar para mostrar mensaje de éxito */}
-
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                        }}
-                                    >
-                                        <Snackbar
-                                            open={successMessageOpen}
-                                            autoHideDuration={null}
-                                            onClose={handleCloseSuccessMessage}
-                                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                                        >
-                                            <SnackbarContent
-                                                message={
-                                                    <>
-                                                        <div style={{
-                                                            display: 'flex',
-                                                            flexDirection: 'column',
-                                                            alignItems: 'center', // Centrar contenido verticalmente
-                                                            margin: '0px 0px 16px 0px',
-                                                        }}>
-                                                            <div style={{
-                                                                height: '40px',
-                                                                width: '40px',
-                                                                border: '2px solid #1D9129',
-                                                                borderRadius: '50%',
-                                                                display: 'flex',
-                                                                justifyContent: 'center',
-                                                                alignItems: 'center',
-                                                                marginBottom: '8px', // Añadir un espacio entre la imagen y el texto
-                                                            }}>
-                                                                <img src="../../../public/img/check.svg" alt="check" style={{ width: '24px', height: '24px' }} />
-                                                            </div>
-                                                            <span
-                                                                style={{
-                                                                    fontSize: '1rem',
-                                                                    color: '#333333',
-                                                                    fontWeight: '400',
-                                                                    fontSize: '18px',
-                                                                    lineHeight: '32px',
-                                                                    textAlign: 'center'
-                                                                }}
-                                                            >
-                                                                Microemprendimiento cargado con éxito
-                                                            </span>
-                                                            {/* Al hacer clic en el enlace, oculta el Snackbar */}
-                                                            <Link variant="button" style={{ display: 'block', textDecoration: 'none', fontSize: '14px', color: '#093C59', fontWeight: 600, textAlign: 'end', marginTop: '16px' }} onClick={() => setSuccessMessageOpen(false)}>Aceptar</Link>
-                                                        </div>
-                                                    </>
-                                                }
-                                                sx={{
-                                                    width: '328px',
-                                                    height: '184px',
-                                                    borderRadius: '28px',
-                                                    backgroundColor: '#FDFDFE',
-                                                    color: '#FDFDFE'
-                                                }}
-                                            />
-                                        </Snackbar>
-                                    </Box>
                                 </Menu>
 
                             </Typography>
+
+                            {/* Snackbar para mostrar mensaje de éxito */}
+
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Snackbar
+                                    open={successMessageOpen}
+                                    autoHideDuration={null}
+                                    onClose={handleCloseSuccessMessage}
+                                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                                >
+                                    <SnackbarContent
+                                        message={
+                                            <>
+                                                <div style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'center', // Centrar contenido verticalmente
+                                                    margin: '0px 0px 16px 0px'
+                                                }}>
+                                                    <div style={{
+                                                        height: '40px',
+                                                        width: '40px',
+                                                        border: '2px solid #1D9129',
+                                                        borderRadius: '50%',
+                                                        display: 'flex',
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center',
+                                                        marginBottom: '8px', // Añadir un espacio entre la imagen y el texto
+                                                    }}>
+                                                        <img src="../../../public/img/check.svg" alt="check" style={{ width: '24px', height: '24px' }} />
+                                                    </div>
+                                                    <span
+                                                        style={{
+                                                            fontSize: '1rem',
+                                                            color: '#333333',
+                                                            fontWeight: '400',
+                                                            fontSize: '18px',
+                                                            lineHeight: '32px',
+                                                            textAlign: 'center'
+                                                        }}
+                                                    >
+                                                        Microemprendimiento cargado con éxito
+                                                    </span>
+                                                    {/* Al hacer clic en el enlace, oculta el Snackbar */}
+                                                    <Link variant="button" style={{ display: 'block', textDecoration: 'none', fontSize: '14px', color: '#093C59', fontWeight: 600, textAlign: 'end', marginTop: '16px' }} onClick={() => setSuccessMessageOpen(false)}>Aceptar</Link>
+                                                </div>
+                                            </>
+                                        }
+                                        sx={{
+                                            width: '328px',
+                                            height: '184px',
+                                            borderRadius: '28px',
+                                            backgroundColor: '#FDFDFE',
+                                            color: '#FDFDFE'
+                                        }}
+                                    />
+                                </Snackbar>
+                            </Box>
 
                             <Divider sx={{
                                 border: '1px solid #226516',

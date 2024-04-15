@@ -61,6 +61,7 @@ function MicroForm() {
 
     const [subcategoria, setSubcategoria] = useState('');
 
+    const [imageList, setImageList] = useState(images);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     // const [isFormComplete, setIsFormComplete] = useState(false);
@@ -70,10 +71,17 @@ function MicroForm() {
         getPaises().then(data => setPais(data));
     }, []);
 
+
     const fileInputRef = useRef(null);
 
     const handleImageUpload = () => {
         // Lógica para manejar la carga de la imagen aquí
+    };
+
+    const handleDeleteClick = (index) => {
+        const newImageList = [...imageList];
+        newImageList.splice(index, 1);
+        setImageList(newImageList);
     };
 
     const handleClick = () => {
@@ -98,7 +106,7 @@ function MicroForm() {
 
         //setPaisSeleccionado(selectedCountryId); // Actualiza el país seleccionado
         //setPaisIdSeleccionado(selectedCountryId);
-        console.log(selectedCountryId)
+        // console.log(selectedCountryId)
         try {
             const provincia = await getProvincias(selectedCountryId);
             setProvincia(provincia);
@@ -116,7 +124,7 @@ function MicroForm() {
         setFiles((fileState) => [...fileState, files[0]])
         const imagesArray = [];
 
-        console.log(files.length)
+        // console.log(files.length)
 
         if (files[0].size > 3000000) {
             alert('Imagenes mayor a 3mb')
@@ -135,7 +143,7 @@ function MicroForm() {
         }
     };
 
-    console.log(files)
+    // console.log(files)
 
     const handleNombreMicroChange = (event) => {
         setNombreMicro(event.target.value);
@@ -450,21 +458,67 @@ function MicroForm() {
                             disabled={images.length === 3} // Deshabilita el input cuando hay 3 imágenes cargadas
                         />
 
-                        <div>
+                        {/* Columna de imágenes */}
+                        <Box
+                            sx={{
+                                position: 'relative', // Establece el posicionamiento relativo para el contenedor de imágenes
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                marginTop: '20px',
+                                borderRadius: '4px'
+                            }}
+                        >
                             {images.map((image, index) => (
-                                <img
-                                    key={index}
-                                    src={image}
-                                    alt={`preview ${index}`}
-                                    style={{
-                                        width: '328px',
-                                        height: '112px',
-                                        borderRadius: "4px",
-                                        objectFit: "cover"
-                                    }}
-                                />
+                                <Box key={index} style={{ position: 'relative', margin: '0 5px', overflow: 'hidden', position: 'relative' }}>
+                                    <img
+                                        src={image}
+                                        style={{
+                                            width: '104px',
+                                            height: '80px',
+                                            opacity: '0.9',
+                                            borderRadius: '4px',
+                                            objectFit: 'cover'
+                                        }}
+                                        alt={`Image ${index + 1}`}
+                                    />
+                                    <Box sx={{
+                                        position: 'absolute',
+                                        top: '5px',
+                                        right: '5px',
+                                        display: 'flex',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Box sx={{
+                                            background: '#09090999',
+                                            borderRadius: '50%',
+                                            width: '24px',
+                                            height: '24px',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            marginRight: '5px'
+                                        }}>
+                                            <img src="../../../public/img/edit.svg" alt="" />
+
+                                        </Box>
+                                        <Box sx={{
+                                            background: '#09090999',
+                                            borderRadius: '50%',
+                                            width: '24px',
+                                            height: '24px',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                        }}
+                                            onClick={() => handleDeleteClick(index)}
+                                        >
+                                            <img src="../../../public/img/delete.svg" alt="" />
+                                        </Box>
+                                    </Box>
+                                </Box>
                             ))}
-                        </div>
+                        </Box>
 
                         {/* Renderiza el botón solo si hay menos de 3 imágenes cargadas */}
                         {images.length < 3 && (
