@@ -3,7 +3,6 @@ import { TextField, Grid, Box } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 const SearchBar = ({ busqueda, setBusqueda }) => {
-  
   const handleBusquedaChange = (event) => {
     setBusqueda(event.target.value);
   };

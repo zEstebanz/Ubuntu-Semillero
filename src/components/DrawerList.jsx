@@ -5,7 +5,6 @@ import { useSession } from "../hooks/useSession";
 
 function DrawerList({ toggleDrawer }) {
   const user = useSession();
-  console.log(user);
 
   const handleClickLink = () => {
     toggleDrawer();
