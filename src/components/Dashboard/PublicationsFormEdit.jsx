@@ -52,17 +52,17 @@ function PublicationsForm() {
     console.log(data)
 
     const [nombre, setNombre] = useState([]);
-    const [descripcion, setDescripcion] = useState([]);
+    const [descripcion, setDescripcion] = useState('');
 
     // Estados de Imagenes 
     const [images, setImages] = useState([]);
-    const [imgEdit, setImgEdit] = useState([]);
+    const [imgEditIndex, setImgEditIndex] = useState(0);
     const [imgDelet, setImgDelete] = useState([]);
     const [mapImages, setMapImages] = useState({});
 
     const maxLength = 2000;
 
-    const [counter, setCounter] = useState(0);
+    const [counter, setCounter] = useState();
 
     const [isFormComplete, setIsFormComplete] = useState(false);
     const [files, setFiles] = useState([]);
@@ -77,6 +77,7 @@ function PublicationsForm() {
             console.log(data)
             setNombre(data.titulo)
             setDescripcion(data.descripcion)
+            setCounter(data.descripcion.length)
             setImages(Object.values(data.images))
             const flipped = Object
                 .entries(data.images)
@@ -84,6 +85,11 @@ function PublicationsForm() {
             setMapImages(Object.fromEntries(flipped))
         })
 
+
+
+    }, [id]);
+
+    useEffect(() => {
         // Verifica si todos los campos están completos
         if (counter > 0 && true) {
             setIsFormComplete(true);
@@ -93,8 +99,7 @@ function PublicationsForm() {
 
         const allFieldsCompleted = nombre && descripcion; // Verifica si todos los campos están completos
         setIsFormComplete(allFieldsCompleted);
-
-    }, [counter]);
+    }, [counter])
 
     console.log(newImages)
     console.log(files)
@@ -109,7 +114,7 @@ function PublicationsForm() {
 
         const files = e.target.files;
         setFiles((fileState) => [...fileState, files[0]])
-        const imagesArray = [];
+        const loadedImages = [];
 
         console.log(files.length)
 
@@ -121,13 +126,19 @@ function PublicationsForm() {
         for (let i = 0; i < files.length; i++) {
             const reader = new FileReader();
             reader.onload = (event) => {
-                imagesArray.push(event.target.result);
-                if (imagesArray.length === files.length) {
-                    setImages([...images, ...imagesArray]);
+                loadedImages.push(event.target.result);
+
+
+                if (loadedImages.length === files.length) {
+                    const copyImages = [...images];
+                    copyImages.splice(imgEditIndex, 0, loadedImages);
+                    setImages(copyImages);
                 }
             };
             reader.readAsDataURL(files[i]);
         }
+
+        setImgEditIndex(images.length);
     };
 
     const handleNombre = (event) => {
@@ -138,10 +149,10 @@ function PublicationsForm() {
     }
     const handleDescripcion = (event) => {
         setDescripcion(event.target.value)
-        const text = event.target.value;
-        if (text.length <= maxLength) {
-            setDescripcion(text);
-        }
+        // const text = event.target.value;
+        // if (text.length <= maxLength) {
+        //     setDescripcion(text);
+        // }
     }
 
     const handleSubmit = async () => {
@@ -149,15 +160,15 @@ function PublicationsForm() {
         formData.append('tittle', nombre);
         formData.append('description', descripcion);
 
-        const idList = newImages.map((url)=>{
+        const idList = newImages.map((url) => {
             return mapImages[url]
         }).join(",")
 
         formData.append('id_imageToReplace', idList);
-        
+
 
         // Añade cada imagen al FormData
-        if (files.length > 0 ) {
+        if (files.length > 0) {
             files.forEach((image, index) => {
                 formData.append('newImages', image);
             });
@@ -181,8 +192,13 @@ function PublicationsForm() {
     };
 
     const handleEditImg = async (url) => {
+
+        const indexImage = images.indexOf(url);
+        setImgEditIndex(indexImage);
+
         const filterImages = images.filter(image => image !== url)
         setImages(filterImages)
+
         setNewImages([...newImages, url])
     }
 
@@ -291,7 +307,6 @@ function PublicationsForm() {
                                 ref={fileInputRef}
                                 style={{ display: 'none' }} // Oculta visualmente el campo de entrada de archivo
                                 onChange={handleChangeImage}
-                                disabled={images.length === 3} // Deshabilita el input cuando hay 3 imágenes cargadas
                             />
 
                             <Box
@@ -358,7 +373,6 @@ function PublicationsForm() {
                                             }}
                                             >
                                                 <IconButton
-                                                    type="file"
                                                     onClick={(e) => {
                                                         e.preventDefault();
                                                         handleDeleteImg(image)
