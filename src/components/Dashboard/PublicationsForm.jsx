@@ -97,7 +97,6 @@ function PublicationsForm() {
             setDescripcion(text);
         }
     }
-
     const handleSubmit = async () => {
 
         if (isSubmitting) {
@@ -199,8 +198,8 @@ function PublicationsForm() {
                     }}
                 />
                 <Input
-                    required
                     type="text"
+                    required
                     helperText={<MessageText counter={counter} />}
                     //defaultValue={messageDefaultValue}
                     label='Ingresa el contenido de la publicación'
@@ -406,7 +405,7 @@ function PublicationsForm() {
                 </Box>
 
                 {/* mensaje de Error */}
-                {/* <Box
+                <Box
                     sx={{
                         display: 'flex',
                         justifyContent: 'center',
@@ -479,7 +478,7 @@ function PublicationsForm() {
                             }}
                         />
                     </Snackbar>
-                </Box> */}
+                </Box> 
 
             </Box>
         </section>

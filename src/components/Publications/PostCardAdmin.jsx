@@ -1,13 +1,24 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, Typography, Button, Grid, CardMedia, Menu, MenuItem } from "@mui/material";
+import { Card, CardContent, Typography, Button, Grid, CardMedia, Menu, MenuItem, Box, Snackbar, SnackbarContent  } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Navigation, Pagination, Mousewheel, Keyboard } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { ubuntuApi } from "../../utils/services/axiosConfig";
+import { getAccessToken } from "../../utils/helpers/localStorage";
+import getPostEdit from "../../api/publications/getPostEdit";
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+
+const hideId = async (id) => {
+    const res = ubuntuApi.get(`publicaciones/admin/findById/${id}`, null, {
+        headers: {
+            Authorization: 'Bearer ' + getAccessToken(),
+        }
+    })
+}
 
 function PostCardAdmin({ title, description, date, images, id }) {
     const [expanded, setExpanded] = useState(false);
@@ -15,31 +26,41 @@ function PostCardAdmin({ title, description, date, images, id }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [showSubMenu, setShowSubMenu] = useState(false);
     const [reload, setReload] = useState(false);
+    const [post, setPost] = useState();
+
+    const [successMessageOpen, setSuccessMessageOpen] = useState(false);
 
     useEffect(() => {
-        const obtenerMicro = async () => {
+        const obtenerPost = async () => {
             try {
-                const microData = await getPostEdit();
+                const postEditData = await getPostEdit();
 
-                setMicros(microData.body);
+                setPost(postEditData.body);
 
-                console.log(microData)
+                console.log(postEditData)
             } catch (error) {
-                console.error('Error al obtener los rubros:', error);
+                console.error('Error al editar:', error);
             }
         };
 
-        obtenerMicro();
+        obtenerPost();
     }, [reload]);
+
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
     const handleClose = (itemId) => {
-        hideMicro(itemId)
+        hideId(itemId)
         setReload(!reload)
         setAnchorEl(null);
+    };
+
+    const handleHideClick = (itemId) => {
+        setSnackbarOpen(true);
+        handleClose(itemId);
+        setSuccessMessageOpen(true);
     };
 
     const toggleExpand = () => {
@@ -49,6 +70,10 @@ function PostCardAdmin({ title, description, date, images, id }) {
     const toggleSubMenu = () => {
         setShowSubMenu(!showSubMenu);
     };
+
+    const handleCloseSuccessMessage = () => {
+        setSuccessMessageOpen(false);
+    }
 
     const renderSwiper = () => {
         if (images.length > 1) {
@@ -185,12 +210,100 @@ function PostCardAdmin({ title, description, date, images, id }) {
                     </Button>
 
                     {showSubMenu && (
-                        <div style={{ marginTop: "0.8rem" }}>
-                            <button>Editar</button>
-                            <button onClick={toggleSubMenu}>Ocultar</button>
-                        </div>
+
+                        <Menu
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={handleClose}>
+                                <Link to={"/dashboard-publications/form-edit/" + id} style={{
+                                    textDecoration: 'none',
+                                    fontSize: '16px',
+                                    lineHeight: '24px',
+                                    color: '#090909'
+                                }}>Editar</Link>
+                            </MenuItem>
+
+                            <MenuItem
+                                onClick={() => handleHideClick(item.id)}
+                            >
+                                <Link to="#" style={{
+                                    textDecoration: 'none',
+                                    fontSize: '16px',
+                                    lineHeight: '24px',
+                                    color: '#090909'
+                                }}>Ocultar</Link>
+                            </MenuItem>
+
+                        </Menu>
                     )}
                 </CardContent>
+
+                {/* Snackbar para mostrar mensaje de éxito */}
+
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Snackbar
+                        open={successMessageOpen}
+                        autoHideDuration={null}
+                        onClose={handleCloseSuccessMessage}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    >
+                        <SnackbarContent
+                            message={
+                                <>
+                                    <div style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center', // Centrar contenido verticalmente
+                                        margin: '0px 0px 16px 0px',
+                                        width: '328px'
+                                    }}>
+                                        <div style={{
+                                            height: '40px',
+                                            width: '40px',
+                                            border: '2px solid #1D9129',
+                                            borderRadius: '50%',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            marginBottom: '8px', // Añadir un espacio entre la imagen y el texto
+                                        }}>
+                                            <img src="../../../public/img/check.svg" alt="check" style={{ width: '24px', height: '24px' }} />
+                                        </div>
+                                        <span
+                                            style={{
+                                                fontSize: '1rem',
+                                                color: '#333333',
+                                                fontWeight: '400',
+                                                fontSize: '18px',
+                                                lineHeight: '32px',
+                                                textAlign: 'center'
+                                            }}
+                                        >
+                                            Publicación ocultada con éxito
+                                        </span>
+                                        {/* Al hacer clic en el enlace, oculta el Snackbar */}
+                                        <Link variant="button" style={{ display: 'block', textDecoration: 'none', fontSize: '14px', color: '#093C59', fontWeight: 600, textAlign: 'end', marginTop: '16px' }} onClick={() => setSuccessMessageOpen(false)}>Aceptar</Link>
+                                    </div>
+                                </>
+                            }
+                            sx={{
+                                width: '328px',
+                                height: '184px',
+                                borderRadius: '28px',
+                                backgroundColor: '#FDFDFE',
+                                color: '#FDFDFE'
+                            }}
+                        />
+                    </Snackbar>
+                </Box>
             </Card>
         </Grid>
 

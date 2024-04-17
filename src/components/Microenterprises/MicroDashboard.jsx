@@ -31,7 +31,7 @@ function Micro() {
 
                 // console.log(microData)
             } catch (error) {
-                console.error('Error al obtener los rubros:', error);
+                console.error('Error al obtener los Microemprendimientos', error);
             }
         };
 
@@ -145,7 +145,8 @@ function Micro() {
                                                     display: 'flex',
                                                     flexDirection: 'column',
                                                     alignItems: 'center', // Centrar contenido verticalmente
-                                                    margin: '0px 0px 16px 0px'
+                                                    margin: '0px 0px 16px 0px',
+                                                    width: '328px'
                                                 }}>
                                                     <div style={{
                                                         height: '40px',
@@ -169,7 +170,7 @@ function Micro() {
                                                             textAlign: 'center'
                                                         }}
                                                     >
-                                                        Microemprendimiento cargado con éxito
+                                                        Publicación ocultada con éxito
                                                     </span>
                                                     {/* Al hacer clic en el enlace, oculta el Snackbar */}
                                                     <Link variant="button" style={{ display: 'block', textDecoration: 'none', fontSize: '14px', color: '#093C59', fontWeight: 600, textAlign: 'end', marginTop: '16px' }} onClick={() => setSuccessMessageOpen(false)}>Aceptar</Link>
@@ -206,7 +207,6 @@ function Micro() {
                                     }}
                                 >
                                     {item.rubro.nombre}
-
                                 </Typography>
                                 <div style={{
                                     width: '7.41px',
