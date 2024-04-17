@@ -154,6 +154,7 @@ function PublicationsForm() {
         }).join(",")
 
         formData.append('id_imageToReplace', idList);
+        
 
         // Añade cada imagen al FormData
         if (files.length > 0 ) {
@@ -161,7 +162,7 @@ function PublicationsForm() {
                 formData.append('newImages', image);
             });
         } else {
-            formData.append('newImages', undefined);
+            formData.append('newImages', new Blob());
         }
 
         try {
