@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, TextField, Modal } from '@mui/material';
+import { Box, Typography, TextField, Modal, Button } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { getAccessToken } from '../../utils/helpers/localStorage';
 import { useSession } from '../../hooks/useSession';
@@ -28,6 +28,7 @@ function MicroView() {
     const [images, setImages] = useState('');
     const [openModal, setOpenModal] = useState(false);
     const [modalImage, setModalImage] = useState('');
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     const handleSearchIconClick = (image) => {
         setModalImage(image);
@@ -38,7 +39,15 @@ function MicroView() {
         setOpenModal(false);
     };
 
-   
+    const handleNextImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    };
+
+    const handlePrevImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+    };
+
+    const currentFraction = `${currentImageIndex + 1}/${images.length}`;
 
     useEffect(() => {
         // Llamada a la API para obtener los datos del microemprendimiento
@@ -246,15 +255,62 @@ function MicroView() {
                                     top: '50%',
                                     left: '50%',
                                     transform: 'translate(-50%, -50%)',
-                                    width: '80%',
+                                    width: '100%',
+                                    height: '100vh',
                                     maxWidth: '800px',
-                                    bgcolor: 'background.paper',
+                                    bgcolor: '#000000',
                                     borderRadius: '4px',
                                     boxShadow: 24,
-                                    p: 4,
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    flexDirection: 'column',
+                                    position: 'relative',
                                 }}
                             >
-                                <img src={modalImage} style={{ width: '100%' }} alt="Modal Image" />
+                                <img
+                                    src={images[currentImageIndex]}
+                                    style={{ width: '100%', height: '248px', objectFit: 'cover' }}
+                                    alt="Modal Image"
+                                />
+                                <button
+                                    style={{
+                                        position: 'absolute',
+                                        left: '16px',
+                                        background: 'none',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        color: '#fff',
+                                        marginBottom: '380px',
+                                        display: currentImageIndex === 0 ? 'none' : 'block' // Oculta el botón si es la primera imagen
+                                    }}
+                                    onClick={handlePrevImage}
+                                >
+                                    <img src="../../../public/img/back.svg" alt="" />
+                                </button>
+                                <button
+                                    style={{
+                                        position: 'absolute',
+                                        right: '32px',
+                                        background: 'none',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        color: '#fff',
+                                        marginBottom: '380px',
+                                        display: currentImageIndex === images.length - 1 ? 'none' : 'block' // Oculta el botón si es la última imagen
+                                    }}
+                                    onClick={handleNextImage}
+                                >
+                                    <img src="../../../public/img/next.svg" alt="" />
+                                </button>
+                                <Typography style={{
+                                    color: '#fff', position: 'absolute', top: '10.625rem'
+                                }}>
+                                    {currentFraction}
+                                </Typography>
+                                <Button variant="contained" color="primary" onClick={handleCloseModal} style={{ marginTop: '16px' }}>
+                                    Cerrar
+                                </Button>
                             </Box>
                         </Modal>
                     </Box>

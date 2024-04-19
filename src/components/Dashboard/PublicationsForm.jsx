@@ -32,7 +32,7 @@ function PublicationsForm() {
     const user = useSession();
 
     const [counter, setCounter] = useState(0);
-    // const [isFormComplete, setIsFormComplete] = useState(false);
+    const [isFormComplete, setIsFormComplete] = useState(false);
 
     const [images, setImages] = useState([]);
     const [files, setFiles] = useState([]);
@@ -52,6 +52,13 @@ function PublicationsForm() {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submit, setSubmit] = useState(true);
+
+    useEffect(() => {
+        // Verifica si todos los campos están completos
+        const allFieldsCompleted = nombre.length > 0 && typeof descripcion === 'string' && descripcion.trim() !== '';
+        setIsFormComplete(allFieldsCompleted);
+    }, [nombre, descripcion]);
+    
 
     const handleClick = (e) => {
         e.preventDefault();
@@ -327,17 +334,16 @@ function PublicationsForm() {
 
                 {submit &&
                     <CustomButton
+                        onClick={handleSubmit}
                         fullWidth
                         style={{
                             marginBottom: "32px",
                             color: "#FDFDFE",
-                            backgroundColor: '#093C59',
-                            // backgroundColor: isFormComplete ? '#093C59' : '#6E6F70',
+                            backgroundColor: isFormComplete ? '#093C59' : '#6E6F70',
                         }}
-                        // disabled={!isFormComplete}
-                        onClick={handleSubmit}
+                        disabled={!isFormComplete}
                     >
-                        Crear publicación
+                        Guardar Publicación
                     </CustomButton>
                 }
 
@@ -352,7 +358,6 @@ function PublicationsForm() {
                     <Snackbar
                         open={successMessageOpen}
                         autoHideDuration={null}
-                        onClose={handleCloseSuccessMessage}
                         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                     >
                         <SnackbarContent
@@ -415,7 +420,6 @@ function PublicationsForm() {
                     <Snackbar
                         open={errorMessageOpen}
                         autoHideDuration={null}
-                        onClose={handleCloseErrorMessage}
                         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                     >
                         <SnackbarContent
@@ -478,7 +482,7 @@ function PublicationsForm() {
                             }}
                         />
                     </Snackbar>
-                </Box> 
+                </Box>
 
             </Box>
         </section>

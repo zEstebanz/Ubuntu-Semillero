@@ -611,7 +611,6 @@ function MicroForm() {
                     <Snackbar
                         open={successMessageOpen}
                         autoHideDuration={null}
-                        onClose={handleCloseSuccessMessage}
                         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                     >
                         <SnackbarContent
@@ -674,7 +673,6 @@ function MicroForm() {
                     <Snackbar
                         open={errorMessageOpen}
                         autoHideDuration={null}
-                        onClose={handleCloseErrorMessage}
                         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                     >
                         <SnackbarContent
@@ -726,7 +724,6 @@ function MicroForm() {
                                             <Link to="/dashboard-micro" variant="button" style={{ marginRight: '8px', textDecoration: 'none', fontSize: '14px', color: '#093C59', fontWeight: 600, marginRight: '16px' }} onClick={() => setErrorMessageOpen(false)}>Cancelar</Link>
                                             <Link to="/dashboard-micro/form" variant="button" style={{ textDecoration: 'none', fontSize: '14px', color: '#093C59', fontWeight: 600 }} onClick={() => { setErrorMessageOpen(false); }}>Intentar Nuevamente</Link>
                                         </div>
-
                                     </div>
                                 </>
                             }

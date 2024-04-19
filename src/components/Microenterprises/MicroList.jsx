@@ -56,7 +56,7 @@ const MicroList = () => {
                         Categorias
                     </Typography>
 
-                    {micros?.map((micro, index) => (
+                    {micros.length > 0 && (
                         <Typography
                             sx={{
                                 fontSize: "20px",
@@ -65,9 +65,9 @@ const MicroList = () => {
                             }}
                             color="primary"
                         >
-                            {micro.rubro.nombre}
+                            {micros[0].rubro.nombre}
                         </Typography>
-                    ))}
+                    )}
 
                     <Typography
                         sx={{
