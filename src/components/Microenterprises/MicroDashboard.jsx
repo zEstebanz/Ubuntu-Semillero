@@ -123,7 +123,7 @@ function Micro() {
 
                             </Typography>
 
-                            {/* Snackbar para mostrar mensaje de éxito */}
+                            {/* Mensaje de éxito */}
 
                             <Box
                                 sx={{
