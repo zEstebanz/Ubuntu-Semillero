@@ -27,18 +27,16 @@ const getUser = async () => {
 export const useSession = () => {
     const dispatch = useDispatch();
     const user = useSelector(store => store.auth.user);
-    console.log(user)
 
     useEffect(() => {
         getUser()
             .then(user => {
-                if (!user) {
+                if (user) {
+                    dispatch(setUser(user));
+                    dispatch(setCredentials(getAccessToken()))
+                } else {
                     deleteAccessToken();
                 }
-
-                dispatch(setCredentials(getAccessToken()))
-                dispatch(setUser(user));
-
             })
             .catch(error => console.log(error))
     }, [dispatch])

@@ -9,7 +9,7 @@ import getProvincias from '../../api/location/getProvincias';
 import { getAccessToken } from "../../utils/helpers/localStorage";
 import { useSession } from '../../hooks/useSession';
 import { MessageHelperText } from "../../components/Contact/MessageHelperText";
-import { MessageText } from "./Message/MessageText";
+import { MicroMessageText } from "./Message/MicroMessageText";
 import { Link } from 'react-router-dom';
 
 
@@ -36,6 +36,8 @@ const Input = styled(TextField)(({ theme }) => ({
 function MicroForm() {
     const user = useSession();
 
+    const [submit, setSubmit] = useState(true);
+
     const [images, setImages] = useState([]);
     const [files, setFiles] = useState([]);
     const [isFormComplete, setIsFormComplete] = useState(false);
@@ -53,12 +55,15 @@ function MicroForm() {
     const [successMessageOpen, setSuccessMessageOpen] = useState(false);
 
     const [masInfo, setMasInfo] = useState('');
-    const maxLength = 2000;
+    const maxLength = 300;
 
     const [counter, setCounter] = useState(0);
 
     const [subcategoria, setSubcategoria] = useState('');
 
+    const [imageList, setImageList] = useState(images);
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
     // const [isFormComplete, setIsFormComplete] = useState(false);
 
     useEffect(() => {
@@ -66,10 +71,17 @@ function MicroForm() {
         getPaises().then(data => setPais(data));
     }, []);
 
+
     const fileInputRef = useRef(null);
 
     const handleImageUpload = () => {
         // Lógica para manejar la carga de la imagen aquí
+    };
+
+    const handleDeleteClick = (index) => {
+        const newImageList = [...imageList];
+        newImageList.splice(index, 1);
+        setImageList(newImageList);
     };
 
     const handleClick = () => {
@@ -161,8 +173,15 @@ function MicroForm() {
         }
     };
 
+
     const handleSubmit = async () => {
-     
+
+        if (isSubmitting) {
+            return; // Evitar múltiples envíos si ya se está procesando una solicitud
+        }
+
+        setIsSubmitting(true);
+
         const formData = new FormData();
         formData.append('nombre', nombreMicro);
         formData.append('idRubro', 2);
@@ -194,10 +213,15 @@ function MicroForm() {
                 });
             if (response.status === 200) {
                 setSuccessMessageOpen(true);
+                setSubmit(false);
             }
+
         } catch (error) {
             console.error('Error al enviar los datos:', error);
             setErrorMessageOpen(true);
+        }
+        finally {
+            setIsSubmitting(false); // Habilitar nuevamente el botón de envío
         }
 
     };
@@ -368,7 +392,7 @@ function MicroForm() {
                 <Input
                     required
                     type="text"
-                    helperText={<MessageText counter={counter} />}
+                    helperText={<MicroMessageText counter={counter} />}
                     //defaultValue={messageDefaultValue}
                     label='Descripción del Microemprendimiento'
                     value={descripcion}
@@ -391,7 +415,7 @@ function MicroForm() {
                 <Input
                     required
                     type="text"
-                    helperText={<MessageText counter={counter} />}
+                    helperText={<MicroMessageText counter={counter} />}
                     //defaultValue={messageDefaultValue}
                     label='Más información del Microemprendimiento'
                     value={masInfo}
@@ -434,21 +458,67 @@ function MicroForm() {
                             disabled={images.length === 3} // Deshabilita el input cuando hay 3 imágenes cargadas
                         />
 
-                        <div>
+                        {/* Columna de imágenes */}
+                        <Box
+                            sx={{
+                                position: 'relative', // Establece el posicionamiento relativo para el contenedor de imágenes
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                marginTop: '20px',
+                                borderRadius: '4px'
+                            }}
+                        >
                             {images.map((image, index) => (
-                                <img
-                                    key={index}
-                                    src={image}
-                                    alt={`preview ${index}`}
-                                    style={{
-                                        width: '328px',
-                                        height: '112px',
-                                        borderRadius: "4px",
-                                        objectFit: "cover"
-                                    }}
-                                />
+                                <Box key={index} style={{ position: 'relative', margin: '0 5px', overflow: 'hidden', position: 'relative' }}>
+                                    <img
+                                        src={image}
+                                        style={{
+                                            width: '104px',
+                                            height: '80px',
+                                            opacity: '0.9',
+                                            borderRadius: '4px',
+                                            objectFit: 'cover'
+                                        }}
+                                        alt={`Image ${index + 1}`}
+                                    />
+                                    <Box sx={{
+                                        position: 'absolute',
+                                        top: '5px',
+                                        right: '5px',
+                                        display: 'flex',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Box sx={{
+                                            background: '#09090999',
+                                            borderRadius: '50%',
+                                            width: '24px',
+                                            height: '24px',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            marginRight: '5px'
+                                        }}>
+                                            <img src="../../../public/img/edit.svg" alt="" />
+
+                                        </Box>
+                                        <Box sx={{
+                                            background: '#09090999',
+                                            borderRadius: '50%',
+                                            width: '24px',
+                                            height: '24px',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                        }}
+                                            onClick={() => handleDeleteClick(index)}
+                                        >
+                                            <img src="../../../public/img/delete.svg" alt="" />
+                                        </Box>
+                                    </Box>
+                                </Box>
                             ))}
-                        </div>
+                        </Box>
 
                         {/* Renderiza el botón solo si hay menos de 3 imágenes cargadas */}
                         {images.length < 3 && (
@@ -516,17 +586,19 @@ function MicroForm() {
                     </Box>
                 </Box>
 
-                <CustomButton
-                    fullWidth
-                    style={{
-                        marginBottom: "32px",
-                        color: "#FDFDFE",
-                        backgroundColor: '#093C59',
-                    }}
-                    onClick={handleSubmit}
-                >
-                    Crear Microemprendimiento
-                </CustomButton>
+                {submit &&
+                    <CustomButton
+                        fullWidth
+                        style={{
+                            marginBottom: "32px",
+                            color: "#FDFDFE",
+                            backgroundColor: '#093C59',
+                        }}
+                        onClick={handleSubmit}
+                    >
+                        Crear Microemprendimiento
+                    </CustomButton>
+                }
 
                 {/* mensaje de Exito */}
                 <Box
@@ -539,7 +611,6 @@ function MicroForm() {
                     <Snackbar
                         open={successMessageOpen}
                         autoHideDuration={null}
-                        onClose={handleCloseSuccessMessage}
                         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                     >
                         <SnackbarContent
@@ -602,7 +673,6 @@ function MicroForm() {
                     <Snackbar
                         open={errorMessageOpen}
                         autoHideDuration={null}
-                        onClose={handleCloseErrorMessage}
                         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                     >
                         <SnackbarContent
@@ -654,7 +724,6 @@ function MicroForm() {
                                             <Link to="/dashboard-micro" variant="button" style={{ marginRight: '8px', textDecoration: 'none', fontSize: '14px', color: '#093C59', fontWeight: 600, marginRight: '16px' }} onClick={() => setErrorMessageOpen(false)}>Cancelar</Link>
                                             <Link to="/dashboard-micro/form" variant="button" style={{ textDecoration: 'none', fontSize: '14px', color: '#093C59', fontWeight: 600 }} onClick={() => { setErrorMessageOpen(false); }}>Intentar Nuevamente</Link>
                                         </div>
-
                                     </div>
                                 </>
                             }
@@ -668,6 +737,7 @@ function MicroForm() {
                         />
                     </Snackbar>
                 </Box>
+
             </Box>
         </section>
     )

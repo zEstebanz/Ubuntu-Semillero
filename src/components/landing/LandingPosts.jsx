@@ -50,8 +50,8 @@ function LandingPosts() {
             key={post.id}
             title={post.titulo}
             description={post.descripcion}
-            date={post.fecha}
-            images={post.images}
+            date={`${post.fechaCreacion[2]}/${post.fechaCreacion[1] < 10 ? '0' : ''}${post.fechaCreacion[1]}/${post.fechaCreacion[0]}`}
+            images={Object.values(post.images)}
           />
         ))}
       </Box>

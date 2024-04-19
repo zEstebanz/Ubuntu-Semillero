@@ -21,7 +21,7 @@ const getPostAdmin = async () => {
     return res.data;
 
     } catch (error) {
-        console.error('Error al obtener los rubros:', error);
+        console.error('Error al obtener las publicaciones:', error);
         return [];
     }
 };

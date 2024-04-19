@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import CustomButton from "../../components/buttonCustom";
 import PublicacionListAdmin from '../../components/Publications/PublicationListAdmin';
-import { Outlet, useLocation, Link } from 'react-router-dom';
+import { Outlet, useLocation, Link, Navigate } from 'react-router-dom';
+import { useSession } from '../../hooks/useSession';
 
 
 function DashboardPublications() {
+  const user = useSession();
 
   const { pathname } = useLocation();
 
