@@ -65,6 +65,8 @@ function MicroFormEdit() {
     const [listaPaises, setListaPaises] = useState([]);
     const [listaProvincias, setListaProvincias] = useState([]);
     const [currentImages, setCurrentImages] = useState([]);
+    const [imgEditIndex, setImgEditIndex] = useState([]);
+    const [newImages, setNewImages] = useState([]);
 
     // const [micro, setMicro] = useState(null);
 
@@ -90,11 +92,11 @@ function MicroFormEdit() {
             setCurrentImages(data.images);
             return data.pais
         })
-        .then(pais => {
-            getProvincias(pais.id)
-                .then(data => setListaProvincias(data))
-                .catch(err => console.log(err))
-        })
+            .then(pais => {
+                getProvincias(pais.id)
+                    .then(data => setListaProvincias(data))
+                    .catch(err => console.log(err))
+            })
         getPaises()
             .then(data => setListaPaises(data))
             .catch(err => console.log(err))
@@ -152,9 +154,11 @@ function MicroFormEdit() {
     };
 
     const handleChangeImage = (e) => {
+        e.preventDefault();
+
         const files = e.target.files;
         setFiles((fileState) => [...fileState, files[0]])
-        const imagesArray = [];
+        const loadedImages = [];
 
         if (files[0].size > 3000000) {
             alert('Imagenes mayor a 3mb')
@@ -164,13 +168,19 @@ function MicroFormEdit() {
         for (let i = 0; i < files.length; i++) {
             const reader = new FileReader();
             reader.onload = (event) => {
-                imagesArray.push(event.target.result);
-                if (imagesArray.length === files.length) {
-                    setImages([...images, ...imagesArray]);
+                loadedImages.push(event.target.result);
+
+                if (loadedImages.length === files.length) {
+                    const copyImages = [...images];
+                    copyImages.splice(imgEditIndex, 0, ...loadedImages);
+                    console.log(copyImages)
+                    setImages(copyImages);
                 }
             };
             reader.readAsDataURL(files[i]);
         }
+
+        setImgEditIndex(images.length);
     };
 
     const handleSubmit = async () => {
@@ -199,7 +209,7 @@ function MicroFormEdit() {
         formData.append('email', user.sub);
 
         const allFiles = [...imageFileList, ...files];
-        console.log(allFiles)
+        console.log({ imageFileList, files })
 
         allFiles.forEach((image) => {
             formData.append('images', image, image.name)
@@ -214,13 +224,32 @@ function MicroFormEdit() {
                     },
                 });
 
-            if(response.status === 200) {
+            if (response.status === 200) {
                 navigate('/dashboard-micro');
             }
         } catch (error) {
             console.error('Error al enviar los datos:', error);
         }
     };
+
+    const handleEditImg = async (url) => {
+
+        const indexImage = images.indexOf(url);
+        setImgEditIndex(indexImage);
+
+        const filterImages = images.filter(image => image !== url)
+        setImages(filterImages)
+        setCurrentImages(filterImages)
+
+        // setNewImages([...newImages, url])
+    }
+
+    const handleDeleteImg = async (url) => {
+        const filterImages = images.filter(image => image !== url)
+        setImages(filterImages)
+        setCurrentImages(filterImages)
+        // setNewImages([...newImages, url])
+    }
 
     return (
         <section>
@@ -417,28 +446,39 @@ function MicroFormEdit() {
                                     display: 'flex',
                                     alignItems: 'center'
                                 }}>
-                                    <Box sx={{
-                                        background: '#09090999',
-                                        borderRadius: '50%',
-                                        width: '24px',
-                                        height: '24px',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        marginRight: '5px'
-                                    }}>
+                                    <Box
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            fileInputRef.current.click();
+                                            handleEditImg(image)
+                                        }}
+                                        sx={{
+                                            background: '#09090999',
+                                            borderRadius: '50%',
+                                            width: '24px',
+                                            height: '24px',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            marginRight: '5px'
+                                        }}>
                                         <img src="../../../public/img/edit.svg" alt="" />
 
                                     </Box>
-                                    <Box sx={{
-                                        background: '#09090999',
-                                        borderRadius: '50%',
-                                        width: '24px',
-                                        height: '24px',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center'
-                                    }}>
+                                    <Box
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            handleDeleteImg(image)
+                                        }}
+                                        sx={{
+                                            background: '#09090999',
+                                            borderRadius: '50%',
+                                            width: '24px',
+                                            height: '24px',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                        }}>
                                         <img src="../../../public/img/delete.svg" alt="" />
                                     </Box>
                                 </Box>
