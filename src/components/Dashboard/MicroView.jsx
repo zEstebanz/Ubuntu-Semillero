@@ -270,7 +270,7 @@ function MicroView() {
                             >
                                 <img
                                     src={images[currentImageIndex]}
-                                    style={{ width: '100%', height: '248px', objectFit: 'cover' }}
+                                    style={{ height: '248px', width: '100%', maxWidth: '100%', objectFit: 'cover' }}
                                     alt="Modal Image"
                                 />
                                 <button
