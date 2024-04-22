@@ -39,7 +39,7 @@ const hidePost = async (id) => {
     }
 };
 
-function PostCardAdmin({ title, description, date, images, id }) {
+function PostCardAdmin({ title, description, date, images, id, isDeleted }) {
     const [expanded, setExpanded] = useState(false);
     const descriptionLimit = 100;
     const [anchorEl, setAnchorEl] = useState(null);
@@ -195,7 +195,7 @@ function PostCardAdmin({ title, description, date, images, id }) {
                                     fontSize: '16px',
                                     lineHeight: '24px',
                                     color: '#090909'
-                                }}>Ocultar</Link>
+                                }}>{isDeleted ? 'Mostrar' : 'Ocultar'}</Link>
                             </MenuItem>
                         </Menu>
 

@@ -19,13 +19,14 @@ const PublicacionList = ({ }) => {
 
     obtenerPost();
   }, []);
-
+  console.log(post)
   return (
     <main>
       <section>
         {post.map((post) => (
           <PostCardAdmin
             id={post.id}
+            isDeleted={post.isDeleted}
             title={post.titulo}
             description={post.descripcion}
             date={`${post.fechaCreacion[2]}/${post.fechaCreacion[1] < 10 ? '0' : ''}${post.fechaCreacion[1]}/${post.fechaCreacion[0]}`}
