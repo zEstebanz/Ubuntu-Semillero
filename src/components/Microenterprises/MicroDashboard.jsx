@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Grid, Card, CardContent, Typography, Divider, Box, Menu, MenuItem, Snackbar, SnackbarContent } from '@mui/material';
 import { Link } from 'react-router-dom';
 import getMicroEdit from '../../api/micros/getMicroEdit';
@@ -13,54 +13,60 @@ const hideMicro = async (id) => {
     });
 }
 
-function Micro() {
+function Micro({ microId }) {
 
-    const [expanded, setExpanded] = useState(false);
     const [micros, setMicros] = useState([]);
-    const [anchorEl, setAnchorEl] = useState(null);
     const [reload, setReload] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [successMessageOpen, setSuccessMessageOpen] = useState(false);
+    const [expandedMenus, setExpandedMenus] = useState({});
+    const anchorRefs = useRef({});
 
     useEffect(() => {
         const obtenerMicro = async () => {
             try {
                 const microData = await getMicroEdit();
-
+                const initialExpandedMenus = microData.body.reduce((acc, item) => {
+                    acc[item.id] = false;
+                    return acc;
+                }, {});
                 setMicros(microData.body);
-
-                // console.log(microData)
+                setExpandedMenus(initialExpandedMenus);
+                console.log("Datos de los micros:", microData.body);
             } catch (error) {
-                console.error('Error al obtener los Microemprendimientos', error);
+                console.error('Error al obtener los rubros:', error);
             }
         };
-
         obtenerMicro();
     }, [reload]);
 
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
+    const handleClick = (itemId) => {
+        setExpandedMenus(prevState => ({
+            ...prevState,
+            [itemId]: true
+        }));
     };
 
     const handleClose = (itemId) => {
-        hideMicro(itemId)
-        setReload(!reload)
-        setAnchorEl(null);
+        setReload(!reload);
+        setExpandedMenus(prevState => ({
+            ...prevState,
+            [itemId]: false
+        }));
     };
 
     const handleHideClick = (itemId) => {
+        hideMicro(itemId);
+
         setSnackbarOpen(true);
         handleClose(itemId);
-        setSuccessMessageOpen(true);
     };
 
     const handleCloseSuccessMessage = () => {
         setSuccessMessageOpen(false);
-    }
+    };
 
     return (
-
         <section>
             <Grid container justifyContent="center">
                 {micros.map((item, index) => (
@@ -70,7 +76,6 @@ function Micro() {
                         marginBottom: '16px'
                     }}>
                         <CardContent>
-
                             <Typography
                                 variant="h6"
                                 gutterBottom
@@ -88,18 +93,18 @@ function Micro() {
                                 }}
                             >
                                 {item.nombre}
-                                <button onClick={handleClick}
+                                <button onClick={() => handleClick(item.id)} ref={el => anchorRefs.current[item.id] = el}
                                     style={{
                                         border: 'none'
                                     }}>
                                     <img src="../../../public/img/menu-edit.svg" alt="menu" />
                                 </button>
                                 <Menu
-                                    anchorEl={anchorEl}
-                                    open={Boolean(anchorEl)}
-                                    onClose={handleClose}
+                                    anchorEl={anchorRefs.current[item.id]}
+                                    open={expandedMenus[item.id]}
+                                    onClose={() => handleClose(item.id)}
                                 >
-                                    <MenuItem onClick={handleClose}>
+                                    <MenuItem onClick={() => handleClose(item.id)}>
                                         <Link to={"/dashboard-micro/form-edit/" + item.id} style={{
                                             textDecoration: 'none',
                                             fontSize: '16px',
@@ -107,10 +112,7 @@ function Micro() {
                                             color: '#090909'
                                         }}>Editar</Link>
                                     </MenuItem>
-
-                                    <MenuItem
-                                        onClick={() => handleHideClick(item.id)}
-                                    >
+                                    <MenuItem onClick={() => handleHideClick(item.id)}>
                                         <Link to="#" style={{
                                             textDecoration: 'none',
                                             fontSize: '16px',
@@ -118,76 +120,18 @@ function Micro() {
                                             color: '#090909'
                                         }}>Ocultar</Link>
                                     </MenuItem>
-
+                                    <MenuItem>
+                                        <Link to={`/inversiones/gestionar/${item.nombre}/${item.id}`} style={{
+                                            textDecoration: 'none',
+                                            fontSize: '16px',
+                                            lineHeight: '24px',
+                                            color: '#090909'
+                                        }}>
+                                            Inversiones
+                                        </Link>
+                                    </MenuItem>
                                 </Menu>
-
                             </Typography>
-
-                            {/* Mensaje de éxito */}
-
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <Snackbar
-                                    open={successMessageOpen}
-                                    autoHideDuration={null}
-                                    onClose={handleCloseSuccessMessage}
-                                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                                >
-                                    <SnackbarContent
-                                        message={
-                                            <>
-                                                <div style={{
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    alignItems: 'center', // Centrar contenido verticalmente
-                                                    margin: '0px 0px 16px 0px',
-                                                    width: '328px'
-                                                }}>
-                                                    <div style={{
-                                                        height: '40px',
-                                                        width: '40px',
-                                                        border: '2px solid #1D9129',
-                                                        borderRadius: '50%',
-                                                        display: 'flex',
-                                                        justifyContent: 'center',
-                                                        alignItems: 'center',
-                                                        marginBottom: '8px', // Añadir un espacio entre la imagen y el texto
-                                                    }}>
-                                                        <img src="../../../public/img/check.svg" alt="check" style={{ width: '24px', height: '24px' }} />
-                                                    </div>
-                                                    <span
-                                                        style={{
-                                                            fontSize: '1rem',
-                                                            color: '#333333',
-                                                            fontWeight: '400',
-                                                            fontSize: '18px',
-                                                            lineHeight: '32px',
-                                                            textAlign: 'center'
-                                                        }}
-                                                    >
-                                                        Publicación ocultada con éxito
-                                                    </span>
-                                                    {/* Al hacer clic en el enlace, oculta el Snackbar */}
-                                                    <Link variant="button" style={{ display: 'block', textDecoration: 'none', fontSize: '14px', color: '#093C59', fontWeight: 600, textAlign: 'end', marginTop: '16px' }} onClick={() => setSuccessMessageOpen(false)}>Aceptar</Link>
-                                                </div>
-                                            </>
-                                        }
-                                        sx={{
-                                            width: '328px',
-                                            height: '184px',
-                                            borderRadius: '28px',
-                                            backgroundColor: '#FDFDFE',
-                                            color: '#FDFDFE'
-                                        }}
-                                    />
-                                </Snackbar>
-                            </Box>
-
                             <Divider sx={{
                                 border: '1px solid #226516',
                                 width: '200px'
@@ -215,20 +159,31 @@ function Micro() {
                                     alignItems: 'center',
                                     paddingTop: '16px'
                                 }}>
-                                    <Link
-                                        to={"/dashboard-micro/view/" + item.id}
-                                    >
+                                    <Link to={"/dashboard-micro/view/" + item.id}>
                                         <img src="../../../public/img/right.svg" alt="right" />
                                     </Link>
                                 </div>
                             </div>
-
                         </CardContent>
                     </Card>
                 ))}
             </Grid>
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={() => setSnackbarOpen(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <SnackbarContent
+                    message="Publicación ocultada con éxito"
+                    action={
+                        <Link to="/dashboard-admin" variant="button" style={{ color: '#093C59', fontWeight: 600 }}>
+                            Aceptar
+                        </Link>
+                    }
+                />
+            </Snackbar>
         </section>
-
     );
 }
 

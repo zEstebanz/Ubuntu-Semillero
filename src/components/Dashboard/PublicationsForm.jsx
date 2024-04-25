@@ -391,7 +391,7 @@ function PublicationsForm() {
                                                 textAlign: 'center'
                                             }}
                                         >
-                                            Microemprendimiento cargado con éxito
+                                            Publicación creada con éxito
                                         </span>
                                         {/* Al hacer clic en el enlace, oculta el Snackbar */}
                                         <Link to="/dashboard-admin" variant="button" style={{ display: 'block', textDecoration: 'none', fontSize: '14px', color: '#093C59', fontWeight: 600, textAlign: 'end', marginTop: '16px' }} onClick={() => setSuccessMessageOpen(false)}>Aceptar</Link>
@@ -453,7 +453,7 @@ function PublicationsForm() {
                                                 textAlign: 'center'
                                             }}
                                         >
-                                            Lo sentimos, los cambios no pudieron ser guardados.
+                                            Lo sentimos, la Publicación no pudo ser creada.
                                         </span>
                                         <span
                                             style={{
