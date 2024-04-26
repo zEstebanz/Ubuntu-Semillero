@@ -13,7 +13,6 @@ const MicroList = () => {
         const obtenerMicro = async () => {
             try {
                 const microData = await getMicro(id);
-                // console.log('Datos de micro recibidos:', microData)
                 setMicros(microData);
             } catch (error) {
                 console.error('Error al obtener los rubros:', error);
@@ -87,6 +86,16 @@ const MicroList = () => {
             </section>
 
             <section>
+                {micros.length === 0 && (
+                    <Typography
+                        color="textSecondary"
+                        align="center"
+                        sx={{ marginTop: 4, fontSize: '24px' }}
+                    >
+                        No hay microemprendimientos cargados para esta categoría.
+                    </Typography>
+                )}
+
                 {micros?.map((micro, index) => (
                     <div key={index}>
                         <MicroCard
