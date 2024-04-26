@@ -4,11 +4,9 @@ import { Link } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import CategoriesCard from '../Categories/categoriesCard.jsx';
 import theme from '../../theme/theme.js';
-import getRubro from '../../api/rubrosCategori/getRubro.js'
-import getMicro from '../../api/micros/getMicro.js';
+import getRubro from '../../api/rubrosCategori/getRubro.js';
 
 const Categories = () => {
-
     const [rubro, setRubro] = useState([]);
 
     useEffect(() => {
@@ -23,15 +21,6 @@ const Categories = () => {
 
         obtenerRubro();
     }, []);
-
-    // const handleButtonClick = async (idRubro) => {
-    //     try {
-    //         const rubroData = await getMicro(idRubro);
-
-    //     } catch (error) {
-    //         console.log('Error al obtener los rubros:', error)
-    //     }
-    // }
 
     return (
         <ThemeProvider theme={theme}>
@@ -66,7 +55,7 @@ const Categories = () => {
                         }}
                         marginBottom={3}
                     >
-                        Categorias
+                        Categorías
                     </Typography>
 
                     <Box sx={{
@@ -77,24 +66,45 @@ const Categories = () => {
                             gap: "10px",
                         },
                     }} lx={{}}>
-                        {rubro?.map((rubro, index) =>
-                        
-                            <Link
-                                key={index}
-                                component="button"
-                                to={`/microemprendimientos/${rubro.id}`}
-                                style={{
-                                    textDecoration: "none"
+                        {rubro.length > 0 ? (
+                            rubro.map((rubro, index) =>
+                                <Link
+                                    key={index}
+                                    component="button"
+                                    to={`/microemprendimientos/${rubro.id}`}
+                                    style={{
+                                        textDecoration: "none"
+                                    }}
+                                >
+                                    <CategoriesCard
+                                        imageUrl={`./public/img/rubros/${rubro.id}.png`}
+                                        altText="Logo de Economia Social."
+                                        title={rubro.nombre}
+                                        dividerColor="green.dark"
+                                    />
+                                </Link>
+                            )
+                        ) : (
+                            <Typography
+                                variant="subtitles"
+                                fontWeight={600}
+                                gutterBottom
+                                alignSelf="center"
+                                marginBottom={2.5}
+                                fontSize={"24px"}
+                                sx={{
+                                    textAlign: "center",
+                                    display: "block",
+                                    paddingY: "50px",
+                                    color: '#FFF',
+                                    backgroundColor: '#093C59', // Fondo rojo para resaltar
+                                    paddingX: '20px',
+                                    borderRadius: '10px', // Bordes redondeados
+                                    boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16)' // Sombra
                                 }}
-                                // onClick={() => handleButtonClick(rubro.id)}
                             >
-                                <CategoriesCard
-                                    imageUrl={`./public/img/rubros/${rubro.id}.png`}
-                                    altText="Logo de Economia Social."
-                                    title={rubro.nombre}
-                                    dividerColor="green.dark"
-                                />
-                            </Link>
+                                No hay categorías por el momento...
+                            </Typography>
                         )}
                     </Box>
                 </Box>

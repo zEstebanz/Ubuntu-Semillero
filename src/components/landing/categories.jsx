@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Button, Box, Card, CardContent, CardMedia, Divider } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import CategoriesCard from '../Categories/categoriesCard.jsx';
 import CustomButton from '../buttonCustom.jsx';
 import theme from '../../theme/theme.js';
-import getRubro from '../../api/rubrosCategori/getRubro.js'
+import getRubro from '../../api/rubrosCategori/getRubro.js';
 import { Link } from 'react-router-dom';
 
 const Categories = () => {
@@ -60,7 +60,7 @@ const Categories = () => {
             }}
             marginBottom={3}
           >
-            Categorías 
+            Categorías
           </Typography>
 
           <Box sx={{
@@ -71,35 +71,42 @@ const Categories = () => {
               gap: "10px",
             },
           }} lx={{}}>
-            {rubro?.map((rubro, index) =>
-
-              <Link
-                key={index}
-                component="button"
-                to={`/microemprendimientos/${rubro.id}`}
-                style={{
-                  textDecoration: "none"
-                }}
-              // onClick={() => handleButtonClick(rubro.id)}
-              >
-                <CategoriesCard
-                  imageUrl={`./public/img/rubros/${rubro.id}.png`}
-                  altText="Logo de Economia Social."
-                  title={rubro.nombre}
-                  dividerColor="green.dark"
-                />
-              </Link>
+            {rubro?.length > 0 ? (
+              rubro.map((rubro, index) => (
+                <Link
+                  key={index}
+                  component="button"
+                  to={`/microemprendimientos/${rubro.id}`}
+                  style={{
+                    textDecoration: "none"
+                  }}
+                >
+                  <CategoriesCard
+                    imageUrl={`./public/img/rubros/${rubro.id}.png`}
+                    altText="Logo de Economia Social."
+                    title={rubro.nombre}
+                    dividerColor="green.dark"
+                  />
+                </Link>
+              ))
+            ) : (
+              <Typography variant="body1" color="textSecondary">
+                No hay categorías por el momento...
+              </Typography>
             )}
           </Box>
 
-          <CustomButton onClick={handleClick}>
-            <Link to={'/microemprendimientos'} style={{
-              textDecoration: 'none',
-              color: 'white'
-            }} >
-              Ir a categorías
-            </Link>
-          </CustomButton>
+          {/* Renderizar el botón solo si hay categorías disponibles */}
+          {rubro && rubro.length > 0 && (
+            <CustomButton onClick={handleClick}>
+              <Link to={'/microemprendimientos'} style={{
+                textDecoration: 'none',
+                color: 'white'
+              }} >
+                Ir a categorías
+              </Link>
+            </CustomButton>
+          )}
         </Box>
 
       </Box>

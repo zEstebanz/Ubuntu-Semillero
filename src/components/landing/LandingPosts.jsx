@@ -5,14 +5,12 @@ import { useEffect, useState } from "react";
 import getPostPublic from "../../api/publications/getPostPublic";
 
 function LandingPosts() {
-
   const [posts, setPost] = useState([]);
 
   useEffect(() => {
     const obtenerMicro = async () => {
       try {
         const postData = await getPostPublic();
-        // console.log('Datos de micro recibidos:', postData)
         setPost(postData);
       } catch (error) {
         console.error('Error al obtener los rubros:', error);
@@ -21,7 +19,6 @@ function LandingPosts() {
 
     obtenerMicro();
   }, []);
-
 
   return (
     <Box
@@ -56,29 +53,32 @@ function LandingPosts() {
             />
           ))
         ) : (
-          <Typography variant="body1" color="textSecondary">
-            No hay publicaciones...
+          <Typography variant="body1" color="textSecondary" sx={{marginBottom: '50px'}}>
+            No hay publicaciones por el momento...
           </Typography>
         )}
       </Box>
-      <Link to="/publicaciones">
-        <Button
-          variant="contained"
-          /*           size="small" */
-          sx={{
-            width: "10rem",
-            borderRadius: "2rem",
-            padding: "0.5rem 1.4rem",
-            marginTop: "1rem",
-            marginBottom: "1rem",
-            textTransform: "none",
-          }}
-        >
-          <Typography variant="body2" fontWeight={500}>
-            Ir a Publicaciones
-          </Typography>
-        </Button>
-      </Link>
+      
+      {/* Renderizar el botón solo si hay publicaciones disponibles */}
+      {posts && posts.length > 0 && (
+        <Link to="/publicaciones">
+          <Button
+            variant="contained"
+            sx={{
+              width: "10rem",
+              borderRadius: "2rem",
+              padding: "0.5rem 1.4rem",
+              marginTop: "1rem",
+              marginBottom: "1rem",
+              textTransform: "none",
+            }}
+          >
+            <Typography variant="body2" fontWeight={500}>
+              Ir a Publicaciones
+            </Typography>
+          </Button>
+        </Link>
+      )}
     </Box>
   );
 }
