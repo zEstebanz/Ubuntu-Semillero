@@ -45,15 +45,21 @@ function LandingPosts() {
         alignItems="center"
         width="100%"
       >
-        {posts?.map((post) => (
-          <PostCard
-            key={post.id}
-            title={post.titulo}
-            description={post.descripcion}
-            date={`${post.fechaCreacion[2]}/${post.fechaCreacion[1] < 10 ? '0' : ''}${post.fechaCreacion[1]}/${post.fechaCreacion[0]}`}
-            images={Object.values(post.images)}
-          />
-        ))}
+        {posts && posts.length > 0 ? (
+          posts.map((post) => (
+            <PostCard
+              key={post.id}
+              title={post.titulo}
+              description={post.descripcion}
+              date={`${post.fechaCreacion[2]}/${post.fechaCreacion[1] < 10 ? '0' : ''}${post.fechaCreacion[1]}/${post.fechaCreacion[0]}`}
+              images={Object.values(post.images)}
+            />
+          ))
+        ) : (
+          <Typography variant="body1" color="textSecondary">
+            No hay publicaciones...
+          </Typography>
+        )}
       </Box>
       <Link to="/publicaciones">
         <Button
