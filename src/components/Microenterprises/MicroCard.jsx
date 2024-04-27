@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -23,6 +23,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Link } from "react-router-dom";
 
+import { ubuntuApi } from "../../utils/services/axiosConfig";
+
 function MicroCard({ microId, title, entity, category, location, images, masInfo, descripcion,  key,
   
   subcategory,
@@ -41,6 +43,28 @@ function MicroCard({ microId, title, entity, category, location, images, masInfo
   const handleContactClick = () => {
     console.log("ID del microemprendimiento a contactar:", microId);
   };
+
+  //INVERSION FILTRADO POR ID
+  const [hasInvestmentData, setHasInvestmentData] = useState(false);
+  const [investmentData, setInvestmentData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await ubuntuApi.get(`/gestionInversion/${microId}`, {
+          
+        });
+        console.log('Data from API:', res.data);
+        setInvestmentData(res.data);
+        setHasInvestmentData(!!res.data); 
+      } catch (error) {
+        console.error('Error fetching investment data:', error);
+      }
+    };
+
+    fetchData();
+  }, [microId]);
+
 
   const renderSwiper = () => {
     if (images.length > 1) {
@@ -253,6 +277,26 @@ function MicroCard({ microId, title, entity, category, location, images, masInfo
                   </Button>
                 </Link>
               </div>
+
+              {/* INVERSIONES BOTON CALCULAR */}
+
+{expanded && (
+            <>
+              <div style={{ textAlign: 'center', marginTop: "1rem" }}>
+              {hasInvestmentData && investmentData && !investmentData.inactivo ? (
+                  <Link to={`/calculoInversion/${title.replace(/\s+/g, '/')}/${microId}`}>
+                    <Button variant="contained" color="primary" sx={{ borderRadius: '100px', padding: '10px 24px', textTransform: 'none' }} onClick={handleContactClick}>
+                      <Typography sx={{ fontSize: '16px', lineHeight: '20px' }}>Calcular Inversión</Typography>
+                    </Button>
+                  </Link>
+                ) : (
+                  <Button variant="contained" color="primary" disabled sx={{ borderRadius: '100px', padding: '10px 24px', textTransform: 'none' }}>
+                    <Typography sx={{ fontSize: '16px', lineHeight: '20px' }}>Calcular Inversión</Typography>
+                  </Button>
+                )}
+              </div>
+            </>
+          )}
             </>
           )}
 
