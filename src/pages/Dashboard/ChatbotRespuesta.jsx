@@ -15,7 +15,6 @@ import { useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import CustomButton from '../../components/buttonCustom';
 import CustomModal from '../../components/modalCustom';
-import { sendMessage } from '../../api/message/sendMessage';
 import { ubuntuApi } from '../../utils/services/axiosConfig';
 import { getAccessToken } from '../../utils/helpers/localStorage';
 
@@ -42,16 +41,17 @@ export const ChatbotRespuesta = () => {
       respuesta: '',
     },
     validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      const modalContent = await sendMessage(values, id);
-      setModalContent(modalContent);
-      setModalOpen(true);
-    }
+    // onSubmit: async (values) => {
+    //   const modalContent = await sendMessage(values, id);
+    //   setModalContent(modalContent);
+    //   setModalOpen(true);
+    // }
   });
 
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
     setShowResponse(true);
+    console.log('Valor actualizado de selectedOption:', event.target.value);
   };
 
   const handleInputChange = (event) => {
@@ -108,6 +108,28 @@ export const ChatbotRespuesta = () => {
     }
   }
 
+  const habldeSubmitReply = async () => {
+    const preguntaValue = formik.values.pregunta;
+  
+    const requestData = {
+        text: formik.values.respuesta,
+      id_question: selectedOption 
+    };
+  
+    try {
+      const question = await ubuntuApi.post('/answer/create', requestData, {
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`
+        },
+      });
+  
+      console.log('Pregunta enviada', question.data);
+      // window.location.reload();
+    } catch (error) {
+      console.log('Error al enviar la pregunta:', error);
+    }
+  };
+
   const handleSubmitQuestion = (event, formik) => {
     formik.setFieldValue('pregunta', event.target.value)
   }
@@ -131,7 +153,7 @@ export const ChatbotRespuesta = () => {
         });
         setTimeout(() => {
           setQuestionList(response.data);
-        }, 2000);
+        }, 3000);
 
         console.log('Lista de preguntas no activas:', response.data);
       } catch (error) {
@@ -336,6 +358,7 @@ export const ChatbotRespuesta = () => {
             <CustomButton
               type="submit"
               fullWidth
+              onClick={habldeSubmitReply}
               sx={{
                 my: 5,
               }}
