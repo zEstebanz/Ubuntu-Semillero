@@ -107,6 +107,14 @@ const Categories = () => {
               </Link>
             </CustomButton>
           )}
+          <CustomButton onClick={handleClick}>
+              <Link to={'/gestionarRespuesta'} style={{
+                textDecoration: 'none',
+                color: 'white'
+              }} >
+                Ir a respuestas
+              </Link>
+            </CustomButton>
         </Box>
 
       </Box>
