@@ -52,6 +52,7 @@ export const ChatbotRespuesta = () => {
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
     setShowResponse(true);
+    formik.setFieldValue('seleccionada', event.target.value);
   };
 
   const handleInputChange = (event) => {
@@ -83,30 +84,39 @@ export const ChatbotRespuesta = () => {
   };
 
   const habldeSubmitInitialQuestion = async () => {
-
     const preguntaValue = formik.values.pregunta;
+
+    // Obtener el valor dinámico de 'type' según el estado del checkbox 'esRepregunta'
+    const typeValue = formik.values.esRepregunta ? 'SECONDARY' : 'INITIAL';
+
+    // Obtener el ID de la pregunta inicial del formulario
+    const initialQuestionId = formik.values.seleccionada || null; // Utilizar null si no hay ninguna pregunta seleccionada
+
+    // Determinar el endpoint basado en el tipo de pregunta
+    let endpoint = '/question/initial';
+    if (typeValue === 'SECONDARY') {
+      endpoint = '/question/secondary';
+    }
 
     const requestData = {
       text: preguntaValue,
-      type: 'INITIAL',
+      type: typeValue,
+      answer_id: initialQuestionId
+    };
 
-      // utilizar esto cuando configure las preguntas a la que pertenece la repregunta.
-      // type: formik.values.type
-
-    }
     try {
-      const question = await ubuntuApi.post('/question/initial', requestData, {
+      const question = await ubuntuApi.post(endpoint, requestData, {
         headers: {
           Authorization: `Bearer ${getAccessToken()}`
         },
       });
 
-      console.log('Pregunta enviada', question.data)
-      window.location.reload();
+      console.log('Pregunta enviada', question.data);
+      // window.location.reload();
     } catch (error) {
-      console.log('Error al enviar la pregunta:', error)
+      console.log('Error al enviar la pregunta:', error);
     }
-  }
+  };
 
   const handleSubmitQuestion = (event, formik) => {
     formik.setFieldValue('pregunta', event.target.value)
@@ -120,6 +130,7 @@ export const ChatbotRespuesta = () => {
     const newTypeValue = checked ? 'SECONDARY' : 'INITIAL';
     formik.setFieldValue('type', newTypeValue);
   };
+
 
   useEffect(() => {
     const fetchQuestionList = async () => {
