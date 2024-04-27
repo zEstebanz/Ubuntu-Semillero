@@ -55,7 +55,7 @@ const MicroList = () => {
                         Categorias
                     </Typography>
 
-                    {micros.length > 0 && (
+                    {micros && micros.length > 0 && (
                         <Typography
                             sx={{
                                 fontSize: "20px",
@@ -64,7 +64,7 @@ const MicroList = () => {
                             }}
                             color="primary"
                         >
-                            {micros[0].rubro.nombre}
+                            {micros[0].rubro.nombre || "Rubro no cargado"}
                         </Typography>
                     )}
 
@@ -86,7 +86,24 @@ const MicroList = () => {
             </section>
 
             <section>
-                {micros.length === 0 && (
+
+                {micros.length > 0 ? (
+                    micros.map((micro, index) => (
+                        <div key={index}>
+                            <MicroCard
+                                key={micro.id}
+                                microId={micro.id}
+                                title={micro.nombre}
+                                entity={micro.rubro.nombre}
+                                category={micro.subrubro}
+                                location={`${micro.ciudad ? micro.ciudad + ', ' : ''}${micro.provincia.nombre}, ${micro.pais.nombre}`}
+                                images={obtenerUrlsDeImagenes(micro.images)}
+                                masInfo={micro.masInfo}
+                                descripcion={micro.descripcion}
+                            />
+                        </div>
+                    ))
+                ) : (
                     <Typography
                         color="textSecondary"
                         align="center"
@@ -95,22 +112,6 @@ const MicroList = () => {
                         No hay microemprendimientos cargados para esta categoría.
                     </Typography>
                 )}
-
-                {micros?.map((micro, index) => (
-                    <div key={index}>
-                        <MicroCard
-                            key={micro.id}
-                            microId={micro.id}
-                            title={micro.nombre}
-                            entity={micro.rubro.nombre}
-                            category={micro.subrubro}
-                            location={`${micro.ciudad ? micro.ciudad + ', ' : ''}${micro.provincia.nombre}, ${micro.pais.nombre}`}
-                            images={obtenerUrlsDeImagenes(micro.images)}
-                            masInfo={micro.masInfo}
-                            descripcion={micro.descripcion}
-                        />
-                    </div>
-                ))}
             </section>
         </main>
     );

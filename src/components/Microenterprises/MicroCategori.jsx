@@ -66,7 +66,7 @@ const Categories = () => {
                             gap: "10px",
                         },
                     }} lx={{}}>
-                        {rubro.length > 0 ? (
+                        {rubro && rubro.length > 0 ? (
                             rubro.map((rubro, index) =>
                                 <Link
                                     key={index}
@@ -86,7 +86,7 @@ const Categories = () => {
                             )
                         ) : (
                             <Typography
-                                variant="subtitles"
+                                variant="subtitle1"
                                 fontWeight={600}
                                 gutterBottom
                                 alignSelf="center"
@@ -103,7 +103,7 @@ const Categories = () => {
                                     boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16)' // Sombra
                                 }}
                             >
-                                No hay categorías por el momento...
+                                 No hay categorías por el momento...
                             </Typography>
                         )}
                     </Box>
