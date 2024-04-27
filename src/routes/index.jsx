@@ -18,6 +18,14 @@ import MicroView from "../components/Dashboard/MicroView";
 import { ProtectedRoute } from "./ProtectedRoute";
 import DashboardSolicitudes from "../pages/Dashboard/DashboardSolicitudes";
 import Formulario from "../pages/Dashboard/SolicitudesForm";
+//INVERSIONES
+import InversionesGestor from "../components/Investments/InversionesGestor";
+import InversionesForm from "../components/Investments/InversionesForm";
+import InversionPorIdMicro from "../components/Investments/TodosInversiones";
+import InversionesFormEdit from "../components/Investments/InversionesFormEdit";
+import InversionesCalculoForm from "../components/Investments/InversionesCalculoForm";
+import InversionCalcResultado from "../components/Investments/InversionCalcResultado";
+
 
 const router = createBrowserRouter([
     {
@@ -50,6 +58,17 @@ const router = createBrowserRouter([
                 path: '/contacto/:title/:id',
                 element: <Contact />
             },
+            //INVERSIONES
+            {
+                path: "/calculoInversion/:title/:id",
+                element: <InversionesCalculoForm />
+            },
+
+            {
+                path: "/InversionCalcResultado/:title/:id",
+                element: <InversionCalcResultado />
+            },
+            //INVERSIONES
             //dashboard
             {
                 element: <ProtectedRoute />,
@@ -110,6 +129,24 @@ const router = createBrowserRouter([
                         path: "/formulario/:id",
                         element: <Formulario />
                     },
+                    //INVERSIONES
+                    {
+                        path: "/inversiones/gestionar/:nombre/:id",
+                        element: <InversionesGestor />
+                    },
+                    {
+                        path: "/inversiones/crear/:nombre/:id",
+                        element: <InversionesForm />
+                    },
+                    {
+                        path: "/inversiones/editar/:nombre/:id",
+                        element: <InversionesFormEdit />
+                    },
+                    {
+                        path: "/inversiones/todos",
+                        element: <InversionPorIdMicro />
+                    },
+                    //INVERSIONES
                 ]
             },
 
