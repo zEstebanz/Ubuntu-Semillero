@@ -46,21 +46,7 @@ export const ChatbotRespuesta = () => {
       const modalContent = await sendMessage(values, id);
       setModalContent(modalContent);
       setModalOpen(true);
-
-      try {
-        const question = await ubuntuApi.post('/question/initial', {
-          pregunta: values.pregunta,
-        }, {
-          headers: {
-            Authorization: 'Bearer ' + getAccessToken(),
-          },
-        }); 
-
-        console.log('Pregunta enviada', question.data)
-      } catch (error) {
-        console.log('Error al enviar la pregunta:', error)
-      }
-    },
+    }
   });
 
   const handleSelectChange = (event) => {
@@ -96,8 +82,46 @@ export const ChatbotRespuesta = () => {
     setModalOpen(false);
   };
 
-  useEffect(() => {
+  const habldeSubmitInitialQuestion = async () => {
 
+    const preguntaValue = formik.values.pregunta;
+
+    const requestData = {
+      text: preguntaValue,
+      type: 'INITIAL',
+
+      // utilizar esto cuando configure las preguntas a la que pertenece la repregunta.
+      // type: formik.values.type
+
+    }
+    try {
+      const question = await ubuntuApi.post('/question/initial', requestData, {
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`
+        },
+      });
+
+      console.log('Pregunta enviada', question.data)
+      window.location.reload();
+    } catch (error) {
+      console.log('Error al enviar la pregunta:', error)
+    }
+  }
+
+  const handleSubmitQuestion = (event, formik) => {
+    formik.setFieldValue('pregunta', event.target.value)
+  }
+
+  const handleChange = (event) => {
+    const { id, value, checked } = event.target;
+
+    formik.setFieldValue(id, id === 'esRepregunta' ? checked : value);
+
+    const newTypeValue = checked ? 'SECONDARY' : 'INITIAL';
+    formik.setFieldValue('type', newTypeValue);
+  };
+
+  useEffect(() => {
     const fetchQuestionList = async () => {
       try {
         const response = await ubuntuApi.get('/question/questionsNotActive', {
@@ -105,41 +129,22 @@ export const ChatbotRespuesta = () => {
             Authorization: 'Bearer ' + getAccessToken(),
           },
         });
-
         setTimeout(() => {
-          setQuestionList(response.data.body);
+          setQuestionList(response.data);
         }, 2000);
 
-        console.log('Lista de preguntas no activas:', response.data.body);
+        console.log('Lista de preguntas no activas:', response.data);
       } catch (error) {
         console.error('Error al obtener la lista de preguntas:', error);
       }
     };
 
-    const handleQuestion = async () => {
-      try {
-        const question = await ubuntuApi.post('/question/initial', {
-          headers: {
-            Authorization: 'Bearer ' + getAccessToken(),
-          },
-        });
-
-        console.log('Pregunta enviada:', question.data);
-
-      } catch (error) {
-        console.error('Error al enviar la pregunta:', error);
-      }
-    };
-    handleQuestion();
-  }, []);
-  
-  const handleSubmitQuestion = (event) => {
-    formik.setFieldValue('pregunta', event.target.value)
-    formik.setFieldValue('type', 'INITIAL')
-  }
+    fetchQuestionList();
+  }, [])
 
   return (
     <div>
+
       {/* Formulario de Creacion de Pregunta*/}
       <div className="contact-section">
         <Box
@@ -183,18 +188,47 @@ export const ChatbotRespuesta = () => {
                 mt: 2,
               }}
               {...formik.getFieldProps('pregunta')}
-              onChange={handleSubmitQuestion}
+              onChange={(event) => handleSubmitQuestion(event, formik)}
             />
 
-            {/* <Box>
+            <Box>
               <Checkbox
                 id="esRepregunta"
                 checked={formik.values.esRepregunta}
-                onChange={formik.handleChange}
+                onChange={handleChange}
               />
               <label htmlFor="esRepregunta">Es repregunta</label>
-            </Box> */}
-            
+            </Box>
+
+            <FormControl fullWidth disabled={!formik.values.esRepregunta}>
+              <InputLabel id="select-label">Seleccionar Pregunta</InputLabel>
+              <Select
+                labelId="select-label"
+                id="seleccionada"
+                value={selectedOption}
+                onChange={handleSelectChange}
+                label="Seleccionar pregunta"
+              >
+                {questionList !== undefined ? (
+                  questionList.length > 0 ? (
+                    questionList.map((question, index) => (
+                      <MenuItem key={index} value={question.id}>
+                        {question.text}
+                      </MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem disabled value="">
+                      Cargando preguntas...
+                    </MenuItem>
+                  )
+                ) : (
+                  <MenuItem disabled value="">
+                    No se encontraron preguntas
+                  </MenuItem>
+                )}
+              </Select>
+            </FormControl>
+
             <CustomButton
               type="submit"
               fullWidth
@@ -202,7 +236,7 @@ export const ChatbotRespuesta = () => {
                 my: 5,
               }}
               // disabled={!formik.values.pregunta}
-              onClick={formik.handleSubmit}
+              onClick={habldeSubmitInitialQuestion}
             >
               Crear Pregunta
             </CustomButton>
@@ -268,7 +302,7 @@ export const ChatbotRespuesta = () => {
                   questionList.length > 0 ? (
                     questionList.map((question, index) => (
                       <MenuItem key={index} value={question.id}>
-                        {question.texto}
+                        {question.text}
                       </MenuItem>
                     ))
                   ) : (
@@ -279,7 +313,6 @@ export const ChatbotRespuesta = () => {
                 ) : (
                   <MenuItem disabled value="">
                     No se encontraron preguntas
-
                   </MenuItem>
                 )}
               </Select>

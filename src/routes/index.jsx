@@ -154,8 +154,7 @@ const router = createBrowserRouter([
                     {
                         path: "/gestionarRespuesta",
                         element: <ChatbotRespuesta />
-                    },
-                    //Chatbot
+                    }
                 ]
             },
 
