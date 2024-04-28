@@ -33,21 +33,19 @@ export const ChatbotRespuesta = () => {
   const [selectedOption, setSelectedOption] = useState('');
   const [showResponse, setShowResponse] = useState(false);
   const [questionList, setQuestionList] = useState([]);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [answerList, setAnswerList] = useState([]);
 
   const formik = useFormik({
     initialValues: {
       pregunta: '',
       seleccionada: '',
       respuesta: '',
+      esRepregunta: false, // Agregar este campo al initialValues
+      type: 'INITIAL', // Agregar este campo al initialValues
+      id_answer: 1,
     },
     validationSchema: validationSchema,
-    // onSubmit: async (values) => {
-    //   const modalContent = await sendMessage(values, id);
-    //   setModalContent(modalContent);
-    //   setModalOpen(true);
-    // }
   });
 
   const handleSelectChange = (event) => {
@@ -84,6 +82,15 @@ export const ChatbotRespuesta = () => {
     setModalOpen(false);
   };
 
+  const handleChange = (event) => {
+    const { id, checked } = event.target;
+
+    formik.setFieldValue(id, checked);
+
+    const newTypeValue = checked ? 'SECONDARY' : 'INITIAL';
+    formik.setFieldValue('type', newTypeValue);
+  };
+
   const habldeSubmitInitialQuestion = async () => {
     const preguntaValue = formik.values.pregunta;
 
@@ -96,7 +103,7 @@ export const ChatbotRespuesta = () => {
     const typeValue = formik.values.esRepregunta ? 'SECONDARY' : 'INITIAL';
 
     // Obtener el ID de la pregunta inicial del formulario
-    const initialQuestionId = formik.values.seleccionada || null; // Utilizar null si no hay ninguna pregunta seleccionada
+    const initialQuestionId = formik.values.seleccionada;
 
     // Determinar el endpoint basado en el tipo de pregunta
     let endpoint = '/question/initial';
@@ -107,7 +114,7 @@ export const ChatbotRespuesta = () => {
     const requestData = {
       text: preguntaValue,
       type: typeValue,
-      id_secondary: initialQuestionId
+      answer_id: initialQuestionId
     };
 
     try {
@@ -118,7 +125,8 @@ export const ChatbotRespuesta = () => {
       });
 
       console.log('Pregunta enviada', question.data);
-      // window.location.reload();
+      // habilitar esto cuando se arregle lo de las url protegidas: (permite recargar la pagina cuando se cargue un dato nuevo)
+      window.location.reload();
     } catch (error) {
       console.log('Error al enviar la pregunta:', error);
     } finally {
@@ -142,7 +150,8 @@ export const ChatbotRespuesta = () => {
       });
 
       console.log('Pregunta enviada', question.data);
-      // window.location.reload();
+      // habilitar esto cuando se arregle lo de las url protegidas: (permite recargar la pagina cuando se cargue un dato nuevo)
+      window.location.reload();
     } catch (error) {
       console.log('Error al enviar la pregunta:', error);
     }
@@ -151,16 +160,6 @@ export const ChatbotRespuesta = () => {
   const handleSubmitQuestion = (event, formik) => {
     formik.setFieldValue('pregunta', event.target.value)
   }
-
-  const handleChange = (event) => {
-    const { id, value, checked } = event.target;
-
-    formik.setFieldValue(id, id === 'esRepregunta' ? checked : value);
-
-    const newTypeValue = checked ? 'SECONDARY' : 'INITIAL';
-    formik.setFieldValue('type', newTypeValue);
-  };
-
 
   useEffect(() => {
     const fetchQuestionList = async () => {
@@ -179,14 +178,30 @@ export const ChatbotRespuesta = () => {
         console.error('Error al obtener la lista de preguntas:', error);
       }
     };
-
     fetchQuestionList();
+
+    const fetchAnswerList = async () => {
+      try {
+        const response = await ubuntuApi.get('/answer/answersNotFull', {
+          headers: {
+            Authorization: 'Bearer ' + getAccessToken(),
+          },
+        });
+        setTimeout(() => {
+          setAnswerList(response.data);
+        }, 3000);
+
+        console.log('Lista de respuestas no activas:', response.data);
+      } catch (error) {
+        console.error('Error al obtener la lista de respuestas:', error);
+      }
+    }
+    fetchAnswerList();
   }, [])
 
   return (
     <div>
 
-      {/* Formulario de Creacion de Pregunta*/}
       <div className="contact-section">
         <Box
           sx={{
@@ -236,35 +251,36 @@ export const ChatbotRespuesta = () => {
               <Checkbox
                 id="esRepregunta"
                 checked={formik.values.esRepregunta}
+
                 onChange={handleChange}
               />
               <label htmlFor="esRepregunta">Es repregunta</label>
             </Box>
 
             <FormControl fullWidth disabled={!formik.values.esRepregunta}>
-              <InputLabel id="select-label">Seleccionar Pregunta</InputLabel>
+              <InputLabel id="select-label">Seleccionar Respuesta</InputLabel>
               <Select
                 labelId="select-label"
                 id="seleccionada"
                 value={selectedOption}
                 onChange={handleSelectChange}
-                label="Seleccionar pregunta"
+                label="Seleccionar respuesta"
               >
-                {questionList !== undefined ? (
-                  questionList.length > 0 ? (
-                    questionList.map((question, index) => (
-                      <MenuItem key={index} value={question.id}>
-                        {question.text}
+                {answerList !== undefined ? (
+                  answerList.length > 0 ? (
+                    answerList.map((answer, index) => (
+                      <MenuItem key={index} value={answer.id}>
+                        {answer.text}
                       </MenuItem>
                     ))
                   ) : (
                     <MenuItem disabled value="">
-                      Cargando preguntas...
+                      Cargando respuestas...
                     </MenuItem>
                   )
                 ) : (
                   <MenuItem disabled value="">
-                    No se encontraron preguntas
+                    No se encontraron respuestas
                   </MenuItem>
                 )}
               </Select>
@@ -285,9 +301,6 @@ export const ChatbotRespuesta = () => {
           </Box>
         </Box>
       </div>
-      {/* End Formulario de Creacion de Pregunta*/}
-
-
 
       {/* Formulario de Creacion de Respuesta*/}
       <div className="contact-section">
