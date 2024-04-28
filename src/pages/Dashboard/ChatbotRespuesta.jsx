@@ -15,7 +15,6 @@ import { useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import CustomButton from '../../components/buttonCustom';
 import CustomModal from '../../components/modalCustom';
-import { sendMessage } from '../../api/message/sendMessage';
 import { ubuntuApi } from '../../utils/services/axiosConfig';
 import { getAccessToken } from '../../utils/helpers/localStorage';
 
@@ -35,6 +34,8 @@ export const ChatbotRespuesta = () => {
   const [showResponse, setShowResponse] = useState(false);
   const [questionList, setQuestionList] = useState([]);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       pregunta: '',
@@ -42,11 +43,11 @@ export const ChatbotRespuesta = () => {
       respuesta: '',
     },
     validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      const modalContent = await sendMessage(values, id);
-      setModalContent(modalContent);
-      setModalOpen(true);
-    }
+    // onSubmit: async (values) => {
+    //   const modalContent = await sendMessage(values, id);
+    //   setModalContent(modalContent);
+    //   setModalOpen(true);
+    // }
   });
 
   const handleSelectChange = (event) => {
@@ -86,7 +87,12 @@ export const ChatbotRespuesta = () => {
   const habldeSubmitInitialQuestion = async () => {
     const preguntaValue = formik.values.pregunta;
 
-    // Obtener el valor dinámico de 'type' según el estado del checkbox 'esRepregunta'
+    if (isSubmitting) {
+      return; // Evitar múltiples envíos si ya se está procesando una solicitud
+    }
+
+    setIsSubmitting(true);
+
     const typeValue = formik.values.esRepregunta ? 'SECONDARY' : 'INITIAL';
 
     // Obtener el ID de la pregunta inicial del formulario
@@ -101,11 +107,35 @@ export const ChatbotRespuesta = () => {
     const requestData = {
       text: preguntaValue,
       type: typeValue,
-      answer_id: initialQuestionId
+      id_secondary: initialQuestionId
     };
 
     try {
       const question = await ubuntuApi.post(endpoint, requestData, {
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`
+        },
+      });
+
+      console.log('Pregunta enviada', question.data);
+      // window.location.reload();
+    } catch (error) {
+      console.log('Error al enviar la pregunta:', error);
+    } finally {
+      setIsSubmitting(false); // Habilitar nuevamente el botón de envío
+    }
+  };
+
+  const habldeSubmitReply = async () => {
+    const preguntaValue = formik.values.pregunta;
+
+    const requestData = {
+      text: formik.values.respuesta,
+      id_question: selectedOption
+    };
+
+    try {
+      const question = await ubuntuApi.post('/answer/create', requestData, {
         headers: {
           Authorization: `Bearer ${getAccessToken()}`
         },
@@ -142,7 +172,7 @@ export const ChatbotRespuesta = () => {
         });
         setTimeout(() => {
           setQuestionList(response.data);
-        }, 2000);
+        }, 3000);
 
         console.log('Lista de preguntas no activas:', response.data);
       } catch (error) {
@@ -246,7 +276,7 @@ export const ChatbotRespuesta = () => {
               sx={{
                 my: 5,
               }}
-              // disabled={!formik.values.pregunta}
+              disabled={!formik.values.pregunta}
               onClick={habldeSubmitInitialQuestion}
             >
               Crear Pregunta
@@ -256,6 +286,8 @@ export const ChatbotRespuesta = () => {
         </Box>
       </div>
       {/* End Formulario de Creacion de Pregunta*/}
+
+
 
       {/* Formulario de Creacion de Respuesta*/}
       <div className="contact-section">
@@ -347,6 +379,7 @@ export const ChatbotRespuesta = () => {
             <CustomButton
               type="submit"
               fullWidth
+              onClick={habldeSubmitReply}
               sx={{
                 my: 5,
               }}
