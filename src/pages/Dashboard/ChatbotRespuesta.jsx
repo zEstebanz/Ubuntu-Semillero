@@ -39,13 +39,11 @@ export const ChatbotRespuesta = () => {
       pregunta: '',
       seleccionada: '',
       respuesta: '',
+      esRepregunta: false, // Agregar este campo al initialValues
+      type: 'INITIAL', // Agregar este campo al initialValues
+      id_answer: 1,
     },
     validationSchema: validationSchema,
-    // onSubmit: async (values) => {
-    //   const modalContent = await sendMessage(values, id);
-    //   setModalContent(modalContent);
-    //   setModalOpen(true);
-    // }
   });
 
   const handleSelectChange = (event) => {
@@ -82,31 +80,62 @@ export const ChatbotRespuesta = () => {
     setModalOpen(false);
   };
 
+  const handleChange = (event) => {
+    const { id, checked } = event.target;
+  
+    formik.setFieldValue(id, checked);
+  
+    const newTypeValue = checked ? 'SECONDARY' : 'INITIAL';
+    formik.setFieldValue('type', newTypeValue);
+  };
+
   const habldeSubmitInitialQuestion = async () => {
-
     const preguntaValue = formik.values.pregunta;
-
+  
     const requestData = {
       text: preguntaValue,
-      type: 'INITIAL',
-
-      // utilizar esto cuando configure las preguntas a la que pertenece la repregunta.
-      // type: formik.values.type
-
-    }
+      type: formik.values.type, 
+      //id_answer: 9,
+    };
+  
     try {
       const question = await ubuntuApi.post('/question/initial', requestData, {
         headers: {
           Authorization: `Bearer ${getAccessToken()}`
         },
       });
-
+  
       console.log('Pregunta enviada', question.data)
-      window.location.reload();
+      //window.location.reload();
     } catch (error) {
       console.log('Error al enviar la pregunta:', error)
     }
-  }
+  };
+
+  const habldeSubmitSecondaryQuestion = async () => {
+    const preguntaValue = formik.values.pregunta;
+  
+    const requestData = {
+      text: preguntaValue,
+      type: formik.values.type, 
+      //answer_id: 9,
+    };
+  
+    try {
+      const question = await ubuntuApi.post('/question/secondary', requestData, {
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`
+        },
+      });
+  
+      console.log('Pregunta enviada', question.data)
+      //window.location.reload();
+    } catch (error) {
+      console.log('Error al enviar la pregunta:', error)
+    }
+  };
+
+
 
   const habldeSubmitReply = async () => {
     const preguntaValue = formik.values.pregunta;
@@ -134,15 +163,6 @@ export const ChatbotRespuesta = () => {
     formik.setFieldValue('pregunta', event.target.value)
   }
 
-  const handleChange = (event) => {
-    const { id, value, checked } = event.target;
-
-    formik.setFieldValue(id, id === 'esRepregunta' ? checked : value);
-
-    const newTypeValue = checked ? 'SECONDARY' : 'INITIAL';
-    formik.setFieldValue('type', newTypeValue);
-  };
-
   useEffect(() => {
     const fetchQuestionList = async () => {
       try {
@@ -166,8 +186,6 @@ export const ChatbotRespuesta = () => {
 
   return (
     <div>
-
-      {/* Formulario de Creacion de Pregunta*/}
       <div className="contact-section">
         <Box
           sx={{
@@ -217,6 +235,7 @@ export const ChatbotRespuesta = () => {
               <Checkbox
                 id="esRepregunta"
                 checked={formik.values.esRepregunta}
+
                 onChange={handleChange}
               />
               <label htmlFor="esRepregunta">Es repregunta</label>
@@ -257,8 +276,7 @@ export const ChatbotRespuesta = () => {
               sx={{
                 my: 5,
               }}
-              // disabled={!formik.values.pregunta}
-              onClick={habldeSubmitInitialQuestion}
+              onClick={formik.values.esRepregunta ? habldeSubmitSecondaryQuestion : habldeSubmitInitialQuestion}
             >
               Crear Pregunta
             </CustomButton>
@@ -266,7 +284,6 @@ export const ChatbotRespuesta = () => {
           </Box>
         </Box>
       </div>
-      {/* End Formulario de Creacion de Pregunta*/}
 
       {/* Formulario de Creacion de Respuesta*/}
       <div className="contact-section">

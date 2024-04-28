@@ -22,7 +22,7 @@ const MessageOption = ({ text, sx, isMessage, onSelected = () => {} }) => {
         color: isMessage ? 'common.white' : 'black',
         display: "flex",
         justifyContent: "flex-end",
-        marginLeft: isMessage ? 'auto' : 0, // Alinea hacia la derecha
+        marginLeft: isMessage ? 'auto' : "auto", // Alinea hacia la derecha
         width: 'fit-content', // Ocupa solo el espacio necesario
         cursor: isMessage ? 'auto' : 'pointer',
         ...sx,
