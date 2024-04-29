@@ -19,7 +19,8 @@ import { ubuntuApi } from '../../utils/services/axiosConfig';
 import { getAccessToken } from '../../utils/helpers/localStorage';
 
 const validationSchema = Yup.object().shape({
-  respuesta: Yup.string().required('Debe escribir una respuesta para la pregunta seleccionada.'),
+  pregunta: Yup.string().required('Debe escribir una pregunta.').min(6, 'La pregunta debe tener al menos 6 caracteres.').max(150, 'La pregunta no puede tener más de 150 caracteres.'),
+  respuesta: Yup.string().required('Debe escribir una respuesta.').min(6, 'La respuesta debe tener al menos 6 caracteres.').max(400, 'La respuesta no puede tener más de 400 caracteres.'),
 });
 
 export const ChatbotRespuesta = () => {
@@ -35,6 +36,18 @@ export const ChatbotRespuesta = () => {
   const [questionList, setQuestionList] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [answerList, setAnswerList] = useState([]);
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const [errorModalOpen, setErrorModalOpen] = useState(false);
+  const [successModalContent, setSuccessModalContent] = useState({
+    
+  title: '',
+  message: '',
+});
+const [errorModalContent, setErrorModalContent] = useState({
+    
+  title: '',
+  message: '',
+});
 
   const formik = useFormik({
     initialValues: {
@@ -47,6 +60,25 @@ export const ChatbotRespuesta = () => {
     },
     validationSchema: validationSchema,
   });
+
+  const openSuccessModal = (title, message) => {
+    setSuccessModalContent({ title, message });
+    setSuccessModalOpen(true);
+    
+  };
+
+  const closeSuccessModal = () => {
+    setSuccessModalOpen(false);
+  };
+
+  const openErrorModal = (title, message) => {
+    setErrorModalContent({ title, message });
+    setErrorModalOpen(true);
+  };
+
+  const closeerrorModal = () => {
+    setErrorModalOpen(false);
+  };
 
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
@@ -65,7 +97,7 @@ export const ChatbotRespuesta = () => {
     }
 
     if (id === 'respuesta') {
-      if (value.length <= 300) {
+      if (value.length <= 500) {
         formik.setFieldValue(id, value);
       }
     } else {
@@ -125,10 +157,13 @@ export const ChatbotRespuesta = () => {
       });
 
       console.log('Pregunta enviada', question.data);
+      openSuccessModal('Éxito', 'Se registró la pregunta exitosamente.');
       // habilitar esto cuando se arregle lo de las url protegidas: (permite recargar la pagina cuando se cargue un dato nuevo)
-      window.location.reload();
+     // window.location.reload();
     } catch (error) {
       console.log('Error al enviar la pregunta:', error);
+      openErrorModal('Error', 'No se pudo registrar la pregunta.');
+      
     } finally {
       setIsSubmitting(false); // Habilitar nuevamente el botón de envío
     }
@@ -151,9 +186,13 @@ export const ChatbotRespuesta = () => {
 
       console.log('Pregunta enviada', question.data);
       // habilitar esto cuando se arregle lo de las url protegidas: (permite recargar la pagina cuando se cargue un dato nuevo)
-      window.location.reload();
+      //window.location.reload();
+      openSuccessModal('Éxito', 'Se registró la respuesta exitosamente.');
+
+   // Agregar este console.log
     } catch (error) {
-      console.log('Error al enviar la pregunta:', error);
+      console.log('Error al enviar la respuesta:', error);
+      openErrorModal('Error', 'No se pudo registrar la respuesta.');
     }
   };
 
@@ -237,14 +276,17 @@ export const ChatbotRespuesta = () => {
             <TextField
               id="pregunta"
               label="Texto de la Pregunta"
+              //helperText="La pregunta debe entre 6 y 150 carácteres."
               fullWidth
               multiline
               rows={7}
               sx={{
                 mt: 2,
               }}
-              {...formik.getFieldProps('pregunta')}
+               {...formik.getFieldProps('pregunta')}
               onChange={(event) => handleSubmitQuestion(event, formik)}
+              error={formik.touched.pregunta && Boolean(formik.errors.pregunta)}
+              helperText={formik.touched.pregunta && formik.errors.pregunta}
             />
 
             <Box>
@@ -292,7 +334,7 @@ export const ChatbotRespuesta = () => {
               sx={{
                 my: 5,
               }}
-              disabled={!formik.values.pregunta}
+              disabled={!formik.values.pregunta || formik.values.pregunta.length < 6 || formik.values.pregunta.length > 150}
               onClick={habldeSubmitInitialQuestion}
             >
               Crear Pregunta
@@ -396,30 +438,37 @@ export const ChatbotRespuesta = () => {
               sx={{
                 my: 5,
               }}
-              disabled={!selectedOption || !formik.isValid || !showResponse || !formik.values.respuesta}
-            >
+              //Al disabled le saqué el !formik.isValid ||, con eso el botón no funcionaba nunca (ni idea por qué)
+              disabled={!selectedOption ||  !showResponse || !formik.values.respuesta || formik.values.respuesta.length < 6 || formik.values.respuesta.length > 400}            >
               Enviar
             </CustomButton>
+
           </Box>
         </Box>
       </div>
       {/* End Formulario de Creacion de Respuesta*/}
 
       <CustomModal
-        open={modalOpen}
-        onClose={handleCloseModal}
-        title={modalContent.title}
-        message={modalContent.message}
-        icon={modalContent.icon}
-        buttons={
-          modalContent.icon === 'check'
-            ? [{ text: 'Aceptar', onClick: handleCloseModal }]
-            : [
-              { text: 'Cancelar', onClick: handleCloseModal },
-              { text: 'Intentar nuevamente', onClick: handleRetry },
-            ]
-        }
+    open={successModalOpen}
+    onClose={closeSuccessModal}
+    title={successModalContent.title}
+    message={successModalContent.message}
+    icon="check"
+    buttons={[{ text: 'Aceptar', onClick: closeSuccessModal }]}
+
       />
+
+<CustomModal
+    open={errorModalOpen}
+    onClose={closeerrorModal}
+    title={errorModalContent.title}
+    message={errorModalContent.message}
+    icon="error"
+    buttons={[{ text: 'Aceptar', onClick: closeerrorModal }]}
+
+      />
+
+
     </div>
   );
 };

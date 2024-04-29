@@ -79,7 +79,7 @@ function ChatMessages() {
     }
 
     return (
-        <Box sx={{ p: 1, marginTop: "100px", overflowY: "auto", maxHeight: "80vh" }}>
+        <Box sx={{ p: 1,  overflowY: "auto", maxHeight: "80vh", maxWidth: "800px", margin: "auto", paddingTop: "120px"}}>
             <MessageReceived text="¡Hola! 👋 Soy el Chatbot de Ubuntu. ¿En qué puedo ayudarte hoy?" />
             {
                 messages?.map(({ text, isAnswer }, index) => {

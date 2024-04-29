@@ -27,6 +27,7 @@ import InversionesCalculoForm from "../components/Investments/InversionesCalculo
 import InversionCalcResultado from "../components/Investments/InversionCalcResultado";
 //Chatbot
 import { ChatbotRespuesta } from "../pages/Dashboard/ChatbotRespuesta";
+import PageNotFound from "../components/Error/PageNotFound";
 
 
 const router = createBrowserRouter([
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
             {
                 path: '/login',
                 element: <Login />
+            },
+            {
+                path: '*',
+                element: <PageNotFound />
             },
             {
                 path: '/contacto/:title/:id',
