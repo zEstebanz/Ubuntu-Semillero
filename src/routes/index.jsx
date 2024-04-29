@@ -25,6 +25,9 @@ import InversionPorIdMicro from "../components/Investments/TodosInversiones";
 import InversionesFormEdit from "../components/Investments/InversionesFormEdit";
 import InversionesCalculoForm from "../components/Investments/InversionesCalculoForm";
 import InversionCalcResultado from "../components/Investments/InversionCalcResultado";
+//Chatbot
+import { ChatbotRespuesta } from "../pages/Dashboard/ChatbotRespuesta";
+import PageNotFound from "../components/Error/PageNotFound";
 
 
 const router = createBrowserRouter([
@@ -53,6 +56,10 @@ const router = createBrowserRouter([
             {
                 path: '/login',
                 element: <Login />
+            },
+            {
+                path: '*',
+                element: <PageNotFound />
             },
             {
                 path: '/contacto/:title/:id',
@@ -147,6 +154,12 @@ const router = createBrowserRouter([
                         element: <InversionPorIdMicro />
                     },
                     //INVERSIONES
+
+                    //Chatbot
+                    {
+                        path: "/gestionarRespuesta",
+                        element: <ChatbotRespuesta />
+                    }
                 ]
             },
 

@@ -107,6 +107,7 @@ const Categories = () => {
               </Link>
             </CustomButton>
           )}
+         
         </Box>
 
       </Box>
