@@ -141,14 +141,14 @@ function PostCard({title, description, date, images, postId}) {
 >
 {title} </Typography>
 
-<Typography
+{/* <Typography
   variant="body2"
   fontWeight={600}
   color="common.black"
   fontSize={'16px'}
 >
   ID de la publicación: {postId}
-</Typography>
+</Typography> */}
 
           {renderSwiper()}
 
