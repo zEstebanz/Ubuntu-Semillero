@@ -28,6 +28,7 @@ import InversionCalcResultado from "../components/Investments/InversionCalcResul
 //Chatbot
 import { ChatbotRespuesta } from "../pages/Dashboard/ChatbotRespuesta";
 import PageNotFound from "../components/Error/PageNotFound";
+import ForbiddenPage from "../components/Error/ForbidenPage";
 
 
 const router = createBrowserRouter([
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
             {
                 path: '*',
                 element: <PageNotFound />
+            },
+            {
+                path: '/error/403',
+                element: <ForbiddenPage />
             },
             {
                 path: '/contacto/:title/:id',

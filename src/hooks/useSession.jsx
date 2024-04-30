@@ -29,17 +29,24 @@ export const useSession = () => {
     const user = useSelector(store => store.auth.user);
 
     useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        if (storedUser) {
+            dispatch(setUser(storedUser));
+        }
+
         getUser()
             .then(user => {
                 if (user) {
                     dispatch(setUser(user));
-                    dispatch(setCredentials(getAccessToken()))
+                    dispatch(setCredentials(getAccessToken()));
+                    localStorage.setItem('user', JSON.stringify(user));
                 } else {
                     deleteAccessToken();
+                    localStorage.removeItem('user');
                 }
             })
-            .catch(error => console.log(error))
-    }, [dispatch])
+            .catch(error => console.log(error));
+    }, [dispatch]);
 
     return user;
-}
+};
