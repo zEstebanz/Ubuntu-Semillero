@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PostCard from "./PostCard";
-import getPost from "../../api/publications/getPost";
+import { getPost } from "../../api/publications/getPost";
 import Typography from '@mui/material/Typography';
 import { Box } from "@mui/material";
 
@@ -31,6 +31,7 @@ const PublicacionList = ({ busqueda }) => {
               description={post.descripcion}
               date={`${post.fechaCreacion[2]}/${post.fechaCreacion[1] < 10 ? '0' : ''}${post.fechaCreacion[1]}/${post.fechaCreacion[0]}`}
               images={Object.values(post.images)}
+              postId={post.id}
             />
           ))
         ) : (

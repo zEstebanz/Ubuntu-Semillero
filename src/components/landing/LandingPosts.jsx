@@ -4,13 +4,14 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import getPostPublic from "../../api/publications/getPostPublic";
 
-function LandingPosts() {
+function LandingPosts({title, description, date, images, postId}) {
   const [posts, setPost] = useState([]);
 
   useEffect(() => {
     const obtenerMicro = async () => {
       try {
         const postData = await getPostPublic();
+        console.log("Datos de las publicaciones: ", postData)
         setPost(postData);
       } catch (error) {
         console.error('Error al obtener los rubros:', error);
@@ -50,6 +51,7 @@ function LandingPosts() {
               description={post.descripcion}
               date={`${post.fechaCreacion[2]}/${post.fechaCreacion[1] < 10 ? '0' : ''}${post.fechaCreacion[1]}/${post.fechaCreacion[0]}`}
               images={Object.values(post.images)}
+              postId={post.id}
             />
           ))
         ) : (
