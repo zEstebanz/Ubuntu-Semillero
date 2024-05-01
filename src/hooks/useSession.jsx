@@ -1,10 +1,9 @@
 import { useEffect } from "react";
-
 import { deleteAccessToken, getAccessToken } from "../utils/helpers/localStorage";
 import { ubuntuApi } from "../utils/services/axiosConfig";
 import { decodeUserData } from "../utils/helpers/decodeJWT";
 import { useDispatch, useSelector } from "react-redux";
-import { setCredentials, setUser } from "../store/auth/authSlice";
+import { setCredentials, setUser, logout } from "../store/auth/authSlice";
 
 const getUser = async () => {
     try {
@@ -34,18 +33,25 @@ export const useSession = () => {
             dispatch(setUser(storedUser));
         }
 
-        getUser()
-            .then(user => {
+        const fetchUser = async () => {
+            try {
+                const user = await getUser();
                 if (user) {
                     dispatch(setUser(user));
                     dispatch(setCredentials(getAccessToken()));
                     localStorage.setItem('user', JSON.stringify(user));
                 } else {
+                    dispatch(logout()); 
                     deleteAccessToken();
                     localStorage.removeItem('user');
                 }
-            })
-            .catch(error => console.log(error));
+            } catch (error) {
+                console.error("Error fetching user:", error);
+            }
+        };
+
+        fetchUser();
+
     }, [dispatch]);
 
     return user;

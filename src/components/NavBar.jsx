@@ -20,6 +20,7 @@ import { useSession } from "./../hooks/useSession";
 import { useDispatch } from "react-redux";
 import { logout } from "../store/auth/authSlice";
 import { deleteAccessToken } from "../utils/helpers/localStorage";
+import { getAccessToken } from "../utils/helpers/localStorage";
 
 function NavBar({ setDrawerOpened }) {
   const [open, setOpen] = useState(false);
@@ -29,6 +30,7 @@ function NavBar({ setDrawerOpened }) {
   const user = useSession();
   const navigate = useNavigate();
   const location = useLocation();
+  const [loggingOut, setLoggingOut] = useState(false);
 
   const getNavbarHeight = () => {
     if (navbarRef.current) {
@@ -60,15 +62,27 @@ function NavBar({ setDrawerOpened }) {
     const lastnameInitial = user.Apellido.substring(0, 1);
     return nameInitial + lastnameInitial;
   };
-  const logOut = () => {
-    console.log(location.pathname);
-    if (location.pathname === "/") {
-      navigate("/login");
+
+  const handleLogout = async () => {
+    try {
+      setLoggingOut(true); 
+      deleteAccessToken(); 
+      dispatch(logout()); 
+      console.log("Logout dispatched successfully"); 
+      
+      await navigate("/"); 
+    } catch (error) {
+      console.error("Error during logout:", error);
+    } finally {
+      setLoggingOut(false); 
     }
-    setDisplayAvatarMenu(false);
-    dispatch(logout());
-    deleteAccessToken();
   };
+  
+  
+  useEffect(() => {
+    if (loggingOut) {
+    }
+  }, [loggingOut]);
 
   useEffect(() => {
     if (open) {
@@ -149,7 +163,7 @@ function NavBar({ setDrawerOpened }) {
                           borderColor: "black",
                         }}
                         onClick={() => {
-                          logOut();
+                          handleLogout();
                         }}
                       >
                         Cerrar sesion
