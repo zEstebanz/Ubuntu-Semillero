@@ -30,6 +30,7 @@ import { ChatBot } from "../pages/Dashboard/ChatBot";
 import { ChatBotGestion } from "../pages/Dashboard/ChatBotGestion";
 import { ChatBotEdit } from "../pages/Dashboard/ChatBotEdit";
 import PageNotFound from "../components/Error/PageNotFound";
+import ForbiddenPage from "../components/Error/ForbidenPage";
 
 const router = createBrowserRouter([
     {
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
             {
                 path: '*',
                 element: <PageNotFound />
+            },
+            {
+                path: '/error/403',
+                element: <ForbiddenPage />
             },
             {
                 path: '/contacto/:title/:id',
