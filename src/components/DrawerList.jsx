@@ -148,7 +148,7 @@ function DrawerList({ toggleDrawer }) {
           <ListItem>
             <Link
               onClick={handleClickLink}
-              to="/gestionarRespuesta"
+              to="/chatbot-gestion"
               style={{
                 textDecoration: "none",
                 color: "white",
@@ -156,6 +156,19 @@ function DrawerList({ toggleDrawer }) {
               }}
             >
               <Typography variant="subtitles">ChatBot</Typography>
+            </Link>
+          </ListItem>
+          <ListItem>
+            <Link
+              onClick={handleClickLink}
+              to="/chatbot-edit"
+              style={{
+                textDecoration: "none",
+                color: "white",
+                fontSize: "18px",
+              }}
+            >
+              <Typography variant="subtitles">ChatBot Edit</Typography>
             </Link>
           </ListItem>
         </>

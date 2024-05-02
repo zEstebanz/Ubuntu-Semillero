@@ -26,9 +26,10 @@ import InversionesFormEdit from "../components/Investments/InversionesFormEdit";
 import InversionesCalculoForm from "../components/Investments/InversionesCalculoForm";
 import InversionCalcResultado from "../components/Investments/InversionCalcResultado";
 //Chatbot
-import { ChatbotRespuesta } from "../pages/Dashboard/ChatbotRespuesta";
+import { ChatBot } from "../pages/Dashboard/ChatBot";
+import { ChatBotGestion } from "../pages/Dashboard/ChatBotGestion";
+import { ChatBotEdit } from "../pages/Dashboard/ChatBotEdit";
 import PageNotFound from "../components/Error/PageNotFound";
-
 
 const router = createBrowserRouter([
     {
@@ -157,8 +158,16 @@ const router = createBrowserRouter([
 
                     //Chatbot
                     {
-                        path: "/gestionarRespuesta",
-                        element: <ChatbotRespuesta />
+                        path: "/chatbot",
+                        element: <ChatBot />
+                    },
+                    {
+                        path: "/chatbot-gestion",
+                        element: <ChatBotGestion />
+                    },
+                    {
+                        path: "/chatbot-edit",
+                        element: <ChatBotEdit />
                     }
                 ]
             },

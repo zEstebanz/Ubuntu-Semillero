@@ -23,7 +23,7 @@ const validationSchema = Yup.object().shape({
   respuesta: Yup.string().required('Debe escribir una respuesta.').min(6, 'La respuesta debe tener al menos 6 caracteres.').max(400, 'La respuesta no puede tener más de 400 caracteres.'),
 });
 
-export const ChatbotRespuesta = () => {
+export const ChatBotGestion = () => {
   const { id, microId, title, microemprendimiento } = useParams();
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState({

@@ -105,7 +105,6 @@ const Categories = () => {
                             >
                                 No hay categorías por el momento...
                             </Typography>
-
                         )}
                     </Box>
                 </Box>

@@ -134,13 +134,12 @@ function MicroView() {
                         label="Provincia/Estado"
                         fullWidth
                         sx={{ mt: 3 }}
-                        disabled
                         InputLabelProps={{
                             shrink: true,
-                            sx: { color: '#0000FF' },
+                            sx: { color: '#093C59' },
                         }}
                         InputProps={{
-                            style: { marginBottom: '8px' }, // Agrega un margen inferior
+                            style: { marginBottom: '8px' }
                         }}
                     />
 
@@ -149,9 +148,9 @@ function MicroView() {
                         label="País"
                         fullWidth
                         sx={{ mt: 3 }}
-                        disabled
                         InputLabelProps={{
                             shrink: true,
+                            sx: { color: '#093C59' },
                         }}
                         InputProps={{
                             style: { marginBottom: '8px' }, // Agrega un margen inferior
@@ -164,7 +163,10 @@ function MicroView() {
                         label="Ciudad"
                         fullWidth
                         sx={{ mt: 3 }}
-                        disabled
+                        InputLabelProps={{
+                            shrink: true,
+                            sx: { color: '#093C59' },
+                        }}
                     />
 
                     {/* Descripción del Microemprendimiento */}
@@ -173,8 +175,11 @@ function MicroView() {
                         label="Descripción del Microemprendimiento"
                         fullWidth
                         sx={{ mt: 3 }}
+                        InputLabelProps={{
+                            shrink: true,
+                            sx: { color: '#093C59' },
+                        }}
                         multiline
-                        disabled
                     />
 
                     {/* Más información del Microemprendimiento */}
@@ -183,8 +188,11 @@ function MicroView() {
                         label="Más información del Microemprendimiento"
                         fullWidth
                         sx={{ mt: 3 }}
+                        InputLabelProps={{
+                            shrink: true,
+                            sx: { color: '#093C59' },
+                        }}
                         multiline
-                        disabled
                     />
 
                     {/* Columna de imágenes */}
