@@ -259,7 +259,7 @@ export const ChatBotEdit = () => {
                             fontWeight: 700,
                         }}
                     >
-                        Gestionador de Preguntas
+                        Edicion de Pregunta/Respuesta
                     </Typography>
                     <Box
                         component="form"
@@ -271,33 +271,7 @@ export const ChatBotEdit = () => {
                             alignItems: 'center',
                         }}
                     >
-                        <TextField
-                            id="pregunta"
-                            label="Texto de la Pregunta"
-                            //helperText="La pregunta debe entre 6 y 150 carácteres."
-                            fullWidth
-                            multiline
-                            rows={7}
-                            sx={{
-                                mt: 2,
-                            }}
-                            {...formik.getFieldProps('pregunta')}
-                            onChange={(event) => handleSubmitQuestion(event, formik)}
-                            error={formik.touched.pregunta && Boolean(formik.errors.pregunta)}
-                            helperText={formik.touched.pregunta && formik.errors.pregunta}
-                        />
-
-                        <Box>
-                            <Checkbox
-                                id="esRepregunta"
-                                checked={formik.values.esRepregunta}
-
-                                onChange={handleChange}
-                            />
-                            <label htmlFor="esRepregunta">Es repregunta</label>
-                        </Box>
-
-                        <FormControl fullWidth disabled={!formik.values.esRepregunta}>
+                        <FormControl fullWidth sx={{marginTop: '32px'}}>
                             <InputLabel id="select-label">Seleccionar Respuesta</InputLabel>
                             <Select
                                 labelId="select-label"
@@ -325,6 +299,23 @@ export const ChatBotEdit = () => {
                                 )}
                             </Select>
                         </FormControl>
+                        <TextField
+                            id="pregunta"
+                            label="Texto de la Pregunta"
+                            //helperText="La pregunta debe entre 6 y 150 carácteres."
+                            fullWidth
+                            multiline
+                            rows={7}
+                            sx={{
+                                mt: 2,
+                            }}
+                            {...formik.getFieldProps('pregunta')}
+                            onChange={(event) => handleSubmitQuestion(event, formik)}
+                            error={formik.touched.pregunta && Boolean(formik.errors.pregunta)}
+                            helperText={formik.touched.pregunta && formik.errors.pregunta}
+                        />
+
+
 
                         <CustomButton
                             type="submit"
@@ -335,137 +326,12 @@ export const ChatBotEdit = () => {
                             disabled={!formik.values.pregunta || formik.values.pregunta.length < 6 || formik.values.pregunta.length > 150}
                             onClick={habldeSubmitInitialQuestion}
                         >
-                            Crear Pregunta
+                            Editar Pregunta
                         </CustomButton>
 
                     </Box>
                 </Box>
             </div>
-
-            {/* Formulario de Creacion de Respuesta*/}
-            <div className="contact-section">
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        pt: 5,
-                        px: 3,
-                        mx: 'auto',
-                    }}
-                    maxWidth="sm"
-                >
-                    <Typography
-                        variant="h3"
-                        sx={{
-                            fontSize: '1.375rem',
-                            textAlign: 'center',
-                            fontWeight: 700,
-                        }}
-                    >
-                        Gestionador de Respuestas
-                    </Typography>
-                    <Typography
-                        variant="h4"
-                        color="primary.main"
-                        sx={{
-                            fontWeight: 600,
-                            mt: 4,
-                        }}
-                    >
-                        {title}
-                    </Typography>
-                    <Box
-                        component="form"
-                        onSubmit={formik.handleSubmit}
-                        sx={{
-                            width: 1,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <FormControl fullWidth>
-                            <InputLabel id="select-label">Seleccionar Pregunta</InputLabel>
-                            <Select
-                                labelId="select-label"
-                                id="seleccionada"
-                                value={selectedOption}
-                                onChange={handleSelectChange}
-                                label="Seleccionar pregunta"
-                            >
-                                {questionList !== undefined ? (
-                                    questionList.length > 0 ? (
-                                        questionList.map((question, index) => (
-                                            <MenuItem key={index} value={question.id}>
-                                                {question.text}
-                                            </MenuItem>
-                                        ))
-                                    ) : (
-                                        <MenuItem disabled value="">
-                                            Cargando preguntas...
-                                        </MenuItem>
-                                    )
-                                ) : (
-                                    <MenuItem disabled value="">
-                                        No se encontraron preguntas
-                                    </MenuItem>
-                                )}
-                            </Select>
-                        </FormControl>
-
-                        <TextField
-                            id="respuesta"
-                            label="Respuesta"
-                            fullWidth
-                            multiline
-                            rows={7}
-                            sx={{
-                                mt: 2,
-                            }}
-                            {...formik.getFieldProps('respuesta')}
-                            onChange={handleInputChange}
-                            error={formik.touched.respuesta && Boolean(formik.errors.respuesta)}
-                            helperText={formik.touched.respuesta && formik.errors.respuesta}
-                            disabled={!showResponse}
-                        />
-                        <CustomButton
-                            type="submit"
-                            fullWidth
-                            onClick={habldeSubmitReply}
-                            sx={{
-                                my: 5,
-                            }}
-                            //Al disabled le saqué el !formik.isValid ||, con eso el botón no funcionaba nunca (ni idea por qué)
-                            disabled={!selectedOption || !showResponse || !formik.values.respuesta || formik.values.respuesta.length < 6 || formik.values.respuesta.length > 400}            >
-                            Enviar
-                        </CustomButton>
-
-                    </Box>
-                </Box>
-            </div>
-            {/* End Formulario de Creacion de Respuesta*/}
-
-            <CustomModal
-                open={successModalOpen}
-                onClose={closeSuccessModal}
-                title={successModalContent.title}
-                message={successModalContent.message}
-                icon="check"
-                buttons={[{ text: 'Aceptar', onClick: closeSuccessModal }]}
-
-            />
-
-            <CustomModal
-                open={errorModalOpen}
-                onClose={closeerrorModal}
-                title={errorModalContent.title}
-                message={errorModalContent.message}
-                icon="error"
-                buttons={[{ text: 'Aceptar', onClick: closeerrorModal }]}
-
-            />
-
         </div>
     );
 };
