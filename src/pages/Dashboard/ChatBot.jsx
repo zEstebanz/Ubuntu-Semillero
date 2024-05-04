@@ -6,6 +6,7 @@ import { Box, Grid, Card, CardContent, Typography, Menu, MenuItem, Divider } fro
 import { getAccessToken } from "../../utils/helpers/localStorage";
 import { ubuntuApi } from '../../utils/services/axiosConfig';
 
+
 const hideQuestion = async (id) => {
     try {
         const res = await ubuntuApi.put(`/question/hide/${id}`, null, {
@@ -43,6 +44,7 @@ function ChatBot() {
     const [preguntas, setPreguntas] = useState(null);
     const [expandedMenus, setExpandedMenus] = useState({});
     const anchorRefs = useRef({});
+    const [expandedText, setExpandedText] = useState(false);
 
     useEffect(() => {
         const fetchPreguntasInitial = async () => {
@@ -56,6 +58,64 @@ function ChatBot() {
         };
         fetchPreguntasInitial();
     }, []);
+
+
+
+    /////
+
+
+    const getAnswerForQuestionId = async (id) => {
+        try {
+            const response = await ubuntuApi.get(`/answer/${id}`, {
+                headers: {
+                    Authorization: 'Bearer ' + getAccessToken(),
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = response.data;
+            console.log('Respuesta para la pregunta', id, ':', data);
+            return data;
+        } catch (error) {
+            console.error('Error al obtener la respuesta para la pregunta', id, ':', error);
+            return null; // Devuelve null si hay un error al obtener la respuesta
+        }
+    };
+    
+    
+    // Dentro de useEffect
+    useEffect(() => {
+        const fetchPreguntasInitial = async () => {
+            try {
+                const response = await getQuestionInitial();
+                const preguntasConRespuestas = await Promise.all(response.map(async pregunta => {
+                    const respuesta = await getAnswerForQuestionId(pregunta.id);
+                    return { ...pregunta, respuesta };
+                }));
+                setPreguntas(preguntasConRespuestas);
+                setExpandedMenus(initialExpandedMenus(response)); // Inicializar los menús expandidos
+            } catch (error) {
+                console.error('Error al traer las preguntas:', error);
+            }
+        };
+        fetchPreguntasInitial();
+    }, []);
+
+
+
+
+
+
+    /////
+
+
+
+
+
+
+
+
+
+
 
     // Función para inicializar los menús expandidos con valor false para cada pregunta
     const initialExpandedMenus = (preguntas) => {
@@ -137,7 +197,8 @@ function ChatBot() {
                             <Card key={pregunta.id} sx={{
                                 width: "328px",
                                 borderRadius: "16px",
-                                marginBottom: '16px'
+                                m: 1,
+                                boxShadow: "none",
                             }}>
                                 <CardContent>
                                     <Typography
@@ -159,7 +220,8 @@ function ChatBot() {
                                         {pregunta.text}
                                         <button onClick={() => handleClick(pregunta.id)} ref={el => anchorRefs.current[pregunta.id] = el}
                                             style={{
-                                                border: 'none'
+                                                border: 'none',
+                                                marginLeft: "1.5rem",
                                             }}>
                                             <img src="../../../public/img/menu-edit.svg" alt="menu" />
                                         </button>
@@ -174,7 +236,7 @@ function ChatBot() {
                                                     fontSize: '16px',
                                                     lineHeight: '24px',
                                                     color: '#090909'
-                                                }}>Editar</Link>
+                                                }}>Editar / Ver más</Link>
                                             </MenuItem>
                                             <MenuItem
                                                 onClick={handleHideClick}
@@ -197,18 +259,26 @@ function ChatBot() {
                                         alignItems: 'center',
                                         justifyContent: 'space-between'
                                     }}>
-                                        <Typography
-                                            sx={{
-                                                fontSize: '14px',
-                                                fontWeight: 400,
-                                                lineHeight: '24px',
-                                                marginTop: '8px',
-                                                width: 'calc(244px - 16px)',
-                                            }}
-                                        >
-                                            {pregunta.type}
-                                        </Typography>
-                                        <div style={{
+                                       <Typography
+    sx={{
+        fontSize: '14px',
+        fontWeight: 400,
+        lineHeight: '24px',
+        marginTop: '8px',
+        width: 'calc(244px - 16px)',
+        display: '-webkit-box',
+        WebkitBoxOrient: 'vertical',
+        WebkitLineClamp: expandedText ? 'unset' : 3,
+        overflow: 'hidden',
+    }}
+>
+    {/* {pregunta.type} */}
+    {pregunta.respuesta ? pregunta.respuesta.text : 'Respuesta no disponible'}
+</Typography>
+
+
+                                        
+                                        {/* <div style={{
                                             width: '7.41px',
                                             height: '12px',
                                             display: 'flex',
@@ -218,8 +288,18 @@ function ChatBot() {
                                             <Link to="#">
                                                 <img src="../../../public/img/right.svg" alt="right" />
                                             </Link>
-                                        </div>
+                                        </div> */}
                                     </div>
+
+
+{/* 
+                                    {pregunta.respuesta && (
+    <CustomButton onClick={() => setExpandedText(!expandedText)}>
+        {expandedText ? 'Mostrar menos' : 'Mostrar más'}
+    </CustomButton>
+)} */}
+
+
                                 </CardContent>
                             </Card>
                         ))}

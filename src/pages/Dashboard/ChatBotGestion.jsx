@@ -49,6 +49,7 @@ const [errorModalContent, setErrorModalContent] = useState({
   message: '',
 });
 
+
   const formik = useFormik({
     initialValues: {
       pregunta: '',
@@ -221,16 +222,15 @@ const [errorModalContent, setErrorModalContent] = useState({
 
     const fetchAnswerList = async () => {
       try {
-        const response = await ubuntuApi.get('/answer/answersNotFull', {
+        const response = await ubuntuApi.get('/answer/answer', {
           headers: {
             Authorization: 'Bearer ' + getAccessToken(),
           },
         });
-        setTimeout(() => {
-          setAnswerList(response.data);
-        }, 3000);
+        
 
         console.log('Lista de respuestas no activas:', response.data);
+        setAnswerList(response.data);
       } catch (error) {
         console.error('Error al obtener la lista de respuestas:', error);
       }
@@ -326,6 +326,11 @@ const [errorModalContent, setErrorModalContent] = useState({
                   </MenuItem>
                 )}
               </Select>
+
+
+
+
+
             </FormControl>
 
             <CustomButton
