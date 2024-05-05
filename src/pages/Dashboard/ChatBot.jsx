@@ -6,7 +6,6 @@ import { Box, Grid, Card, CardContent, Typography, Menu, MenuItem, Divider } fro
 import { getAccessToken } from "../../utils/helpers/localStorage";
 import { ubuntuApi } from '../../utils/services/axiosConfig';
 
-
 const hideQuestion = async (id) => {
     try {
         const res = await ubuntuApi.put(`/question/hide/${id}`, null, {
@@ -40,11 +39,29 @@ const showQuestion = async (id) => {
     }
 };
 
+export const getQuestionSecondary = async (id) => {
+    try {
+        const res = await ubuntuApi.get(`/faq/answer/${id}`, {
+            headers: {
+                Authorization: 'Bearer ' + getAccessToken(),
+            }
+        });
+        console.log("Preguntas secundarias", res.data);
+
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 function ChatBot() {
-    const [preguntas, setPreguntas] = useState(null);
+    const [preguntas, setPreguntas] = useState([]);
+    const [preguntasSecundarias, setPreguntasSecundarias] = useState([]);
     const [expandedMenus, setExpandedMenus] = useState({});
     const anchorRefs = useRef({});
     const [expandedText, setExpandedText] = useState(false);
+    const [successMessageOpen, setSuccessMessageOpen] = useState(false);
+    const [errorMessageOpen, setErrorMessageOpen] = useState(false);
 
     useEffect(() => {
         const fetchPreguntasInitial = async () => {
@@ -59,6 +76,28 @@ function ChatBot() {
         fetchPreguntasInitial();
     }, []);
 
+    useEffect(() => {
+        const fetchPreguntasSecundarias = async () => {
+            try {
+                // Obtener preguntas secundarias para cada pregunta inicial
+                const secondaryQuestions = await Promise.all(preguntas.map(async pregunta => {
+                    const secondary = await getQuestionSecondary(pregunta.id);
+                    // Para cada pregunta secundaria, obtener la respuesta
+                    const secondaryWithResponse = await Promise.all(secondary.secondaryQuestions.map(async preguntaSecundaria => {
+                        const respuesta = await getAnswerForQuestionId(preguntaSecundaria.id);
+                        return { ...preguntaSecundaria, respuesta };
+                    }));
+                    return secondaryWithResponse;
+                }));
+                // Unificar todas las preguntas secundarias en una sola lista
+                const allSecondaryQuestions = secondaryQuestions.reduce((acc, val) => acc.concat(val), []);
+                setPreguntasSecundarias(allSecondaryQuestions);
+            } catch (error) {
+                console.error('Error al traer las preguntas secundarias:', error);
+            }
+        };
+        fetchPreguntasSecundarias();
+    }, [preguntas]);
 
 
     /////
@@ -80,6 +119,8 @@ function ChatBot() {
             return null; // Devuelve null si hay un error al obtener la respuesta
         }
     };
+
+    
     
     
     // Dentro de useEffect
@@ -110,11 +151,26 @@ function ChatBot() {
 
 
 
-
-
-
-
-
+    useEffect(() => {
+        const fetchPreguntasSecundarias = async () => {
+            try {
+                // Obtener preguntas secundarias para cada pregunta inicial
+                const secondaryQuestions = await Promise.all(preguntas.map(async pregunta => {
+                    const secondary = await getQuestionSecondary(pregunta.id);
+                    return secondary.secondaryQuestions;
+                }));
+                // Unificar todas las preguntas secundarias en una sola lista
+                const allSecondaryQuestions = secondaryQuestions.reduce((acc, val) => acc.concat(val), []);
+                setPreguntasSecundarias(allSecondaryQuestions);
+                console.log("Todas las preguntas secundarias:", allSecondaryQuestions);
+                
+            } catch (error) {
+                console.error('Error al traer las preguntas secundarias:', error);
+            }
+        };
+        fetchPreguntasSecundarias();
+    }, [preguntas]);
+    
 
 
     // Función para inicializar los menús expandidos con valor false para cada pregunta
@@ -308,6 +364,114 @@ function ChatBot() {
 
             </Box>
 
+
+{/* BOX PARA REPREGUNTAS */}
+
+<Box>
+
+<Box>
+    <h2 style={{ textAlign: 'center', marginBottom: '20px', marginTop: '20px' }}>Repreguntas</h2>
+    {preguntasSecundarias && (
+        <Grid container justifyContent="center">
+            {preguntasSecundarias.map(pregunta => (
+                <Card key={pregunta.id} sx={{
+                    width: "328px",
+                    borderRadius: "16px",
+                    m: 1,
+                    boxShadow: "none",
+                }}>
+                    <CardContent>
+                        <Typography
+                            variant="h6"
+                            gutterBottom
+                            color="primary"
+                            sx={{
+                                fontFamily: 'Lato',
+                                fontSize: '18px',
+                                fontWeight: 700,
+                                lineHeight: '25px',
+                                letterSpacing: '0px',
+                                textAlign: 'left',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignpreguntas: 'center'
+                            }}
+                        >
+                            {pregunta.text}
+                            <button onClick={() => handleClick(pregunta.id)} ref={el => anchorRefs.current[pregunta.id] = el}
+                                style={{
+                                    border: 'none',
+                                    marginLeft: "1.5rem",
+                                }}>
+                                <img src="../../../public/img/menu-edit.svg" alt="menu" />
+                            </button>
+                            <Menu
+                                anchorEl={anchorRefs.current[pregunta.id]}
+                                open={expandedMenus[pregunta.id]}
+                                onClose={() => handleClose(pregunta.id)}
+                            >
+                                <MenuItem onClick={() => handleClose(pregunta.id)}>
+                                    <Link to={"/chatbot-edit-secondary/" + pregunta.id} style={{
+                                        textDecoration: 'none',
+                                        fontSize: '16px',
+                                        lineHeight: '24px',
+                                        color: '#090909'
+                                    }}>Editar / Ver más</Link>
+                                </MenuItem>
+                                <MenuItem
+                                    onClick={handleHideClick}
+                                >
+                                    <Link to="#" style={{
+                                        textDecoration: 'none',
+                                        fontSize: '16px',
+                                        lineHeight: '24px',
+                                        color: '#090909'
+                                    }}>Ocultar</Link>
+                                </MenuItem>
+                            </Menu>
+                        </Typography>
+                        <Divider sx={{
+                            border: '1px solid #226516',
+                            width: '200px'
+                        }} />
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between'
+                        }}>
+                            <Typography
+                                sx={{
+                                    fontSize: '14px',
+                                    fontWeight: 400,
+                                    lineHeight: '24px',
+                                    marginTop: '8px',
+                                    width: 'calc(244px - 16px)',
+                                    display: '-webkit-box',
+                                    WebkitBoxOrient: 'vertical',
+                                    WebkitLineClamp: expandedText ? 'unset' : 3,
+                                    overflow: 'hidden',
+                                }}
+                            >
+                                {/* {pregunta.text} */}
+                                {pregunta.respuesta ? pregunta.respuesta.text : 'Respuesta no disponible'}
+                            </Typography>
+                   
+                   
+                            
+                        </div>
+                    </CardContent>
+           
+                </Card>
+            ))}
+        </Grid>
+    )}
+</Box>
+
+{console.log("Todas las preguntas:", preguntas.concat(preguntasSecundarias))}
+
+{console.log("Todas las respuestas:", (preguntasSecundarias.map(pregunta => pregunta.respuesta)))}
+
+</Box>
 
         </main>
     );

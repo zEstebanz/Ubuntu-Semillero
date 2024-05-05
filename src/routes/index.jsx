@@ -31,6 +31,7 @@ import { ChatBotGestion } from "../pages/Dashboard/ChatBotGestion";
 import { ChatBotEdit } from "../pages/Dashboard/ChatBotEdit";
 import PageNotFound from "../components/Error/PageNotFound";
 import ForbiddenPage from "../components/Error/ForbidenPage";
+import { ChatBotEditSecondary } from "../pages/Dashboard/ChatBotEditSecondary";
 
 const router = createBrowserRouter([
     {
@@ -173,6 +174,10 @@ const router = createBrowserRouter([
                     {
                         path: "/chatbot-edit/:id",
                         element: <ChatBotEdit />
+                    },
+                    {
+                        path: "/chatbot-edit-secondary/:id",
+                        element: <ChatBotEditSecondary />
                     }
                 ]
             },
