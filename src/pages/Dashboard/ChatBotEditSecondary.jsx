@@ -200,8 +200,6 @@ export const ChatBotEditSecondary = () => {
                                 setPregunta({ ...preguntas, text: e.target.value });
                             }}
 
-
-
                             error={formik.touched.pregunta && Boolean(formik.errors.pregunta)}
                             helperText={formik.touched.pregunta && formik.errors.pregunta}
 
@@ -254,20 +252,29 @@ export const ChatBotEditSecondary = () => {
                                 fullWidth
                                 multiline
                                 rows={7}
+
                                 sx={{
                                     mt: 2,
                                 }}
-                                {...formikRespuesta.getFieldProps('respuesta')}
-                                error={formikRespuesta.touched.respuesta && Boolean(formikRespuesta.errors.respuesta)}
-                                helperText={formikRespuesta.touched.respuesta && formikRespuesta.errors.respuesta}
+                                {...formik.getFieldProps('respuesta')}
+
+                                value={respuesta ? respuesta.text : ''}
+                                onChange={(e) => {
+                                    handleRespuestaChange(e);
+                                    setRespuesta({ ...respuesta, text: e.target.value });
+                                }}
+                                
+                                error={formik.touched.respuesta && Boolean(formik.errors.respuesta)}
+                                helperText={formik.touched.respuesta && formik.errors.respuesta}
                             />
                             <CustomButton
-                                type="submit"
+                                type="button"
                                 fullWidth
                                 sx={{
                                     my: 5,
                                 }}
                                 disabled={!formikRespuesta.isValid || !hasRespuestaChanged}
+                                onClick={formikRespuesta.handleSubmit}
                             >
                                 Editar Respuesta
                             </CustomButton>
