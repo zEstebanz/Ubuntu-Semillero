@@ -1,29 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
-import {
-    Box,
-    Typography,
-    TextField,
-} from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, Typography, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import { useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import CustomButton from '../../components/buttonCustom';
 import { ubuntuApi } from '../../utils/services/axiosConfig';
 import { getAccessToken } from '../../utils/helpers/localStorage';
-import { getQuestionInitial } from '../../api/chatbot/getQuestionInitial';
-import { getAnswer } from '../../api/chatbot/getAnswer';
-//import { getQuestionSecondary } from '../../api/chatbot/getQuestionSecondary';
 
-
-
-export const getQuestionSecondary = async (id) => {
+export const getQuestionById = async (id) => {
     try {
-        const res = await ubuntuApi.get(`/faq/answer/${id}`, {
+        const res = await ubuntuApi.get(`/question/${id}`, {
             headers: {
                 Authorization: 'Bearer ' + getAccessToken(),
             }
         });
-        //console.log("Preguntas secundarias", res.data);
+        console.log("Pregunta por ID:", res.data);
 
         return res.data;
     } catch (error) {
@@ -31,7 +22,20 @@ export const getQuestionSecondary = async (id) => {
     }
 }
 
+export const getAnswerById = async (id) => {
+    try {
+        const res = await ubuntuApi.get(`/answer/${id}`, {
+            headers: {
+                Authorization: 'Bearer ' + getAccessToken(),
+            }
+        });
+        console.log("Respuesta por ID:", res.data);
 
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 const validationSchema = Yup.object().shape({
     pregunta: Yup.string().required('Debe escribir una pregunta.').min(6, 'La pregunta debe tener al menos 6 caracteres.').max(150, 'La pregunta no puede tener más de 150 caracteres.'),
@@ -45,22 +49,16 @@ export const ChatBotEditSecondary = () => {
     const { id } = useParams();
     const idActual = id;
 
-  console.log(`El ID actual es: ${idActual}`);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [respuesta, setRespuesta] = useState({}); // Estado para almacenar la respuesta
+    console.log(`El ID actual es: ${idActual}`);
+    const [preguntas, setPregunta] = useState({});
+    const [respuesta, setRespuesta] = useState({});
     const [hasChanged, setHasChanged] = useState(false);
     const [hasRespuestaChanged, setHasRespuestaChanged] = useState(false);
-    const [hasChangedPregunta, setHasChangedPregunta] = useState(false);
-    const [hasChangedRespuesta, setHasChangedRespuesta] = useState(false);
-    const [preguntas, setPreguntas] = useState([]);
-    const [preguntasSecundarias, setPreguntasSecundarias] = useState([]);
-    const [expandedMenus, setExpandedMenus] = useState({});
-    const anchorRefs = useRef({});
-    const [expandedText, setExpandedText] = useState(false);
-    const [successMessageOpen, setSuccessMessageOpen] = useState(false);
-    const [errorMessageOpen, setErrorMessageOpen] = useState(false);
 
-    
+    //Editar 
+    const [preguntaText, setPreguntaText] = useState('');
+
+
     const formik = useFormik({
         initialValues: {
             pregunta: '',
@@ -88,268 +86,55 @@ export const ChatBotEditSecondary = () => {
             try {
                 const accessToken = getAccessToken();
                 const response = await ubuntuApi.put(`/answer/${id}?text=${encodeURIComponent(values.respuesta)}`, null, { headers: { Authorization: `Bearer ${accessToken}` } });
-                console.log('respuesta actualizada:', response.data);
+                console.log('Respuesta actualizada:', response.data);
             } catch (error) {
                 console.error('Error al actualizar la respuesta:', error);
             }
         },
     });
 
+    useEffect(() => {
+        const fetchQuestionAndAnswer = async () => {
+            try {
+                const fetchedPregunta = await getQuestionById(idActual);
+                setPregunta(fetchedPregunta);
+
+                if (fetchedPregunta.id_answer) {
+                    const fetchedRespuesta = await getAnswerById(fetchedPregunta.id_answer);
+                    setRespuesta(fetchedRespuesta);
+                }
+            } catch (error) {
+                console.error('Error al obtener la pregunta y la respuesta:', error);
+            }
+        };
+        fetchQuestionAndAnswer();
+    }, [idActual]);
+
+    useEffect(() => {
+        const fetchQuestionAndAnswer = async () => {
+            try {
+                const fetchedPregunta = await getQuestionById(idActual);
+                setPregunta(fetchedPregunta);
+                setPreguntaText(fetchedPregunta.text || '');
+            } catch (error) {
+                console.error('Error al obtener la pregunta y la respuesta:', error);
+            }
+        };
+        fetchQuestionAndAnswer();
+    }, [idActual]);
 
     const handleInputChange = (e) => {
         formik.handleChange(e);
-        setHasChanged(true); 
+        setHasChanged(true);
     };
 
     const handleRespuestaChange = (e) => {
         formikRespuesta.handleChange(e);
-        setHasRespuestaChanged(true); 
+        setHasRespuestaChanged(true);
     };
-
-    useEffect(() => {
-        const fetchPreguntasInitial = async () => {
-            try {
-                const response = await getQuestionInitial();
-                setPreguntas(response);
-                setExpandedMenus(initialExpandedMenus(response)); 
-            } catch (error) {
-            }
-        };
-        fetchPreguntasInitial();
-    }, []);
-
-    useEffect(() => {
-        const fetchPreguntasSecundarias = async () => {
-            try {
-                const secondaryQuestions = await Promise.all(preguntas.map(async pregunta => {
-                    const secondary = await getQuestionSecondary(pregunta.id);
-                    const secondaryWithResponse = await Promise.all(secondary.secondaryQuestions.map(async preguntaSecundaria => {
-                        const respuesta = await getAnswerForQuestionId(preguntaSecundaria.id);
-                        return { ...preguntaSecundaria, respuesta };
-                    }));
-                    return secondaryWithResponse;
-                }));
-                
-                const allSecondaryQuestions = secondaryQuestions.reduce((acc, val) => acc.concat(val), []);
-                setPreguntasSecundarias(allSecondaryQuestions);
-                
-            } catch (error) {
-            }
-        };
-        fetchPreguntasSecundarias();
-    }, [preguntas]);
-
-
-    /////
-
-
-    const getAnswerForQuestionId = async (id) => {
-        try {
-            const response = await ubuntuApi.get(`/answer/${id}`, {
-                headers: {
-                    Authorization: 'Bearer ' + getAccessToken(),
-                    'Content-Type': 'application/json'
-                }
-            });
-            const data = response.data;
-            return data;
-        } catch (error) {
-            return null; 
-        }
-    };
-
-    
-    
-    
-    
-    useEffect(() => {
-        const fetchPreguntasInitial = async () => {
-            try {
-                const response = await getQuestionInitial();
-                const preguntasConRespuestas = await Promise.all(response.map(async pregunta => {
-                    const respuesta = await getAnswerForQuestionId(pregunta.id);
-                    return { ...pregunta, respuesta };
-                }));
-                setPreguntas(preguntasConRespuestas);
-                setExpandedMenus(initialExpandedMenus(response)); 
-            } catch (error) {
-            }
-        };
-        fetchPreguntasInitial();
-    }, []);
-
-
-
-
-
-
-    /////
-
-
-
-
-    useEffect(() => {
-        const fetchPreguntasSecundarias = async () => {
-            try {
-                const secondaryQuestions = await Promise.all(preguntas.map(async pregunta => {
-                    const secondary = await getQuestionSecondary(pregunta.id);
-                    return secondary.secondaryQuestions;
-                }));
-                const allSecondaryQuestions = secondaryQuestions.reduce((acc, val) => acc.concat(val), []);
-                setPreguntasSecundarias(allSecondaryQuestions);
-                console.log("Todas las preguntas secundarias:", allSecondaryQuestions);
-                
-            } catch (error) {
-                console.error('Error al traer las preguntas secundarias:', error);
-            }
-        };
-        fetchPreguntasSecundarias();
-    }, [preguntas]);
-    
-
-
-    const initialExpandedMenus = (preguntas) => {
-        const initialMenus = {};
-        preguntas.forEach(pregunta => {
-            initialMenus[pregunta.id] = false;
-        });
-        return initialMenus;
-    };
-
-    const handleClick = (id) => {
-        setExpandedMenus((prevMenus) => ({
-            ...prevMenus,
-            [id]: !prevMenus[id], 
-        }));
-    };
-
-    const handleClose = (id) => {
-        setExpandedMenus((prevMenus) => ({
-            ...prevMenus,
-            [id]: false, 
-        }));
-    };
-
-    const handleHideClick = async (id) => {
-        try {
-            await hideQuestion(id);
-            setSuccessMessageOpen(true);
-            console.log("La pregunta se ha ocultado correctamente.");
-        } catch (error) {
-            console.error("Error al ocultar la pregunta:", error);
-            setErrorMessageOpen(true);
-        }
-    };
-
-    const handleShowClick = async (id) => {
-        try {
-            await showQuestion(id);
-            const updatedPreguntas = preguntas.map(pregunta => {
-                if (pregunta.id === id) {
-                    return {
-                        ...pregunta,
-                        hidden: false 
-                    };
-                }
-                return pregunta;
-            });
-            setPreguntas(updatedPreguntas);
-            console.log("La pregunta se ha mostrado correctamente.");
-        } catch (error) {
-            console.error("Error al mostrar la pregunta:", error);
-        }
-    };
-
-
-
-    const handleChangePregunta = (e, preguntaId) => {
-        const newValue = e.target.value;
-        setPreguntasSecundarias(prevState => {
-            return prevState.map(pregunta => {
-                if (pregunta.id === preguntaId) {
-                    return {
-                        ...pregunta,
-                        text: newValue
-                    };
-                }
-                return pregunta;
-            });
-        });
-    };
-
-    const handleChangeRespuesta = (e, preguntaId) => {
-        const newValue = e.target.value;
-        setPreguntasSecundarias(prevState => {
-            return prevState.map(pregunta => {
-                if (pregunta.id === preguntaId && pregunta.respuesta) {
-                    return {
-                        ...pregunta,
-                        respuesta: {
-                            ...pregunta.respuesta,
-                            text: newValue
-                        }
-                    };
-                }
-                return pregunta;
-            });
-        });
-    };
-
 
     return (
         <div>
-
-
-
-
-<div>
-            {preguntasSecundarias
-                .filter(pregunta => pregunta.id == idActual)
-                .map(pregunta => (
-                    <div key={pregunta.id}>
-                        <form>
-                            <label>
-                                Pregunta:
-                                <input
-                                    type="text"
-                                    value={pregunta.text}
-                                    onChange={e => handleChangePregunta(e, pregunta.id)}
-                                />
-                            </label>
-
-                      
-
-
-
-                            <br />
-                            <label>
-                                Respuesta:
-                                <input
-                                    type="text"
-                                    value={pregunta.respuesta ? pregunta.respuesta.text : ''}
-                                    onChange={e => handleChangeRespuesta(e, pregunta.id)}
-                                />
-                            </label>
-                            <br />
-                            <input type="submit" value="Guardar cambios" />
-                        </form>
-
-
-
-
-
-
-                        
-                    </div>
-                ))}
-        </div>
-
-
-
-
-
-
-
 
             <div className="contact-section">
                 <Box
@@ -371,10 +156,22 @@ export const ChatBotEditSecondary = () => {
                             fontWeight: 700,
                         }}
                     >
-                        Edición de Pregunta 
+                        Edición de Pregunta
+
                     </Typography>
+                    <Typography
+                        variant="h3"
+                        sx={{
+                            fontSize: '1rem',
+                            marginTop: '8px',
+                            textAlign: 'center',
+                            fontWeight: 700,
+                            color: '#093C59'
+                        }}
+                    >
+                        {preguntas.text || ''}
 
-
+                    </Typography>
                     <Box
                         component="form"
                         onSubmit={formik.handleSubmit}
@@ -400,25 +197,28 @@ export const ChatBotEditSecondary = () => {
                             value={preguntas ? preguntas.text : ''}
                             onChange={(e) => {
                                 handleInputChange(e);
-                                setPreguntas({ ...preguntas, text: e.target.value });
+                                setPregunta({ ...preguntas, text: e.target.value });
                             }}
 
 
-                            
+
                             error={formik.touched.pregunta && Boolean(formik.errors.pregunta)}
                             helperText={formik.touched.pregunta && formik.errors.pregunta}
 
                         />
+
                         <CustomButton
-                            type="submit"
+                            type="button"
                             fullWidth
                             sx={{
                                 my: 5,
                             }}
                             disabled={!formik.isValid || !hasChanged}
+                            onClick={formik.handleSubmit}
                         >
                             Editar Pregunta
                         </CustomButton>
+
                     </Box>
 
                     <Box sx={{
@@ -437,8 +237,6 @@ export const ChatBotEditSecondary = () => {
                         >
                             Edición de Respuesta
                         </Typography>
-
-
 
                         <Box
                             component="form"
@@ -460,14 +258,8 @@ export const ChatBotEditSecondary = () => {
                                     mt: 2,
                                 }}
                                 {...formikRespuesta.getFieldProps('respuesta')}
-                                value={respuesta ? respuesta.text : ''}
-                                onChange={(e) => {
-                                    handleRespuestaChange(e); 
-                                    setRespuesta({ ...respuesta, text: e.target.value });
-                                }}
                                 error={formikRespuesta.touched.respuesta && Boolean(formikRespuesta.errors.respuesta)}
                                 helperText={formikRespuesta.touched.respuesta && formikRespuesta.errors.respuesta}
-
                             />
                             <CustomButton
                                 type="submit"
@@ -475,19 +267,12 @@ export const ChatBotEditSecondary = () => {
                                 sx={{
                                     my: 5,
                                 }}
-                                disabled={!formikRespuesta.isValid || !hasRespuestaChanged} 
+                                disabled={!formikRespuesta.isValid || !hasRespuestaChanged}
                             >
-                                Editar Pregunta
+                                Editar Respuesta
                             </CustomButton>
                         </Box>
-
-
-
                     </Box>
-
-                    {console.log("Todas las preguntas:", (preguntasSecundarias))}
-
-{console.log("Todas las respuestas:", (preguntasSecundarias.map(pregunta => pregunta.respuesta)))}
                 </Box>
             </div>
         </div>
