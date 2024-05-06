@@ -371,16 +371,12 @@ function ChatBot() {
                                                     color: '#090909'
                                                 }}>Editar / Ver más</Link>
                                             </MenuItem>
-                                            <MenuItem
-                                                onClick={handleHideClick}
-                                            >
-                                                <Link to="#" style={{
-                                                    textDecoration: 'none',
-                                                    fontSize: '16px',
-                                                    lineHeight: '24px',
-                                                    color: '#090909'
-                                                }}>Ocultar</Link>
-                                            </MenuItem>
+                                            <MenuItem onClick={() => {
+    const clickHandler = pregunta.active ? handleHideClick : handleShowClick;
+    clickHandler(pregunta.id);
+}}>
+    {pregunta.active ? 'Ocultar' : 'Mostrar'}
+</MenuItem>
                                         </Menu>
                                     </Typography>
                                     <Divider sx={{
@@ -496,16 +492,12 @@ function ChatBot() {
                                         color: '#090909'
                                     }}>Editar / Ver más</Link>
                                 </MenuItem>
-                                <MenuItem
-                                    onClick={handleHideClick}
-                                >
-                                    <Link to="#" style={{
-                                        textDecoration: 'none',
-                                        fontSize: '16px',
-                                        lineHeight: '24px',
-                                        color: '#090909'
-                                    }}>Ocultar</Link>
-                                </MenuItem>
+                                <MenuItem onClick={() => {
+    const clickHandler = pregunta.active ? handleHideClick : handleShowClick;
+    clickHandler(pregunta.id);
+}}>
+    {pregunta.active ? 'Ocultar' : 'Mostrar'}
+</MenuItem>
                             </Menu>
                         </Typography>
                         <Divider sx={{
