@@ -181,7 +181,7 @@ function PostCard({title, description, date, images, postId}) {
             }}
             onClick={() => toggleExpand(postId)}
           >
-            <Typography variant="body2" fontWeight={600} color="principal" fontSize={'16px'}>
+            <Typography variant="body2" fontWeight={500} color="principal" fontSize={'16px'}>
               {expanded ? "Ver menos" : "Ver más"}
             </Typography>
           </Button>
