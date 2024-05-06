@@ -290,7 +290,7 @@ function MicroCard({ microId, title, entity, category, location, images, masInfo
                     </Button>
                   </Link>
                 ) : (
-                  <Button variant="contained" color="primary" disabled sx={{ borderRadius: '100px', padding: '10px 24px', textTransform: 'none' }}>
+                  <Button variant="contained" color="primary" disabled sx={{ borderRadius: '100px', padding: '10px 24px', textTransform: 'none', display: "none" }}>
                     <Typography sx={{ fontSize: '16px', lineHeight: '20px' }}>Calcular Inversión</Typography>
                   </Button>
                 )}

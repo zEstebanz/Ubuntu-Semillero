@@ -22,6 +22,7 @@ export const Hero = () => {
         height: "488px",
         mx: "auto",
         p: 0,
+        minWidth: '100%',
         backgroundImage: 'url("/img/landing-hero-bg.jpeg")',
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",

@@ -5,7 +5,6 @@ import MicroCard from './MicroCard';
 import getMicro from '../../api/micros/getMicro';
 
 const MicroList = () => {
-
     const [micros, setMicros] = useState([]);
     const { id } = useParams();
 
@@ -68,25 +67,26 @@ const MicroList = () => {
                         </Typography>
                     )}
 
-                    <Typography
-                        sx={{
-                            fontFamily: "Lato",
-                            fontSize: "16px",
-                            fontWeight: 400,
-                            lineHeight: "25px",
-                            letterSpacing: "0px",
-                            textAlign: "center",
-                            marginBottom: "16px",
-                            marginTop: "16px"
-                        }}
-                    >
-                        Conectate con Microemprendimientos que respetan la tierra y priorizan la salud, a través de prácticas agrícolas limpias y alimentos nutritivos.
-                    </Typography>
+                    {micros.length > 0 && (
+                        <Typography
+                            sx={{
+                                fontFamily: "Lato",
+                                fontSize: "16px",
+                                fontWeight: 400,
+                                lineHeight: "25px",
+                                letterSpacing: "0px",
+                                textAlign: "center",
+                                marginBottom: "16px",
+                                marginTop: "16px"
+                            }}
+                        >
+                            Conectate con Microemprendimientos que respetan la tierra y priorizan la salud, a través de prácticas agrícolas limpias y alimentos nutritivos.
+                        </Typography>
+                    )}
                 </Box>
             </section>
 
             <section>
-
                 {micros.length > 0 ? (
                     micros.map((micro, index) => (
                         <div key={index}>
@@ -105,11 +105,25 @@ const MicroList = () => {
                     ))
                 ) : (
                     <Typography
-                        color="textSecondary"
-                        align="center"
-                        sx={{ marginTop: 4, fontSize: '24px' }}
+                        fontWeight={400}
+                        gutterBottom
+                        alignSelf="center"
+                        marginBottom={2.5}
+                        fontSize={"18px"}
+                        sx={{
+                            textAlign: "center",
+                            display: "block",
+                            paddingY: "50px",
+                            paddingX: "6px",
+                            color: '#093C59',
+                            backgroundColor: '#FDFDFE',
+                            marginX: '32px',
+                            borderRadius: '28px',
+                            boxShadow: '0px 6px 10px rgba(0, 0, 0, 0.5)',
+                        }}
                     >
                         No hay microemprendimientos cargados para esta categoría.
+
                     </Typography>
                 )}
             </section>

@@ -145,6 +145,19 @@ function DrawerList({ toggleDrawer }) {
               <Typography variant="subtitles">Publicaciones</Typography>
             </Link>
           </ListItem>
+          <ListItem>
+            <Link
+              onClick={handleClickLink}
+              to="/chatbot"
+              style={{
+                textDecoration: "none",
+                color: "white",
+                fontSize: "18px",
+              }}
+            >
+              <Typography variant="subtitles">ChatBot</Typography>
+            </Link>
+          </ListItem>
         </>
       )}
     </List>

@@ -87,23 +87,23 @@ const Categories = () => {
                         ) : (
                             <Typography
                                 variant="subtitle1"
-                                fontWeight={600}
+                                fontWeight={400}
                                 gutterBottom
                                 alignSelf="center"
                                 marginBottom={2.5}
-                                fontSize={"24px"}
+                                fontSize={"18px"}
                                 sx={{
                                     textAlign: "center",
                                     display: "block",
                                     paddingY: "50px",
-                                    color: '#FFF',
-                                    backgroundColor: '#093C59', // Fondo rojo para resaltar
+                                    color: '#093C59',
+                                    backgroundColor: '#FDFDFE',
                                     paddingX: '20px',
-                                    borderRadius: '10px', // Bordes redondeados
-                                    boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16)' // Sombra
+                                    borderRadius: '28px',
+                                    boxShadow: '0px 6px 10px rgba(0, 0, 0, 0.5)',
                                 }}
                             >
-                                 No hay categorías por el momento...
+                                No hay categorías por el momento...
                             </Typography>
                         )}
                     </Box>

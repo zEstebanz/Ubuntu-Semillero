@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PostCard from "./PostCard";
-import getPost from "../../api/publications/getPost";
+import { getPost } from "../../api/publications/getPost";
 import Typography from '@mui/material/Typography';
 import { Box } from "@mui/material";
 
@@ -31,6 +31,7 @@ const PublicacionList = ({ busqueda }) => {
               description={post.descripcion}
               date={`${post.fechaCreacion[2]}/${post.fechaCreacion[1] < 10 ? '0' : ''}${post.fechaCreacion[1]}/${post.fechaCreacion[0]}`}
               images={Object.values(post.images)}
+              postId={post.id}
             />
           ))
         ) : (
@@ -39,26 +40,30 @@ const PublicacionList = ({ busqueda }) => {
             left: '50%',
             transform: 'translate(-50%, 50%)',
             textAlign: 'center',
-            paddingX: '20px',
-            paddingY: "50px",
-            backgroundColor: '#093C59',
-            borderRadius: '10px',
-            boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16)',
             width: '80%'
-            }}>
+          }}>
             <Typography
-              variant="subtitles"
-              fontWeight={600}
+              variant="subtitle1"
+              fontWeight={400}
               gutterBottom
+              alignSelf="center"
               marginBottom={2.5}
-              fontSize={"24px"}
+              fontSize={"18px"}
               sx={{
-                color: '#FFF',
+                textAlign: "center",
+                display: "block",
+                paddingY: "50px",
+                color: '#093C59',
+                backgroundColor: '#FDFDFE',
+                borderRadius: '28px',
+                paddingX: '8px',
+                boxShadow: '0px 6px 10px rgba(0, 0, 0, 0.5)',
               }}
             >
               No hay publicaciones por el momento...
             </Typography>
           </Box>
+
         )}
       </section>
     </main>

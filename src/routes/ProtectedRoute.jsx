@@ -5,8 +5,13 @@ export const ProtectedRoute = () => {
     const user = useSession();
 
     if (user) {
-        return (<Outlet />)
+        return <Outlet />;
+    } else {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        if (storedUser) {
+            return <Outlet />;
+        } else {
+            return <Navigate to="/login" />;
+        }
     }
-
-    return (<Navigate to='/login' />)
-}
+};

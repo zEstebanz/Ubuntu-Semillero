@@ -67,12 +67,17 @@ function MicroFormEdit() {
     const [currentImages, setCurrentImages] = useState([]);
     const [imgEditIndex, setImgEditIndex] = useState([]);
     const [newImages, setNewImages] = useState([]);
+    const [rubros, setRubros] = useState([]);
 
     // const [micro, setMicro] = useState(null);
 
     const [isFormComplete, setIsFormComplete] = useState(false);
 
     const fileInputRef = useRef(null);
+
+    useEffect(() => {
+        getRubros().then(data => setRubros(data));
+    }, []);
 
     useEffect(() => {
         getRubros().then(data => setCategoria(data));
@@ -326,6 +331,37 @@ function MicroFormEdit() {
                         onChange={handleNombreMicroChange}
                         value={nombre}
                     />
+
+
+
+
+
+<Select
+                        value={rubro}
+                        required
+                        onChange={(event) => setRubro(event.target.value)}
+                        fullWidth
+                        sx={{ mt: 3 }}
+                        //ref={paisSelectRef}
+                    >
+                        <MenuItem value={rubro} disabled>
+                            {rubro?.nombre}
+                        </MenuItem>
+                        {rubros?.map((rubroItem) => (
+                            <MenuItem key={rubroItem.id} value={rubroItem}>
+                                {rubroItem.nombre}
+                            </MenuItem>
+                        ))}
+                    </Select>
+
+
+  
+
+
+
+
+
+
 
                     {/* Sub-Categoría */}
                     <Input

@@ -25,7 +25,13 @@ import InversionPorIdMicro from "../components/Investments/TodosInversiones";
 import InversionesFormEdit from "../components/Investments/InversionesFormEdit";
 import InversionesCalculoForm from "../components/Investments/InversionesCalculoForm";
 import InversionCalcResultado from "../components/Investments/InversionCalcResultado";
-
+//Chatbot
+import ChatBot from "../pages/Dashboard/ChatBot";
+import { ChatBotGestion } from "../pages/Dashboard/ChatBotGestion";
+import { ChatBotEdit } from "../pages/Dashboard/ChatBotEdit";
+import PageNotFound from "../components/Error/PageNotFound";
+import ForbiddenPage from "../components/Error/ForbidenPage";
+import { ChatBotEditSecondary } from "../pages/Dashboard/ChatBotEditSecondary";
 
 const router = createBrowserRouter([
     {
@@ -53,6 +59,14 @@ const router = createBrowserRouter([
             {
                 path: '/login',
                 element: <Login />
+            },
+            {
+                path: '*',
+                element: <PageNotFound />
+            },
+            {
+                path: '/error/403',
+                element: <ForbiddenPage />
             },
             {
                 path: '/contacto/:title/:id',
@@ -147,6 +161,24 @@ const router = createBrowserRouter([
                         element: <InversionPorIdMicro />
                     },
                     //INVERSIONES
+
+                    //Chatbot
+                    {
+                        path: "/chatbot",
+                        element: <ChatBot />
+                    },
+                    {
+                        path: "/chatbot-gestion",
+                        element: <ChatBotGestion />
+                    },
+                    {
+                        path: "/chatbot-edit/:id",
+                        element: <ChatBotEdit />
+                    },
+                    {
+                        path: "/chatbot-edit-secondary/:id",
+                        element: <ChatBotEditSecondary />
+                    }
                 ]
             },
 

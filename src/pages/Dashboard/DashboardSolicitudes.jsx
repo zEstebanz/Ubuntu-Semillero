@@ -87,27 +87,39 @@ const DashboardSolicitudes = () => {
             </Box>
 
             <TabPanel value={selectedTab} index={0}>
-                {messages.filter(message => !message.gestionado).map((message) => (
-                    <MessageCard 
-                        key={message.id} 
-                        message={message} 
-                        handleGestionadoChange={handleGestionadoChange} 
-                        handleMessageClick={handleMessageClick} 
-                        iconColor={getIconColor(message.gestionado)}
-                    />
-                ))}
-            </TabPanel>
-            <TabPanel value={selectedTab} index={1}>
-                {messages.filter(message => message.gestionado).map((message) => (
-                    <MessageCard 
-                        key={message.id} 
-                        message={message} 
-                        handleGestionadoChange={handleGestionadoChange} 
-                        handleMessageClick={handleMessageClick} 
-                        iconColor={getIconColor(message.gestionado)} 
-                    />
-                ))}
-            </TabPanel>
+    {messages.filter(message => !message.gestionado).length === 0 ? (
+        <Box sx={{textAlign: "center", margin: "auto", pt: 1}}>
+        <Typography variant="h6" >No tiene mensajes para gestionar.</Typography>
+        </Box>
+    ) : (
+        messages.filter(message => !message.gestionado).map((message) => (
+            <MessageCard 
+                key={message.id} 
+                message={message} 
+                handleGestionadoChange={handleGestionadoChange} 
+                handleMessageClick={handleMessageClick} 
+                iconColor={getIconColor(message.gestionado)}
+            />
+        ))
+    )}
+</TabPanel>
+<TabPanel value={selectedTab} index={1}>
+    {messages.filter(message => message.gestionado).length === 0 ? (
+        <Box sx={{textAlign: "center", margin: "auto", pt: 1}}>
+        <Typography variant="h6" >No tiene mensajes para gestionar.</Typography>
+        </Box>
+    ) : (
+        messages.filter(message => message.gestionado).map((message) => (
+            <MessageCard 
+                key={message.id} 
+                message={message} 
+                handleGestionadoChange={handleGestionadoChange} 
+                handleMessageClick={handleMessageClick} 
+                iconColor={getIconColor(message.gestionado)} 
+            />
+        ))
+    )}
+</TabPanel>
         </div>
     );
 };
