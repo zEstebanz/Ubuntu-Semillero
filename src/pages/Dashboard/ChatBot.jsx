@@ -5,27 +5,36 @@ import CustomButton from '../../components/buttonCustom';
 import { Box, Grid, Card, CardContent, Typography, Menu, MenuItem, Divider } from '@mui/material';
 import { getAccessToken } from "../../utils/helpers/localStorage";
 import { ubuntuApi } from '../../utils/services/axiosConfig';
+import CustomModal from '../../components/modalCustom';
 
 
 
-const handleHideClick = async (id) => {
-    try {
-        const res = await ubuntuApi.put(`/question/hide/${id}`, null, {
-            headers: {
-                Authorization: 'Bearer ' + getAccessToken(),
-                'Content-Type': 'application/json' // Asegúrate de establecer el tipo de contenido correctamente si estás enviando datos en el cuerpo
-            },
-            // Puedes enviar datos en el cuerpo de la solicitud PUT si es necesario
-            // body: JSON.stringify({ key: value }),
-        });
 
-        // Aquí puedes manejar la respuesta si es necesario
-        console.log('Publicación ocultada correctamente:', res);
-    } catch (error) {
-        console.error('Error al ocultar la publicación:', error);
-        // Aquí puedes manejar cualquier error que ocurra durante la solicitud
-    }
-};
+// const handleHideClick = async (id) => {
+//     try {
+//         await ubuntuApi.put(`/question/hide/${id}`, null, {
+//             headers: {
+//                 Authorization: 'Bearer ' + getAccessToken(),
+//                 'Content-Type': 'application/json'
+//             },
+//         });
+        
+//         // Actualizar preguntas después de ocultar una pregunta
+//         const updatedPreguntas = preguntas.map(pregunta => {
+//             if (pregunta.id === id) {
+//                 return {
+//                     ...pregunta,
+//                     hidden: true // Actualiza el estado de oculto a verdadero
+//                 };
+//             }
+//             return pregunta;
+//         });
+//         setPreguntas(updatedPreguntas);
+//         console.log("La pregunta se ha ocultado correctamente.");
+//     } catch (error) {
+//         console.error("Error al ocultar la pregunta:", error);
+//     }
+// };
 
 const showQuestion = async (id) => {
     try {
@@ -65,6 +74,22 @@ function ChatBot() {
     const [successMessageOpen, setSuccessMessageOpen] = useState(false);
     const [errorMessageOpen, setErrorMessageOpen] = useState(false);
 
+    const [modalMessage, setModalMessage] = useState('');
+    const [modalType, setModalType] = useState('success');
+
+    // Función para mostrar un modal
+    const showModal = (message, type) => {
+        setModalMessage(message);
+        setModalType(type);
+        setSuccessMessageOpen(type === 'success');
+        setErrorMessageOpen(type === 'error');
+    };
+
+    // Función para ocultar un modal
+    const closeModal = () => {
+        setSuccessMessageOpen(false);
+        setErrorMessageOpen(false);
+    };
 
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -283,27 +308,126 @@ function ChatBot() {
     };
 
     // Función para ocultar
-   
-    // Función para mostrar una pregunta oculta
-    const handleShowClick = async (id) => {
-        try {
-            await showQuestion(id);
-            // Actualizar preguntas después de mostrar una pregunta oculta
-            const updatedPreguntas = preguntas.map(pregunta => {
-                if (pregunta.id === id) {
-                    return {
-                        ...pregunta,
-                        hidden: false // Actualiza el estado de oculto a falso
-                    };
-                }
-                return pregunta;
-            });
-            setPreguntas(updatedPreguntas);
-            console.log("La pregunta se ha mostrado correctamente.");
-        } catch (error) {
-            console.error("Error al mostrar la pregunta:", error);
-        }
-    };
+
+   // Función para ocultar preguntas iniciales
+   const hideInitialQuestions = async (id) => {
+    try {
+        await ubuntuApi.put(`/question/hide/${id}`, null, {
+            headers: {
+                Authorization: 'Bearer ' + getAccessToken(),
+                'Content-Type': 'application/json'
+            },
+        });
+
+        // Actualizar el estado de las preguntas iniciales ocultando la pregunta con el ID correspondiente
+        const updatedInitialQuestions = preguntas.map(pregunta => {
+            if (pregunta.id === id) {
+                return {
+                    ...pregunta,
+                    active: false
+                };
+            }
+            return pregunta;
+        });
+
+        showModal("La pregunta inicial se ha ocultado correctamente.", 'success');
+        setPreguntas(updatedInitialQuestions);
+        console.log("La pregunta inicial se ha ocultado correctamente.");
+    } catch (error) {
+        console.error("Error al ocultar la pregunta inicial:", error);
+        showModal("Error al ocultar la pregunta inicial.", 'error');
+    }
+};
+
+// Función para mostrar preguntas iniciales
+const showInitialQuestions = async (id) => {
+    try {
+        await ubuntuApi.put(`/question/show/${id}`, null, {
+            headers: {
+                Authorization: 'Bearer ' + getAccessToken(),
+                'Content-Type': 'application/json'
+            },
+        });
+
+        // Actualizar el estado de las preguntas iniciales mostrando la pregunta con el ID correspondiente
+        const updatedInitialQuestions = preguntas.map(pregunta => {
+            if (pregunta.id === id) {
+                return {
+                    ...pregunta,
+                    active: true
+                };
+            }
+            return pregunta;
+        });
+
+        setPreguntas(updatedInitialQuestions);
+        console.log("La pregunta inicial se ha mostrado correctamente.");
+        showModal("La pregunta inicial se ha mostrado correctamente.", 'success');
+    } catch (error) {
+        console.error("Error al mostrar la pregunta inicial:", error);
+        showModal("Error al mostrar la pregunta inicial.", 'error');
+    }
+};
+
+// Función para ocultar preguntas secundarias
+const hideSecondaryQuestions = async (id) => {
+    try {
+        await ubuntuApi.put(`/question/hide/${id}`, null, {
+            headers: {
+                Authorization: 'Bearer ' + getAccessToken(),
+                'Content-Type': 'application/json'
+            },
+        });
+
+        // Actualizar el estado de las preguntas secundarias ocultando la pregunta con el ID correspondiente
+        const updatedSecondaryQuestions = preguntasSecundarias.map(pregunta => {
+            if (pregunta.id === id) {
+                return {
+                    ...pregunta,
+                    active: false
+                };
+            }
+            return pregunta;
+        });
+
+        setPreguntasSecundarias(updatedSecondaryQuestions);
+        console.log("La pregunta secundaria se ha ocultado correctamente.");
+        showModal("La repregunta se ha ocultado correctamente.", 'success');
+    } catch (error) {
+        console.error("Error al ocultar la pregunta secundaria:", error);
+        showModal("Error al ocultar la repregunta.", 'error');
+    }
+};
+
+// Función para mostrar preguntas secundarias
+const showSecondaryQuestions = async (id) => {
+    try {
+        await ubuntuApi.put(`/question/show/${id}`, null, {
+            headers: {
+                Authorization: 'Bearer ' + getAccessToken(),
+                'Content-Type': 'application/json'
+            },
+        });
+
+        // Actualizar el estado de las preguntas secundarias mostrando la pregunta con el ID correspondiente
+        const updatedSecondaryQuestions = preguntasSecundarias.map(pregunta => {
+            if (pregunta.id === id) {
+                return {
+                    ...pregunta,
+                    active: true
+                };
+            }
+            return pregunta;
+        });
+
+        setPreguntasSecundarias(updatedSecondaryQuestions);
+        console.log("La pregunta secundaria se ha mostrado correctamente.");
+        showModal("La repregunta se ha mostrado correctamente.", 'success');
+    } catch (error) {
+        console.error("Error al mostrar la pregunta secundaria:", error);
+        showModal("Error al mostrar la repregunta.", 'error');
+    }
+};
 
     return (
         <main style={{ padding: '20px' }}>
@@ -372,7 +496,7 @@ function ChatBot() {
                                                 }}>Editar / Ver más</Link>
                                             </MenuItem>
                                             <MenuItem onClick={() => {
-    const clickHandler = pregunta.active ? handleHideClick : handleShowClick;
+    const clickHandler = pregunta.active ? hideInitialQuestions : showInitialQuestions;
     clickHandler(pregunta.id);
 }}>
     {pregunta.active ? 'Ocultar' : 'Mostrar'}
@@ -492,8 +616,9 @@ function ChatBot() {
                                         color: '#090909'
                                     }}>Editar / Ver más</Link>
                                 </MenuItem>
-                                <MenuItem onClick={() => {
-    const clickHandler = pregunta.active ? handleHideClick : handleShowClick;
+                                <MenuItem onClick={(event) => {
+    event.preventDefault(); // Evitar el comportamiento predeterminado del evento
+    const clickHandler = pregunta.active ? hideSecondaryQuestions : showSecondaryQuestions;
     clickHandler(pregunta.id);
 }}>
     {pregunta.active ? 'Ocultar' : 'Mostrar'}
@@ -537,11 +662,21 @@ function ChatBot() {
     )}
 </Box>
 
+
+
 {console.log("Todas las preguntas:", preguntas.concat(preguntasSecundarias))}
 
 {console.log("Todas las respuestas:", (preguntasSecundarias.map(pregunta => pregunta.respuesta)))}
 
 </Box>
+<CustomModal
+                open={successMessageOpen || errorMessageOpen}
+                onClose={closeModal}
+                title={modalType === 'success' ? 'Éxito' : 'Error'}
+                message={modalMessage}
+                buttons={[{ text: 'Cerrar', onClick: closeModal }]}
+                icon={modalType === 'success' ? 'check' : 'error'}
+            />
 
         </main>
     );
