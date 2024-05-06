@@ -5,36 +5,25 @@ import CustomButton from '../../components/buttonCustom';
 import { Box, Grid, Card, CardContent, Typography, Menu, MenuItem, Divider } from '@mui/material';
 import { getAccessToken } from "../../utils/helpers/localStorage";
 import { ubuntuApi } from '../../utils/services/axiosConfig';
-import CustomModal from '../../components/modalCustom';
 
+const hideQuestion = async (id) => {
+    try {
+        const res = await ubuntuApi.put(`/question/hide/${id}`, null, {
+            headers: {
+                Authorization: 'Bearer ' + getAccessToken(),
+                'Content-Type': 'application/json' // Asegúrate de establecer el tipo de contenido correctamente si estás enviando datos en el cuerpo
+            },
+            // Puedes enviar datos en el cuerpo de la solicitud PUT si es necesario
+            // body: JSON.stringify({ key: value }),
+        });
 
-
-
-// const handleHideClick = async (id) => {
-//     try {
-//         await ubuntuApi.put(`/question/hide/${id}`, null, {
-//             headers: {
-//                 Authorization: 'Bearer ' + getAccessToken(),
-//                 'Content-Type': 'application/json'
-//             },
-//         });
-        
-//         // Actualizar preguntas después de ocultar una pregunta
-//         const updatedPreguntas = preguntas.map(pregunta => {
-//             if (pregunta.id === id) {
-//                 return {
-//                     ...pregunta,
-//                     hidden: true // Actualiza el estado de oculto a verdadero
-//                 };
-//             }
-//             return pregunta;
-//         });
-//         setPreguntas(updatedPreguntas);
-//         console.log("La pregunta se ha ocultado correctamente.");
-//     } catch (error) {
-//         console.error("Error al ocultar la pregunta:", error);
-//     }
-// };
+        // Aquí puedes manejar la respuesta si es necesario
+        console.log('Publicación ocultada correctamente:', res);
+    } catch (error) {
+        console.error('Error al ocultar la publicación:', error);
+        // Aquí puedes manejar cualquier error que ocurra durante la solicitud
+    }
+};
 
 const showQuestion = async (id) => {
     try {
@@ -74,91 +63,14 @@ function ChatBot() {
     const [successMessageOpen, setSuccessMessageOpen] = useState(false);
     const [errorMessageOpen, setErrorMessageOpen] = useState(false);
 
-    const [modalMessage, setModalMessage] = useState('');
-    const [modalType, setModalType] = useState('success');
-
-    // Función para mostrar un modal
-    const showModal = (message, type) => {
-        setModalMessage(message);
-        setModalType(type);
-        setSuccessMessageOpen(type === 'success');
-        setErrorMessageOpen(type === 'error');
-    };
-
-    // Función para ocultar un modal
-    const closeModal = () => {
-        setSuccessMessageOpen(false);
-        setErrorMessageOpen(false);
-    };
-
-    useEffect(() => {
-        const fetchQuestions = async () => {
-            try {
-                // Obtener preguntas iniciales activas
-                const initialQuestions = await getQuestionInitial();
-    
-                // Obtener preguntas inactivas
-                const inactiveQuestionsResponse = await ubuntuApi.get('/question/questionsNotActive', {
-                    headers: {
-                        Authorization: 'Bearer ' + getAccessToken(),
-                    }
-                });
-                const inactiveQuestions = inactiveQuestionsResponse.data;
-    
-                // Filtrar preguntas inactivas en preguntas iniciales y secundarias
-                const initialInactiveQuestions = inactiveQuestions.filter(question => question.type === "INITIAL");
-                const secondaryInactiveQuestions = inactiveQuestions.filter(question => question.type === "SECONDARY");
-    
-                // Combinar preguntas activas e inactivas
-                const allQuestions = [...initialQuestions, ...initialInactiveQuestions];
-    
-                // Actualizar el estado de las preguntas
-                setPreguntas(allQuestions);
-                setExpandedMenus(initialExpandedMenus(allQuestions)); // Inicializar los menús expandidos
-    
-                // Imprimir las preguntas inactivas en la consola
-                console.log("Preguntas inactivas inicialmente:", initialInactiveQuestions);
-                console.log("Preguntas inactivas secundarias:", secondaryInactiveQuestions);
-            } catch (error) {
-                console.error('Error al traer las preguntas:', error);
-            }
-        };
-        fetchQuestions();
-    }, []);
-
-
     useEffect(() => {
         const fetchPreguntasInitial = async () => {
             try {
-                // Obtener preguntas iniciales activas
-                const activeInitialQuestions = await getQuestionInitial();
-    
-                // Obtener preguntas inactivas iniciales
-                const inactiveInitialQuestionsResponse = await ubuntuApi.get('/question/questionsNotActive', {
-                    headers: {
-                        Authorization: 'Bearer ' + getAccessToken(),
-                    }
-                });
-                const inactiveInitialQuestions = inactiveInitialQuestionsResponse.data.filter(question => question.type === "INITIAL");
-    
-                // Obtener respuestas para preguntas activas e inactivas iniciales
-                const activeInitialQuestionsWithResponses = await Promise.all(activeInitialQuestions.map(async pregunta => {
-                    const respuesta = await getAnswerForQuestionId(pregunta.id);
-                    return { ...pregunta, respuesta, active: true }; // Marcamos las preguntas activas
-                }));
-                const inactiveInitialQuestionsWithResponses = await Promise.all(inactiveInitialQuestions.map(async pregunta => {
-                    const respuesta = await getAnswerForQuestionId(pregunta.id);
-                    return { ...pregunta, respuesta, active: false }; // Marcamos las preguntas inactivas
-                }));
-    
-                // Combinar preguntas iniciales activas e inactivas
-                const allInitialQuestionsCombined = [...activeInitialQuestionsWithResponses, ...inactiveInitialQuestionsWithResponses];
-    
-                // Actualizar el estado de las preguntas iniciales
-                setPreguntas(allInitialQuestionsCombined);
-                console.log("Todas las preguntas iniciales:", allInitialQuestionsCombined);
+                const response = await getQuestionInitial();
+                setPreguntas(response);
+                setExpandedMenus(initialExpandedMenus(response)); // Inicializar los menús expandidos
             } catch (error) {
-                console.error('Error al traer las preguntas iniciales:', error);
+                console.error('Error al traer las preguntas:', error);
             }
         };
         fetchPreguntasInitial();
@@ -167,7 +79,7 @@ function ChatBot() {
     useEffect(() => {
         const fetchPreguntasSecundarias = async () => {
             try {
-                // Obtener preguntas secundarias activas
+                // Obtener preguntas secundarias para cada pregunta inicial
                 const secondaryQuestions = await Promise.all(preguntas.map(async pregunta => {
                     const secondary = await getQuestionSecondary(pregunta.id);
                     // Para cada pregunta secundaria, obtener la respuesta
@@ -177,30 +89,9 @@ function ChatBot() {
                     }));
                     return secondaryWithResponse;
                 }));
-    
                 // Unificar todas las preguntas secundarias en una sola lista
                 const allSecondaryQuestions = secondaryQuestions.reduce((acc, val) => acc.concat(val), []);
-    
-                // Obtener preguntas secundarias inactivas
-                const inactiveSecondaryQuestionsResponse = await ubuntuApi.get('/question/questionsNotActive', {
-                    headers: {
-                        Authorization: 'Bearer ' + getAccessToken(),
-                    }
-                });
-                const inactiveSecondaryQuestions = inactiveSecondaryQuestionsResponse.data.filter(question => question.type === "SECONDARY");
-    
-                // Obtener respuestas para preguntas secundarias inactivas
-                const inactiveSecondaryQuestionsWithResponses = await Promise.all(inactiveSecondaryQuestions.map(async pregunta => {
-                    const respuesta = await getAnswerForQuestionId(pregunta.id);
-                    return { ...pregunta, respuesta };
-                }));
-    
-                // Combinar preguntas secundarias activas e inactivas
-                const allSecondaryQuestionsCombined = [...allSecondaryQuestions, ...inactiveSecondaryQuestionsWithResponses];
-    
-                // Actualizar el estado de las preguntas secundarias
-                setPreguntasSecundarias(allSecondaryQuestionsCombined);
-                console.log("Todas las preguntas secundarias:", allSecondaryQuestionsCombined);
+                setPreguntasSecundarias(allSecondaryQuestions);
             } catch (error) {
                 console.error('Error al traer las preguntas secundarias:', error);
             }
@@ -229,9 +120,9 @@ function ChatBot() {
         }
     };
 
-    
-    
-    
+
+
+
     // Dentro de useEffect
     useEffect(() => {
         const fetchPreguntasInitial = async () => {
@@ -272,14 +163,14 @@ function ChatBot() {
                 const allSecondaryQuestions = secondaryQuestions.reduce((acc, val) => acc.concat(val), []);
                 setPreguntasSecundarias(allSecondaryQuestions);
                 console.log("Todas las preguntas secundarias:", allSecondaryQuestions);
-                
+
             } catch (error) {
                 console.error('Error al traer las preguntas secundarias:', error);
             }
         };
         fetchPreguntasSecundarias();
     }, [preguntas]);
-    
+
 
 
     // Función para inicializar los menús expandidos con valor false para cada pregunta
@@ -308,126 +199,39 @@ function ChatBot() {
     };
 
     // Función para ocultar
+    const handleHideClick = async (id) => {
+        try {
+            await hideQuestion(id);
+            // Si la solicitud se completa con éxito, puedes mostrar algún tipo de mensaje de éxito o actualizar el estado de tu componente según sea necesario
+            setSuccessMessageOpen(true);
+            console.log("La pregunta se ha ocultado correctamente.");
+        } catch (error) {
+            // Si ocurre un error durante la solicitud, puedes manejarlo aquí mostrando un mensaje de error o tomando otras acciones según sea necesario
+            console.error("Error al ocultar la pregunta:", error);
+            setErrorMessageOpen(true);
+        }
+    };
 
-   // Función para ocultar preguntas iniciales
-   const hideInitialQuestions = async (id) => {
-    try {
-        await ubuntuApi.put(`/question/hide/${id}`, null, {
-            headers: {
-                Authorization: 'Bearer ' + getAccessToken(),
-                'Content-Type': 'application/json'
-            },
-        });
-
-        // Actualizar el estado de las preguntas iniciales ocultando la pregunta con el ID correspondiente
-        const updatedInitialQuestions = preguntas.map(pregunta => {
-            if (pregunta.id === id) {
-                return {
-                    ...pregunta,
-                    active: false
-                };
-            }
-            return pregunta;
-        });
-
-        showModal("La pregunta inicial se ha ocultado correctamente.", 'success');
-        setPreguntas(updatedInitialQuestions);
-        console.log("La pregunta inicial se ha ocultado correctamente.");
-    } catch (error) {
-        console.error("Error al ocultar la pregunta inicial:", error);
-        showModal("Error al ocultar la pregunta inicial.", 'error');
-    }
-};
-
-// Función para mostrar preguntas iniciales
-const showInitialQuestions = async (id) => {
-    try {
-        await ubuntuApi.put(`/question/show/${id}`, null, {
-            headers: {
-                Authorization: 'Bearer ' + getAccessToken(),
-                'Content-Type': 'application/json'
-            },
-        });
-
-        // Actualizar el estado de las preguntas iniciales mostrando la pregunta con el ID correspondiente
-        const updatedInitialQuestions = preguntas.map(pregunta => {
-            if (pregunta.id === id) {
-                return {
-                    ...pregunta,
-                    active: true
-                };
-            }
-            return pregunta;
-        });
-
-        setPreguntas(updatedInitialQuestions);
-        console.log("La pregunta inicial se ha mostrado correctamente.");
-        showModal("La pregunta inicial se ha mostrado correctamente.", 'success');
-    } catch (error) {
-        console.error("Error al mostrar la pregunta inicial:", error);
-        showModal("Error al mostrar la pregunta inicial.", 'error');
-    }
-};
-
-// Función para ocultar preguntas secundarias
-const hideSecondaryQuestions = async (id) => {
-    try {
-        await ubuntuApi.put(`/question/hide/${id}`, null, {
-            headers: {
-                Authorization: 'Bearer ' + getAccessToken(),
-                'Content-Type': 'application/json'
-            },
-        });
-
-        // Actualizar el estado de las preguntas secundarias ocultando la pregunta con el ID correspondiente
-        const updatedSecondaryQuestions = preguntasSecundarias.map(pregunta => {
-            if (pregunta.id === id) {
-                return {
-                    ...pregunta,
-                    active: false
-                };
-            }
-            return pregunta;
-        });
-
-        setPreguntasSecundarias(updatedSecondaryQuestions);
-        console.log("La pregunta secundaria se ha ocultado correctamente.");
-        showModal("La repregunta se ha ocultado correctamente.", 'success');
-    } catch (error) {
-        console.error("Error al ocultar la pregunta secundaria:", error);
-        showModal("Error al ocultar la repregunta.", 'error');
-    }
-};
-
-// Función para mostrar preguntas secundarias
-const showSecondaryQuestions = async (id) => {
-    try {
-        await ubuntuApi.put(`/question/show/${id}`, null, {
-            headers: {
-                Authorization: 'Bearer ' + getAccessToken(),
-                'Content-Type': 'application/json'
-            },
-        });
-
-        // Actualizar el estado de las preguntas secundarias mostrando la pregunta con el ID correspondiente
-        const updatedSecondaryQuestions = preguntasSecundarias.map(pregunta => {
-            if (pregunta.id === id) {
-                return {
-                    ...pregunta,
-                    active: true
-                };
-            }
-            return pregunta;
-        });
-
-        setPreguntasSecundarias(updatedSecondaryQuestions);
-        console.log("La pregunta secundaria se ha mostrado correctamente.");
-        showModal("La repregunta se ha mostrado correctamente.", 'success');
-    } catch (error) {
-        console.error("Error al mostrar la pregunta secundaria:", error);
-        showModal("Error al mostrar la repregunta.", 'error');
-    }
-};
+    // Función para mostrar una pregunta oculta
+    const handleShowClick = async (id) => {
+        try {
+            await showQuestion(id);
+            // Actualizar preguntas después de mostrar una pregunta oculta
+            const updatedPreguntas = preguntas.map(pregunta => {
+                if (pregunta.id === id) {
+                    return {
+                        ...pregunta,
+                        hidden: false // Actualiza el estado de oculto a falso
+                    };
+                }
+                return pregunta;
+            });
+            setPreguntas(updatedPreguntas);
+            console.log("La pregunta se ha mostrado correctamente.");
+        } catch (error) {
+            console.error("Error al mostrar la pregunta:", error);
+        }
+    };
 
     return (
         <main style={{ padding: '20px' }}>
@@ -442,10 +246,6 @@ const showSecondaryQuestions = async (id) => {
                 </CustomButton>
             </Link>
             <Box>
-
-
-
-                
                 <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Preguntas Iniciales</h2>
                 {preguntas && (
                     <Grid container justifyContent="center">
@@ -455,7 +255,6 @@ const showSecondaryQuestions = async (id) => {
                                 borderRadius: "16px",
                                 m: 1,
                                 boxShadow: "none",
-                                opacity: pregunta.active ? '1' : '.7',
                             }}>
                                 <CardContent>
                                     <Typography
@@ -479,6 +278,7 @@ const showSecondaryQuestions = async (id) => {
                                             style={{
                                                 border: 'none',
                                                 marginLeft: "1.5rem",
+                                                margin: '8px'
                                             }}>
                                             <img src="../../../public/img/menu-edit.svg" alt="menu" />
                                         </button>
@@ -495,12 +295,16 @@ const showSecondaryQuestions = async (id) => {
                                                     color: '#090909'
                                                 }}>Editar / Ver más</Link>
                                             </MenuItem>
-                                            <MenuItem onClick={() => {
-    const clickHandler = pregunta.active ? hideInitialQuestions : showInitialQuestions;
-    clickHandler(pregunta.id);
-}}>
-    {pregunta.active ? 'Ocultar' : 'Mostrar'}
-</MenuItem>
+                                            <MenuItem
+                                                onClick={handleHideClick}
+                                            >
+                                                <Link to="#" style={{
+                                                    textDecoration: 'none',
+                                                    fontSize: '16px',
+                                                    lineHeight: '24px',
+                                                    color: '#090909'
+                                                }}>Ocultar</Link>
+                                            </MenuItem>
                                         </Menu>
                                     </Typography>
                                     <Divider sx={{
@@ -512,25 +316,25 @@ const showSecondaryQuestions = async (id) => {
                                         alignItems: 'center',
                                         justifyContent: 'space-between'
                                     }}>
-                                       <Typography
-    sx={{
-        fontSize: '14px',
-        fontWeight: 400,
-        lineHeight: '24px',
-        marginTop: '8px',
-        width: 'calc(244px - 16px)',
-        display: '-webkit-box',
-        WebkitBoxOrient: 'vertical',
-        WebkitLineClamp: expandedText ? 'unset' : 3,
-        overflow: 'hidden',
-    }}
->
-    {/* {pregunta.type} */}
-    {pregunta.respuesta ? pregunta.respuesta.text : 'Respuesta no disponible'}
-</Typography>
+                                        <Typography
+                                            sx={{
+                                                fontSize: '14px',
+                                                fontWeight: 400,
+                                                lineHeight: '24px',
+                                                marginTop: '8px',
+                                                width: 'calc(244px - 16px)',
+                                                display: '-webkit-box',
+                                                WebkitBoxOrient: 'vertical',
+                                                WebkitLineClamp: expandedText ? 'unset' : 3,
+                                                overflow: 'hidden',
+                                            }}
+                                        >
+                                            {/* {pregunta.type} */}
+                                            {pregunta.respuesta ? pregunta.respuesta.text : 'Respuesta no disponible'}
+                                        </Typography>
 
 
-                                        
+
                                         {/* <div style={{
                                             width: '7.41px',
                                             height: '12px',
@@ -545,7 +349,7 @@ const showSecondaryQuestions = async (id) => {
                                     </div>
 
 
-{/* 
+                                    {/* 
                                     {pregunta.respuesta && (
     <CustomButton onClick={() => setExpandedText(!expandedText)}>
         {expandedText ? 'Mostrar menos' : 'Mostrar más'}
@@ -562,121 +366,129 @@ const showSecondaryQuestions = async (id) => {
             </Box>
 
 
-{/* BOX PARA REPREGUNTAS */}
+            {/* BOX PARA REPREGUNTAS */}
 
-<Box>
+            <Box>
 
-<Box>
-    <h2 style={{ textAlign: 'center', marginBottom: '20px', marginTop: '20px' }}>Repreguntas</h2>
-    {preguntasSecundarias && (
-        <Grid container justifyContent="center">
-            {preguntasSecundarias.map(pregunta => (
-                <Card key={pregunta.id} sx={{
-                    width: "328px",
-                    borderRadius: "16px",
-                    m: 1,
-                    boxShadow: "none",
-                    opacity: pregunta.active ? '1' : '.7',
-                }}>
-                    <CardContent>
-                        <Typography
-                            variant="h6"
-                            gutterBottom
-                            color="primary"
-                            sx={{
-                                fontFamily: 'Lato',
-                                fontSize: '18px',
-                                fontWeight: 700,
-                                lineHeight: '25px',
-                                letterSpacing: '0px',
-                                textAlign: 'left',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignpreguntas: 'center'
-                            }}
-                        >
-                            {pregunta.text}
-                            <button onClick={() => handleClick(pregunta.id)} ref={el => anchorRefs.current[pregunta.id] = el}
-                                style={{
-                                    border: 'none',
-                                    marginLeft: "1.5rem",
+                <Box>
+                    <h2 style={{ textAlign: 'center', marginBottom: '20px', marginTop: '20px' }}>Repreguntas</h2>
+                    {preguntasSecundarias && (
+                        <Grid container justifyContent="center">
+                            {preguntasSecundarias.map(pregunta => (
+                                <Card key={pregunta.id} sx={{
+                                    width: "328px",
+                                    borderRadius: "16px",
+                                    m: 1,
+                                    boxShadow: "none",
                                 }}>
-                                <img src="../../../public/img/menu-edit.svg" alt="menu" />
-                            </button>
-                            <Menu
-                                anchorEl={anchorRefs.current[pregunta.id]}
-                                open={expandedMenus[pregunta.id]}
-                                onClose={() => handleClose(pregunta.id)}
-                            >
-                                <MenuItem onClick={() => handleClose(pregunta.id)}>
-                                    <Link to={"/chatbot-edit-secondary/" + pregunta.id} style={{
-                                        textDecoration: 'none',
-                                        fontSize: '16px',
-                                        lineHeight: '24px',
-                                        color: '#090909'
-                                    }}>Editar / Ver más</Link>
-                                </MenuItem>
-                                <MenuItem onClick={(event) => {
-    event.preventDefault(); // Evitar el comportamiento predeterminado del evento
-    const clickHandler = pregunta.active ? hideSecondaryQuestions : showSecondaryQuestions;
-    clickHandler(pregunta.id);
-}}>
-    {pregunta.active ? 'Ocultar' : 'Mostrar'}
-</MenuItem>
-                            </Menu>
-                        </Typography>
-                        <Divider sx={{
-                            border: '1px solid #226516',
-                            width: '200px'
-                        }} />
-                        <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between'
-                        }}>
-                            <Typography
-                                sx={{
-                                    fontSize: '14px',
-                                    fontWeight: 400,
-                                    lineHeight: '24px',
-                                    marginTop: '8px',
-                                    width: 'calc(244px - 16px)',
-                                    display: '-webkit-box',
-                                    WebkitBoxOrient: 'vertical',
-                                    WebkitLineClamp: expandedText ? 'unset' : 3,
-                                    overflow: 'hidden',
-                                }}
-                            >
-                                {/* {pregunta.text} */}
-                                {pregunta.respuesta ? pregunta.respuesta.text : 'Respuesta no disponible'}
-                            </Typography>
-                   
-                   
-                            
-                        </div>
-                    </CardContent>
-           
-                </Card>
-            ))}
-        </Grid>
-    )}
-</Box>
+                                    <CardContent>
+                                        <div style={{ position: 'relative' }}>
+
+                                            <Typography
+                                                variant="h6"
+                                                gutterBottom
+                                                color="primary"
+                                                sx={{
+                                                    fontFamily: 'Lato',
+                                                    fontSize: '18px',
+                                                    fontWeight: 700,
+                                                    lineHeight: '25px',
+                                                    letterSpacing: '0px',
+                                                    textAlign: 'left',
+                                                    display: 'flex',
+                                                    justifyContent: 'space-between',
+                                                    alignpreguntas: 'center',
+                                                    whiteSpace: 'pre-wrap',
+                                                    flexDirection: 'column',
+                                                    wordWrap: 'break-word',
+                                                    maxWidth: '100%'
+                                                }}
+                                            >
+                                                {pregunta.text.split('/').map((text, index) => (
+                                                    <span key={index}>{text}{index !== pregunta.text.split('/').length - 1 && <br />}</span>
+                                                ))}
+
+                                                <button
+                                                    onClick={() => handleClick(pregunta.id)}
+                                                    ref={el => anchorRefs.current[pregunta.id] = el}
+                                                    style={{
+                                                        border: 'none',
+                                                        position: 'absolute',
+                                                        top: 0,
+                                                        right: 0,
+                                                        margin: '8px'
+                                                    }}
+                                                >
+                                                    <img src="../../../public/img/menu-edit.svg" alt="menu" />
+                                                </button>
+                                                <Menu
+                                                    anchorEl={anchorRefs.current[pregunta.id]}
+                                                    open={expandedMenus[pregunta.id]}
+                                                    onClose={() => handleClose(pregunta.id)}
+                                                >
+                                                    <MenuItem onClick={() => handleClose(pregunta.id)}>
+                                                        <Link to={"/chatbot-edit-secondary/" + pregunta.id} style={{
+                                                            textDecoration: 'none',
+                                                            fontSize: '16px',
+                                                            lineHeight: '24px',
+                                                            color: '#090909'
+                                                        }}>Editar / Ver más</Link>
+                                                    </MenuItem>
+                                                    <MenuItem
+                                                        onClick={handleHideClick}
+                                                    >
+                                                        <Link to="#" style={{
+                                                            textDecoration: 'none',
+                                                            fontSize: '16px',
+                                                            lineHeight: '24px',
+                                                            color: '#090909'
+                                                        }}>Ocultar</Link>
+                                                    </MenuItem>
+                                                </Menu>
+                                            </Typography>
+                                            <Divider sx={{
+                                                border: '1px solid #226516',
+                                                width: '200px'
+                                            }} />
+                                            <div style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'space-between'
+                                            }}>
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: '14px',
+                                                        fontWeight: 400,
+                                                        lineHeight: '24px',
+                                                        marginTop: '8px',
+                                                        width: 'calc(244px - 16px)',
+                                                        display: '-webkit-box',
+                                                        WebkitBoxOrient: 'vertical',
+                                                        WebkitLineClamp: expandedText ? 'unset' : 3,
+                                                        overflow: 'hidden',
+                                                    }}
+                                                >
+                                                    {/* {pregunta.text} */}
+                                                    {pregunta.respuesta ? pregunta.respuesta.text : 'Respuesta no disponible'}
+                                                </Typography>
 
 
 
-{console.log("Todas las preguntas:", preguntas.concat(preguntasSecundarias))}
+                                            </div>
+                                        </div>
+                                    </CardContent>
 
-{console.log("Todas las respuestas:", (preguntasSecundarias.map(pregunta => pregunta.respuesta)))}
+                                </Card>
+                            ))}
+                        </Grid>
+                    )}
+                </Box>
 
-</Box>
-<CustomModal
-                open={successMessageOpen || errorMessageOpen}
-                onClose={closeModal}
-                title={modalType === 'success' ? 'Éxito' : 'Error'}
-                message={modalMessage}
-                buttons={[{ text: 'Cerrar', onClick: closeModal }]}
-                icon={modalType === 'success' ? 'check' : 'error'}
-            />
+                {console.log("Todas las preguntas:", preguntas.concat(preguntasSecundarias))}
+
+                {console.log("Todas las respuestas:", (preguntasSecundarias.map(pregunta => pregunta.respuesta)))}
+
+            </Box>
 
         </main>
     );
