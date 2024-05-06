@@ -195,6 +195,7 @@ export const ChatBotEdit = () => {
                         <TextField
                             id="pregunta"
                             label="Texto de la Pregunta"
+                            InputLabelProps={{ shrink: true }}  
                             fullWidth
                             multiline
                             rows={7}
@@ -204,7 +205,7 @@ export const ChatBotEdit = () => {
                             }}
                             {...formik.getFieldProps('pregunta')}
 
-                            value={preguntas ? preguntas.text : ''}
+                            value={preguntas ? preguntas.text :  ''}
                             onChange={(e) => {
                                 handleInputChange(e);
                                 setPregunta({ ...preguntas, text: e.target.value });
@@ -260,6 +261,7 @@ export const ChatBotEdit = () => {
                                 id="respuesta"
                                 label="Texto de la Respuesta"
                                 fullWidth
+                                InputLabelProps={{ shrink: true }}  
                                 multiline
                                 rows={7}
 

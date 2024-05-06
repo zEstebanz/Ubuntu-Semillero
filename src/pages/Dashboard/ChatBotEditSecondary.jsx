@@ -196,6 +196,7 @@ export const ChatBotEditSecondary = () => {
                             id="pregunta"
                             label="Texto de la Pregunta"
                             fullWidth
+                            InputLabelProps={{ shrink: true }}  
                             multiline
                             rows={7}
 
@@ -260,6 +261,7 @@ export const ChatBotEditSecondary = () => {
                                 id="respuesta"
                                 label="Texto de la Respuesta"
                                 fullWidth
+                                InputLabelProps={{ shrink: true }}  
                                 multiline
                                 rows={7}
 
