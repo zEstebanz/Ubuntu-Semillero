@@ -4,6 +4,7 @@ import { getAccessToken } from "../../utils/helpers/localStorage";
 export const getQuestionInitial = async () => {
     try {
         const res = await ubuntuApi.get(`/faq/initials`, {
+            
             headers: {
                 Authorization: 'Bearer' + getAccessToken(),
             }
@@ -15,3 +16,15 @@ export const getQuestionInitial = async () => {
         console.log(error);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+

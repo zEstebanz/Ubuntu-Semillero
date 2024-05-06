@@ -6,7 +6,9 @@ import { Box, Grid, Card, CardContent, Typography, Menu, MenuItem, Divider } fro
 import { getAccessToken } from "../../utils/helpers/localStorage";
 import { ubuntuApi } from '../../utils/services/axiosConfig';
 
-const hideQuestion = async (id) => {
+
+
+const handleHideClick = async (id) => {
     try {
         const res = await ubuntuApi.put(`/question/hide/${id}`, null, {
             headers: {
@@ -63,14 +65,75 @@ function ChatBot() {
     const [successMessageOpen, setSuccessMessageOpen] = useState(false);
     const [errorMessageOpen, setErrorMessageOpen] = useState(false);
 
+
+    useEffect(() => {
+        const fetchQuestions = async () => {
+            try {
+                // Obtener preguntas iniciales activas
+                const initialQuestions = await getQuestionInitial();
+    
+                // Obtener preguntas inactivas
+                const inactiveQuestionsResponse = await ubuntuApi.get('/question/questionsNotActive', {
+                    headers: {
+                        Authorization: 'Bearer ' + getAccessToken(),
+                    }
+                });
+                const inactiveQuestions = inactiveQuestionsResponse.data;
+    
+                // Filtrar preguntas inactivas en preguntas iniciales y secundarias
+                const initialInactiveQuestions = inactiveQuestions.filter(question => question.type === "INITIAL");
+                const secondaryInactiveQuestions = inactiveQuestions.filter(question => question.type === "SECONDARY");
+    
+                // Combinar preguntas activas e inactivas
+                const allQuestions = [...initialQuestions, ...initialInactiveQuestions];
+    
+                // Actualizar el estado de las preguntas
+                setPreguntas(allQuestions);
+                setExpandedMenus(initialExpandedMenus(allQuestions)); // Inicializar los menús expandidos
+    
+                // Imprimir las preguntas inactivas en la consola
+                console.log("Preguntas inactivas inicialmente:", initialInactiveQuestions);
+                console.log("Preguntas inactivas secundarias:", secondaryInactiveQuestions);
+            } catch (error) {
+                console.error('Error al traer las preguntas:', error);
+            }
+        };
+        fetchQuestions();
+    }, []);
+
+
     useEffect(() => {
         const fetchPreguntasInitial = async () => {
             try {
-                const response = await getQuestionInitial();
-                setPreguntas(response);
-                setExpandedMenus(initialExpandedMenus(response)); // Inicializar los menús expandidos
+                // Obtener preguntas iniciales activas
+                const activeInitialQuestions = await getQuestionInitial();
+    
+                // Obtener preguntas inactivas iniciales
+                const inactiveInitialQuestionsResponse = await ubuntuApi.get('/question/questionsNotActive', {
+                    headers: {
+                        Authorization: 'Bearer ' + getAccessToken(),
+                    }
+                });
+                const inactiveInitialQuestions = inactiveInitialQuestionsResponse.data.filter(question => question.type === "INITIAL");
+    
+                // Obtener respuestas para preguntas activas e inactivas iniciales
+                const activeInitialQuestionsWithResponses = await Promise.all(activeInitialQuestions.map(async pregunta => {
+                    const respuesta = await getAnswerForQuestionId(pregunta.id);
+                    return { ...pregunta, respuesta, active: true }; // Marcamos las preguntas activas
+                }));
+                const inactiveInitialQuestionsWithResponses = await Promise.all(inactiveInitialQuestions.map(async pregunta => {
+                    const respuesta = await getAnswerForQuestionId(pregunta.id);
+                    return { ...pregunta, respuesta, active: false }; // Marcamos las preguntas inactivas
+                }));
+    
+                // Combinar preguntas iniciales activas e inactivas
+                const allInitialQuestionsCombined = [...activeInitialQuestionsWithResponses, ...inactiveInitialQuestionsWithResponses];
+    
+                // Actualizar el estado de las preguntas iniciales
+                setPreguntas(allInitialQuestionsCombined);
+                console.log("Todas las preguntas iniciales:", allInitialQuestionsCombined);
             } catch (error) {
-                console.error('Error al traer las preguntas:', error);
+                console.error('Error al traer las preguntas iniciales:', error);
             }
         };
         fetchPreguntasInitial();
@@ -79,7 +142,7 @@ function ChatBot() {
     useEffect(() => {
         const fetchPreguntasSecundarias = async () => {
             try {
-                // Obtener preguntas secundarias para cada pregunta inicial
+                // Obtener preguntas secundarias activas
                 const secondaryQuestions = await Promise.all(preguntas.map(async pregunta => {
                     const secondary = await getQuestionSecondary(pregunta.id);
                     // Para cada pregunta secundaria, obtener la respuesta
@@ -89,9 +152,30 @@ function ChatBot() {
                     }));
                     return secondaryWithResponse;
                 }));
+    
                 // Unificar todas las preguntas secundarias en una sola lista
                 const allSecondaryQuestions = secondaryQuestions.reduce((acc, val) => acc.concat(val), []);
-                setPreguntasSecundarias(allSecondaryQuestions);
+    
+                // Obtener preguntas secundarias inactivas
+                const inactiveSecondaryQuestionsResponse = await ubuntuApi.get('/question/questionsNotActive', {
+                    headers: {
+                        Authorization: 'Bearer ' + getAccessToken(),
+                    }
+                });
+                const inactiveSecondaryQuestions = inactiveSecondaryQuestionsResponse.data.filter(question => question.type === "SECONDARY");
+    
+                // Obtener respuestas para preguntas secundarias inactivas
+                const inactiveSecondaryQuestionsWithResponses = await Promise.all(inactiveSecondaryQuestions.map(async pregunta => {
+                    const respuesta = await getAnswerForQuestionId(pregunta.id);
+                    return { ...pregunta, respuesta };
+                }));
+    
+                // Combinar preguntas secundarias activas e inactivas
+                const allSecondaryQuestionsCombined = [...allSecondaryQuestions, ...inactiveSecondaryQuestionsWithResponses];
+    
+                // Actualizar el estado de las preguntas secundarias
+                setPreguntasSecundarias(allSecondaryQuestionsCombined);
+                console.log("Todas las preguntas secundarias:", allSecondaryQuestionsCombined);
             } catch (error) {
                 console.error('Error al traer las preguntas secundarias:', error);
             }
@@ -199,19 +283,7 @@ function ChatBot() {
     };
 
     // Función para ocultar
-    const handleHideClick = async (id) => {
-        try {
-            await hideQuestion(id);
-            // Si la solicitud se completa con éxito, puedes mostrar algún tipo de mensaje de éxito o actualizar el estado de tu componente según sea necesario
-            setSuccessMessageOpen(true);
-            console.log("La pregunta se ha ocultado correctamente.");
-        } catch (error) {
-            // Si ocurre un error durante la solicitud, puedes manejarlo aquí mostrando un mensaje de error o tomando otras acciones según sea necesario
-            console.error("Error al ocultar la pregunta:", error);
-            setErrorMessageOpen(true);
-        }
-    };
-
+   
     // Función para mostrar una pregunta oculta
     const handleShowClick = async (id) => {
         try {
@@ -246,6 +318,10 @@ function ChatBot() {
                 </CustomButton>
             </Link>
             <Box>
+
+
+
+                
                 <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Preguntas Iniciales</h2>
                 {preguntas && (
                     <Grid container justifyContent="center">
@@ -255,6 +331,7 @@ function ChatBot() {
                                 borderRadius: "16px",
                                 m: 1,
                                 boxShadow: "none",
+                                opacity: pregunta.active ? '1' : '.7',
                             }}>
                                 <CardContent>
                                     <Typography
@@ -379,6 +456,7 @@ function ChatBot() {
                     borderRadius: "16px",
                     m: 1,
                     boxShadow: "none",
+                    opacity: pregunta.active ? '1' : '.7',
                 }}>
                     <CardContent>
                         <Typography

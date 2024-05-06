@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import CustomButton from '../../components/buttonCustom';
 import { ubuntuApi } from '../../utils/services/axiosConfig';
 import { getAccessToken } from '../../utils/helpers/localStorage';
+import CustomModal from '../../components/modalCustom';
 
 export const getQuestionById = async (id) => {
     try {
@@ -55,6 +56,11 @@ export const ChatBotEditSecondary = () => {
     const [hasChanged, setHasChanged] = useState(false);
     const [hasRespuestaChanged, setHasRespuestaChanged] = useState(false);
 
+    const [successModalOpen, setSuccessModalOpen] = useState(false);
+    const [errorModalOpen, setErrorModalOpen] = useState(false);
+    const [successRespuestaModalOpen, setSuccessRespuestaModalOpen] = useState(false);
+    const [errorRespuestaModalOpen, setErrorRespuestaModalOpen] = useState(false);
+
     //Editar 
     const [preguntaText, setPreguntaText] = useState('');
 
@@ -70,8 +76,10 @@ export const ChatBotEditSecondary = () => {
                 const accessToken = getAccessToken();
                 const response = await ubuntuApi.put(`/question/text/${id}?text=${encodeURIComponent(values.pregunta)}`, null, { headers: { Authorization: `Bearer ${accessToken}` } });
                 console.log('Pregunta actualizada:', response.data);
+                setSuccessModalOpen(true);
             } catch (error) {
                 console.error('Error al actualizar la pregunta:', error);
+                setErrorModalOpen(true);
             }
         },
     });
@@ -87,8 +95,10 @@ export const ChatBotEditSecondary = () => {
                 const accessToken = getAccessToken();
                 const response = await ubuntuApi.put(`/answer/${id}?text=${encodeURIComponent(values.respuesta)}`, null, { headers: { Authorization: `Bearer ${accessToken}` } });
                 console.log('Respuesta actualizada:', response.data);
+                setSuccessRespuestaModalOpen(true);
             } catch (error) {
                 console.error('Error al actualizar la respuesta:', error);
+                setErrorRespuestaModalOpen(true);
             }
         },
     });
@@ -281,6 +291,45 @@ export const ChatBotEditSecondary = () => {
                         </Box>
                     </Box>
                 </Box>
+
+
+                <CustomModal
+    open={successModalOpen}
+    onClose={() => setSuccessModalOpen(false)}
+    title="Éxito"
+    message="La pregunta se ha actualizado correctamente."
+    buttons={[{ text: "Aceptar", onClick: () => setSuccessModalOpen(false) }]}
+    icon="check"
+/>
+
+<CustomModal
+    open={errorModalOpen}
+    onClose={() => setErrorModalOpen(false)}
+    title="Error"
+    message="Hubo un error al actualizar la pregunta. Por favor, inténtalo de nuevo más tarde."
+    buttons={[{ text: "Aceptar", onClick: () => setErrorModalOpen(false) }]}
+    icon="error"
+/>
+
+<CustomModal
+    open={successRespuestaModalOpen}
+    onClose={() => setSuccessRespuestaModalOpen(false)}
+    title="Éxito"
+    message="La respuesta se ha actualizado correctamente."
+    buttons={[{ text: "Aceptar", onClick: () => setSuccessRespuestaModalOpen(false) }]}
+    icon="check"
+/>
+
+<CustomModal
+    open={errorRespuestaModalOpen}
+    onClose={() => setErrorRespuestaModalOpen(false)}
+    title="Error"
+    message="Hubo un error al actualizar la respuesta. Por favor, inténtalo de nuevo más tarde."
+    buttons={[{ text: "Aceptar", onClick: () => setErrorRespuestaModalOpen(false) }]}
+    icon="error"
+/>
+
+
             </div>
         </div>
     );

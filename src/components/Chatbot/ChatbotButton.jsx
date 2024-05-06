@@ -16,6 +16,7 @@ function ChatHeader({ onClose }) {
             alignItems: 'center',
             position: 'fixed',
             background: 'linear-gradient(to right bottom, #1e709e, #093C59)',
+            zIndex: 999,
         }}>
 
 <Box>
