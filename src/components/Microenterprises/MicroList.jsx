@@ -8,19 +8,55 @@ const MicroList = () => {
     const [micros, setMicros] = useState([]);
     const { id } = useParams();
 
+    // useEffect(() => {
+    //     const obtenerMicro = async () => {
+    //         try {
+    //             const microData = await getMicro(id);
+    //             setMicros(microData);
+    //         } catch (error) {
+    //             console.error('Error al obtener los rubros:', error);
+    //         }
+    //     };
+
+    //     obtenerMicro();
+    // }, [id]);
+
     useEffect(() => {
-        const obtenerMicro = async () => {
-            try {
-                const microData = await getMicro(id);
-                setMicros(microData);
-            } catch (error) {
-                console.error('Error al obtener los rubros:', error);
+        // Datos ficticios de microemprendimientos
+        const fakeMicrosData = [
+            {
+                id: 1,
+                nombre: 'Microemprendimiento 1',
+                rubro: {
+                    nombre: 'Rubro 1'
+                },
+                subrubro: 'Subrubro 1',
+                ciudad: 'Ciudad 1',
+                provincia: { nombre: 'Provincia 1' },
+                pais: { nombre: 'País 1' },
+                images: ['secure_url=https://example.com/image1.jpg'],
+                masInfo: 'Más información 1',
+                descripcion: 'Descripción 1'
+            },
+            {
+                id: 2,
+                nombre: 'Microemprendimiento 2',
+                rubro: {
+                    nombre: 'Rubro 2'
+                },
+                subrubro: 'Subrubro 2',
+                ciudad: 'Ciudad 2',
+                provincia: { nombre: 'Provincia 2' },
+                pais: { nombre: 'País 2' },
+                images: ['secure_url=https://example.com/image2.jpg'],
+                masInfo: 'Más información 2',
+                descripcion: 'Descripción 2'
             }
-        };
+        ];
 
-        obtenerMicro();
-    }, [id]);
-
+        setMicros(fakeMicrosData);
+    }, []);
+    
     const obtenerUrlsDeImagenes = (images) => {
         return images.map(image => {
             const regex = /secure_url=(.*?),/;
