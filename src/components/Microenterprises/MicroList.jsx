@@ -1,69 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Box, Container, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import MicroCard from './MicroCard';
-import getMicro from '../../api/micros/getMicro';
 
 const MicroList = () => {
-    const [micros, setMicros] = useState([]);
-    const { id } = useParams();
-
-    // useEffect(() => {
-    //     const obtenerMicro = async () => {
-    //         try {
-    //             const microData = await getMicro(id);
-    //             setMicros(microData);
-    //         } catch (error) {
-    //             console.error('Error al obtener los rubros:', error);
-    //         }
-    //     };
-
-    //     obtenerMicro();
-    // }, [id]);
-
-    useEffect(() => {
-        // Datos ficticios de microemprendimientos
-        const fakeMicrosData = [
-            {
-                id: 1,
-                nombre: 'Microemprendimiento 1',
-                rubro: {
-                    nombre: 'Rubro 1'
-                },
-                subrubro: 'Subrubro 1',
-                ciudad: 'Ciudad 1',
-                provincia: { nombre: 'Provincia 1' },
-                pais: { nombre: 'País 1' },
-                images: ['secure_url=https://example.com/image1.jpg'],
-                masInfo: 'Más información 1',
-                descripcion: 'Descripción 1'
+    // Datos hardcodeados de microemprendimientos
+    const hardcodedMicroData = [
+        {
+            "id": 1,
+            "nombre": "EcoSenda",
+            "rubro": {
+                "id": 1,
+                "nombre": "Economía social/Desarrollo local/Inclusión financiera"
             },
-            {
-                id: 2,
-                nombre: 'Microemprendimiento 2',
-                rubro: {
-                    nombre: 'Rubro 2'
-                },
-                subrubro: 'Subrubro 2',
-                ciudad: 'Ciudad 2',
-                provincia: { nombre: 'Provincia 2' },
-                pais: { nombre: 'País 2' },
-                images: ['secure_url=https://example.com/image2.jpg'],
-                masInfo: 'Más información 2',
-                descripcion: 'Descripción 2'
-            }
-        ];
+            "subrubro": "Finca agroecológica",
+            "pais": {
+                "id": 1,
+                "nombre": "Argentina"
+            },
+            "provincia": {
+                "id": 3,
+                "nombre": "Mendoza"
+            },
+            "ciudad": "Tunuyán",
+            "descripcion": "Promueven un modelo de agricultura sostenible, protegiendo el medio ambiente, el agua y las semillas autóctonas. Cultivan frutas, verduras, plantas medicinales y crean derivados. Editan también contenidos educativos, gestionando un banco de semillas y comercializan o intercambian excedentes.",
+            "masInfo": "Nació del sueño de restaurar la salud y adoptar un estilo de vida ideal. Este proyecto familiar creció fundamentado en la permacultura, comprometiéndose con la soberanía alimentaria, el bienestar, el regreso al campo, la venta directa y la dignidad de la vida campesina.",
+            "deleted": false,
+            "gestionado": false,
+            "images": [
+                "https://res.cloudinary.com/dvoxzrkzs/image/upload/v1711397426/f5ovc4dtqn00blpt7rx0.jpg",
+                "https://res.cloudinary.com/dvoxzrkzs/image/upload/v1711151306/hrj91ijz5kfnyxokrlsz.jpg",
+                "https://res.cloudinary.com/dvoxzrkzs/image/upload/v1711151310/zo7xeqcvqvu3qtn7k7s7.jpg"
+            ],
+            "fechaCreacion": "2024-05-12"
+        }
+    ];
 
-        setMicros(fakeMicrosData);
-    }, []);
-    
-    const obtenerUrlsDeImagenes = (images) => {
-        return images.map(image => {
-            const regex = /secure_url=(.*?),/;
-            const match = regex.exec(image);
-            return match ? match[1] : '';
-        });
-    };
+    const [micros, setMicros] = useState(hardcodedMicroData);
+    const { id } = useParams();
 
     return (
         <main>
@@ -133,7 +107,7 @@ const MicroList = () => {
                                 entity={micro.rubro.nombre}
                                 category={micro.subrubro}
                                 location={`${micro.ciudad ? micro.ciudad + ', ' : ''}${micro.provincia.nombre}, ${micro.pais.nombre}`}
-                                images={obtenerUrlsDeImagenes(micro.images)}
+                                images={micro.images} // No es necesario procesar las URLs aquí
                                 masInfo={micro.masInfo}
                                 descripcion={micro.descripcion}
                             />
@@ -159,7 +133,6 @@ const MicroList = () => {
                         }}
                     >
                         No hay microemprendimientos cargados para esta categoría.
-
                     </Typography>
                 )}
             </section>

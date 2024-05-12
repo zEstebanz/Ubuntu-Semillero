@@ -4,7 +4,6 @@ import { ThemeProvider } from '@mui/material/styles';
 import CategoriesCard from '../Categories/categoriesCard.jsx';
 import CustomButton from '../buttonCustom.jsx';
 import theme from '../../theme/theme.js';
-import getRubro from '../../api/rubrosCategori/getRubro.js';
 import { Link } from 'react-router-dom';
 
 const Categories = () => {
@@ -12,20 +11,27 @@ const Categories = () => {
     // console.log('Click');
   };
 
-  const [rubro, setRubro] = useState([]);
+  // Datos hardcodeados de categorías
+  const hardcodedCategorias = [
+    {
+      "id": 1,
+      "nombre": "Economía social/Desarrollo local/Inclusión financiera"
+    },
+    {
+      "id": 2,
+      "nombre": "Agroecología/Orgánicos/Alimentación saludable"
+    },
+    {
+      "id": 3,
+      "nombre": "Conservación/Regeneración/Servicios ecosistémicos"
+    },
+    {
+      "id": 4,
+      "nombre": "Empresas/Organismos de impacto/Economía circular"
+    }
+  ];
 
-  useEffect(() => {
-    const obtenerRubro = async () => {
-      try {
-        const rubroData = await getRubro();
-        setRubro(rubroData);
-      } catch (error) {
-        console.error('Error al obtener los rubros:', error);
-      }
-    };
-
-    obtenerRubro();
-  }, []);
+  const [rubro, setRubro] = useState(hardcodedCategorias);
 
   return (
     <ThemeProvider theme={theme}>
@@ -72,19 +78,19 @@ const Categories = () => {
             },
           }} lx={{}}>
             {rubro?.length > 0 ? (
-              rubro.map((rubro, index) => (
+              rubro.map((categoria, index) => (
                 <Link
                   key={index}
                   component="button"
-                  to={`/microemprendimientos/${rubro.id}`}
+                  to={`/microemprendimientos/${categoria.id}`}
                   style={{
                     textDecoration: "none"
                   }}
                 >
                   <CategoriesCard
-                    imageUrl={`./public/img/rubros/${rubro.id}.png`}
+                    imageUrl={`./public/img/rubros/${categoria.id}.png`}
                     altText="Logo de Economia Social."
-                    title={rubro.nombre}
+                    title={categoria.nombre}
                     dividerColor="green.dark"
                   />
                 </Link>
